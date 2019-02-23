@@ -1,0 +1,136 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Live Simulator: 2 - Note Info</title>
+		<link rel="stylesheet" href="/semantic/semantic.min.css" />
+		<link rel="stylesheet" href="/index.css" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script type="text/javascript" src="/semantic/semantic.min.js"></script>
+	</head>
+	<body>
+		<div class="ui violet segment">
+			<h1 class="ui header"><i class="life ring outline icon"></i>Live Simulator: 2 - Note Info</h1>
+			<p>Live Simulator: 2 supports many combination of notes, which can be applied per user basis, beatmap basis, or per note basis, depends on the mapper.</p>
+			<div class="ui segments">
+				<div class="ui violet segment">
+					<h2 class="ui header">Note Styles</h2>
+					<table class="ui celled table" id="note_tables">
+							<thead><tr>
+							<th>Note ID</th>
+							<th>Old Style Image</th>
+							<th>V5 Style Image</th>
+							<th>V5 Style Image (Swing)</th>
+							<th>Matte Style Image</th>
+						</tr></thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/red.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/pink_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_pink.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/00.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/green.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/green_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_green.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/01.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/cyan.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/cyan_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_cyan.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/02.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/blue.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/blue_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_blue.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/06.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>5</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/yellow.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/yellow_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_yellow.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/05.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>6</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/orange.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/orange_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_orange.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/04.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>7</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/pink.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/red_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_red.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/03.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>8</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/purple.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/purple_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_purple.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/07.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>9</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/gray.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/gray_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_gray.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/08.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>10</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/rainbow.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/rainbow_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_rainbow.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/09.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>11</td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/black.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/black_v5.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_black.png" width="48" height="48"></td>
+								<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/20.png" width="48" height="48"></td>
+							</tr>
+							<tr>
+							<td>15</td>
+							<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/default/gray.png" width="48" height="48">*</td>
+							<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/gray_v5.png" width="48" height="48">*</td>
+							<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/neon/slide_gray.png" width="48" height="48">*</td>
+							<td><img src="https://github.com/MikuAuahDark/livesim2/raw/36029f6/assets/image/tap_circle/matte/08.png" width="48" height="48">*</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>* - See CBF Note Colors below</p>
+				</div>
+				<div class="ui violet segment">
+					<h2 class="ui header">CBF Note Colors</h2>
+					<p>Live Simulator: 2 uses Note ID 9, shown above as Note ID 15, as base for custom note color in CBF. Stored as unsigned dword and encoded as follows:</p>
+					<pre><code>rrrrrrrr rggggggg ggbbbbbb bbb01111</code></pre>
+					<ul class="ui list">
+						<li><p><code>r</code> - Red color component (0-511, normalized to 0..2 range)</p></li>
+						<li><p><code>g</code> - Green color component (0-511, normalized to 0..2 range)</p></li>
+						<li><p><code>b</code> - Blue color component (0-511, normalized to 0..2 range)</p></li>
+					</ul>
+					<p>The <code>1111</code> indicates Note ID 15 which is reserved to mark that it&#39;s CBF custom color attribute.</p>
+					<p>If custom note color is not used, then it follows this mapping:</p>
+					<ul class="ui list">
+						<li><p><code>smile</code> - Note ID 1</p></li>
+						<li><p><code>pure</code> - Note ID 2</p></li>
+						<li><p><code>cool</code> - Note ID 3</p></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
