@@ -84,7 +84,7 @@ function calculateSectorName()
 		let y = Number($("#y_coord").val())
 
 		// NaN-check
-		if (x == x && y == y && x >= -999 && y >= -999 && x <= 999 && y <= 999)
+		if (x == x && y == y && x >= -32767 && y >= -32767 && x <= 32767 && y <= 32767)
 		{
 			if (x == 0 && y == 0)
 				$("#sector_name").text("Sol")
