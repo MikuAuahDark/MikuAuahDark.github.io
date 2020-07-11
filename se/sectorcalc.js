@@ -89,8 +89,8 @@ $(document).ready(function()
 				{
 					// Initialize RNG state
 					let rng = new Xorshift(computeSeed64(x, y, 2147463847n, 1013n, 337n))
-					console.log(rng.next())
-					console.log(rng.next())
+					rng.next()
+					rng.next()
 					rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
 
 					let length = 3 + Math.floor(rng.random() ** 0.885 * 10)
@@ -126,11 +126,9 @@ $(document).ready(function()
 						
 						let list = next.paths
 						let nextValue = rng.range(0, list[list.length - 1][1])
-						console.log(list)
 
 						for (const v of list)
 						{
-							console.log(nextValue, v[1])
 							if (nextValue <= v[1])
 							{
 								state.push(v[0])
