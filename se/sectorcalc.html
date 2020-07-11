@@ -9,20 +9,29 @@
 		<script type="text/javascript" src="../jquery-3.5.1.min.js"></script>
 		<script type="text/javascript" src="../semantic/semantic.min.js"></script>
 		<script type="text/javascript" src="sectorcalc.js"></script>
+		<style>
+			.slightly_far_apart {
+				margin: 0.5em
+			}
+		</style>
 	</head>
 	<body style="background-color: #1b1c1d">
 		<div class="ui inverted segment">
 			<h1 class="ui header"><i class="rocket icon"></i>Alpha Stellar Sector Name Calculator</h1>
 			<p>Just input the X and Y coordinates to get the sector name. Note that (0,0) is hardcoded to "Sol"</p>
-			<p>Sector coordinates are in range of (-999, -999)...(999, 999)</p>
-			<div class="ui inverted labeled input">
+			<p>Alpha Stellar only uses sector coordinates in range of (-999, -999)...(999, 999) and US Baby Names dictionary. Alpha Stellar only uses coordinate outside the range (-32767, -32767)...(32767, 32767) and/or Indonesia Word Dictionary for person names.</p>
+			<div class="ui inverted labeled input slightly_far_apart">
 				<div class="ui label">X coord.</div>
 				<input id="x_coord" type="number" min="-999" max="999" placeholder="ex. 687">
 			</div>
-			<div class="ui inverted labeled input">
+			<div class="ui inverted labeled input slightly_far_apart">
 				<div class="ui label">Y coord.</div>
 				<input id="y_coord" type="number" min="-999" max="999" placeholder="ex. 291">
 			</div>
+			<select id="dictionary" class="ui dropdown slightly_far_apart">
+				<option value="us_names.json" selected>US Baby Names (1880-2018)</option>
+				<option value="id_dict.json">Indonesia Word Dictionary</option>
+			</select>
 			<h2 class="ui header">Sector Name: <span id="sector_name"></span></h2>
 		</div>
 	</body>

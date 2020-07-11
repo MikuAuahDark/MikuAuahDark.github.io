@@ -66,86 +66,95 @@ class Xorshift
 	}
 }
 
-$.getJSON("us_names.json", function(data)
+function changeDictionary()
 {
-	dictionary = data
-})
-
-$(document).ready(function()
-{
-	let changer = function()
+	dictionary = null
+	$.getJSON($("#dictionary").val(), function(data)
 	{
-		if (dictionary)
+		dictionary = data
+		calculateSectorName()
+	})
+}
+
+function calculateSectorName()
+{
+	if (dictionary)
+	{
+		let x = Number($("#x_coord").val())
+		let y = Number($("#y_coord").val())
+
+		// NaN-check
+		if (x == x && y == y && x >= -999 && y >= -999 && x <= 999 && y <= 999)
 		{
-			let x = Number($("#x_coord").val())
-			let y = Number($("#y_coord").val())
-
-			// NaN-check
-			if (x == x && y == y && x >= -999 && y >= -999 && x <= 999 && y <= 999)
+			if (x == 0 && y == 0)
+				$("#sector_name").text("Sol")
+			else
 			{
-				if (x == 0 && y == 0)
-					$("#sector_name").text("Sol")
-				else
+				// Initialize RNG state
+				let rng = new Xorshift(computeSeed64(x, y, 2147463847n, 1013n, 337n))
+				rng.next()
+				rng.next()
+				rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
+
+				let length = 3 + Math.floor(rng.random() ** 0.885 * 10)
+				let initialState = dictionary.initialState[rng.range(1, dictionary.initialState.length) - 1]
+				let state = [initialState[0], initialState[1], initialState[2]]
+
+				while (state.length < length)
 				{
-					// Initialize RNG state
-					let rng = new Xorshift(computeSeed64(x, y, 2147463847n, 1013n, 337n))
-					rng.next()
-					rng.next()
-					rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
+					// Do binary search
+					let currentState = state.slice(-3).join("")
+					let next = null
+					let min = 1
+					let max = dictionary.ma.length
 
-					let length = 3 + Math.floor(rng.random() ** 0.885 * 10)
-					let initialState = dictionary.initialState[rng.range(1, dictionary.initialState.length) - 1]
-					let state = [initialState[0], initialState[1], initialState[2]]
-
-					while (state.length < length)
+					while (min <= max)
 					{
-						// Do binary search
-						let currentState = state.slice(-3).join("")
-						let next = null
-						let min = 1
-						let max = dictionary.ma.length
+						let mid = Math.floor((min + max) / 2)
+						let target = dictionary.ma[mid - 1]
 
-						while (min <= max)
+						if (currentState > target.name)
+							min = mid + 1
+						else if (currentState < target.name)
+							max = mid - 1
+						else
 						{
-							let mid = Math.floor((min + max) / 2)
-							let target = dictionary.ma[mid - 1]
-
-							if (currentState > target.name)
-								min = mid + 1
-							else if (currentState < target.name)
-								max = mid - 1
-							else
-							{
-								next = target
-								break
-							}
-						}
-
-						if (next == null)
+							next = target
 							break
-						
-						let list = next.paths
-						let nextValue = rng.range(0, list[list.length - 1][1])
-
-						for (const v of list)
-						{
-							if (nextValue <= v[1])
-							{
-								state.push(v[0])
-								break
-							}
 						}
 					}
 
-					state[0] = state[0].toUpperCase()
-					$("#sector_name").text(state.join(""))
-				}
-			}
-			else
-				$("#sector_name").text("INVALID")
-		}
-	}
+					if (next == null)
+						break
+					
+					let list = next.paths
+					let nextValue = rng.range(0, list[list.length - 1][1])
 
-	$("#x_coord").on("change paste keyup", changer)
-	$("#y_coord").on("change paste keyup", changer)
+					for (const v of list)
+					{
+						if (nextValue <= v[1])
+						{
+							state.push(v[0])
+							break
+						}
+					}
+				}
+
+				state[0] = state[0].toUpperCase()
+				$("#sector_name").text(state.join(""))
+			}
+		}
+		else
+			$("#sector_name").text("INVALID")
+	}
+}
+
+$(document).ready(function()
+{
+	$(".ui.dropdown").dropdown()
+	$("#x_coord").on("change paste keyup", calculateSectorName)
+	$("#y_coord").on("change paste keyup", calculateSectorName)
+	$("#dictionary").change(changeDictionary)
+
+	changeDictionary()
 })
