@@ -8,12 +8,30 @@
 		<script src="../jquery-3.5.1.min.js"></script>
 		<script src="../semantic/semantic.min.js"></script>
 		<script>
-			let styleValues = [64, 4096, 262144]
+			let styleValues = [1, 1, 1]
+			let imageElements = [
+				// Default
+				["notes-9.png", "notes-11.png", "notes-12.png"],
+				// Neon
+				["notes-31.png", "notes-44.png", "notes-46.png"],
+				// Matte
+				["notes-56.png", "notes-69.png", "notes-256-23_.png"],
+				// Lovewing
+				["notes-82.png", "notes-96.png", "notes-256-31_.png"]
+			]
 			
 			function recalculate()
 			{
-				let ns = document.getElementById("note_style")
-				ns.value = 63 | styleValues[0] | styleValues[1] | styleValues[2]
+				let ns = document.getElementById("#note_style")
+
+				if (styleValues[0] == styleValues[1] && styleValues[1] == styleValues[2])
+					ns.value = styleValues[0]
+				else
+					ns.value = 63 | (styleValues[0] << 6) | (styleValues[1] << 12) | (styleValues[2] << 18)
+				
+				document.getElementById("#base_image").setAttribute("src", imageElements[styleValues[0] - 1][0])
+				document.getElementById("#swing_image").setAttribute("src", imageElements[styleValues[1] - 1][1])
+				document.getElementById("#simul_image").setAttribute("src", imageElements[styleValues[2] - 1][2])
 			}
 			
 			function setValue(elem, index)
@@ -21,9 +39,17 @@
 				styleValues[index] = parseInt(elem.value)
 				recalculate()
 			}
+
+			function init()
+			{
+				styleValues[0] = parseInt(document.querySelector("input[name=base]:checked").value)
+				styleValues[1] = parseInt(document.querySelector("input[name=swing]:checked").value)
+				styleValues[2] = parseInt(document.querySelector("input[name=simul]:checked").value)
+				recalculate()
+			}
 		</script>
 	</head>
-	<body onload="recalculate()">
+	<body onload="init()">
 		<div class="ui violet segment">
 			<h1 class="ui header"><i class="life ring outline icon"></i> Note Style Calculator</h1>
 			<div class="ui form">
@@ -31,20 +57,26 @@
 					<label>Base Frame</label>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="base" checked="checked" type="radio" value="64" onclick="setValue(this,0)">
+							<input name="base" checked="checked" type="radio" value="1" onclick="setValue(this, 0)">
 							<label>Default</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="base" type="radio" value="128" onclick="setValue(this,0)">
+							<input name="base" type="radio" value="2" onclick="setValue(this, 0)">
 							<label>Neon</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="base" type="radio" value="192" onclick="setValue(this,0)">
+							<input name="base" type="radio" value="3" onclick="setValue(this, 0)">
 							<label>Matte</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="base" type="radio" value="4" onclick="setValue(this, 0)">
+							<label>Lovewing</label>
 						</div>
 					</div>
 				</div>
@@ -54,20 +86,26 @@
 					<label>Swing Icon</label>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="swing" checked="checked" type="radio" value="4096" onclick="setValue(this,1)">
+							<input name="swing" checked="checked" type="radio" value="1" onclick="setValue(this, 1)">
 							<label>Default</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="swing" type="radio" value="8192" onclick="setValue(this,1)">
+							<input name="swing" type="radio" value="2" onclick="setValue(this, 1)">
 							<label>Neon</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="swing" type="radio" value="12288" onclick="setValue(this,1)">
+							<input name="swing" type="radio" value="3" onclick="setValue(this, 1)">
 							<label>Matte</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="swing" type="radio" value="4" onclick="setValue(this, 1)">
+							<label>Lovewing</label>
 						</div>
 					</div>
 				</div>
@@ -77,20 +115,26 @@
 					<label>Simultaneous Mark</label>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="simul" checked="checked" type="radio" value="262144" onclick="setValue(this,2)">
+							<input name="simul" checked="checked" type="radio" value="1" onclick="setValue(this, 2)">
 							<label>Default</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="simul" type="radio" value="524288" onclick="setValue(this,2)">
+							<input name="simul" type="radio" value="2" onclick="setValue(this, 2)">
 							<label>Neon</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input name="simul" type="radio" value="786432" onclick="setValue(this,2)">
+							<input name="simul" type="radio" value="3" onclick="setValue(this, 2)">
 							<label>Matte</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="simul" type="radio" value="4" onclick="setValue(this, 2)">
+							<label>Lovewing</label>
 						</div>
 					</div>
 				</div>
@@ -99,6 +143,20 @@
 				<div class="ui label">Note Style Value</div>
 				<input id="note_style" type="text" readonly="readonly" value="1">
 			</div>
+			<table class="ui celled inverted table">
+				<thead><tr>
+					<th>Base</th>
+					<th>Swing</th>
+					<th>Simultaneous</th>
+				</tr></thead>
+				<tbody>
+					<tr>
+						<td><img id="base_image"></td>
+						<td><img id="swing_image"></td>
+						<td><img id="simul_image"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html>
