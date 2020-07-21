@@ -22,16 +22,16 @@
 			
 			function recalculate()
 			{
-				let ns = document.getElementById("#note_style")
+				let ns = document.getElementById("note_style")
 
 				if (styleValues[0] == styleValues[1] && styleValues[1] == styleValues[2])
 					ns.value = styleValues[0]
 				else
 					ns.value = 63 | (styleValues[0] << 6) | (styleValues[1] << 12) | (styleValues[2] << 18)
 				
-				document.getElementById("#base_image").setAttribute("src", imageElements[styleValues[0] - 1][0])
-				document.getElementById("#swing_image").setAttribute("src", imageElements[styleValues[1] - 1][1])
-				document.getElementById("#simul_image").setAttribute("src", imageElements[styleValues[2] - 1][2])
+				document.getElementById("base_image").setAttribute("src", imageElements[styleValues[0] - 1][0])
+				document.getElementById("swing_image").setAttribute("src", imageElements[styleValues[1] - 1][1])
+				document.getElementById("simul_image").setAttribute("src", imageElements[styleValues[2] - 1][2])
 			}
 			
 			function setValue(elem, index)
