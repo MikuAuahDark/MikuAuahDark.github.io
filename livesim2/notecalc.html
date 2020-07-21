@@ -1,0 +1,104 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="Content-Type" content="text/html" />
+		<title>Live Simulator: 2 Note Style Calculator</title>
+		<link rel="stylesheet" href="../semantic/semantic.min.css" />
+		<link rel="stylesheet" href="../index.css" />
+		<script src="../jquery-3.5.1.min.js"></script>
+		<script src="../semantic/semantic.min.js"></script>
+		<script>
+			let styleValues = [64, 4096, 262144]
+			
+			function recalculate()
+			{
+				let ns = document.getElementById("note_style")
+				ns.value = 63 | styleValues[0] | styleValues[1] | styleValues[2]
+			}
+			
+			function setValue(elem, index)
+			{
+				styleValues[index] = parseInt(elem.value)
+				recalculate()
+			}
+		</script>
+	</head>
+	<body onload="recalculate()">
+		<div class="ui violet segment">
+			<h1 class="ui header"><i class="life ring outline icon"></i> Note Style Calculator</h1>
+			<div class="ui form">
+				<div class="inline fields">
+					<label>Base Frame</label>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="base" checked="checked" type="radio" value="64" onclick="setValue(this,0)">
+							<label>Default</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="base" type="radio" value="128" onclick="setValue(this,0)">
+							<label>Neon</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="base" type="radio" value="192" onclick="setValue(this,0)">
+							<label>Matte</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui form">
+				<div class="inline fields">
+					<label>Swing Icon</label>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="swing" checked="checked" type="radio" value="4096" onclick="setValue(this,1)">
+							<label>Default</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="swing" type="radio" value="8192" onclick="setValue(this,1)">
+							<label>Neon</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="swing" type="radio" value="12288" onclick="setValue(this,1)">
+							<label>Matte</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui form">
+				<div class="inline fields">
+					<label>Simultaneous Mark</label>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="simul" checked="checked" type="radio" value="262144" onclick="setValue(this,2)">
+							<label>Default</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="simul" type="radio" value="524288" onclick="setValue(this,2)">
+							<label>Neon</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="simul" type="radio" value="786432" onclick="setValue(this,2)">
+							<label>Matte</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui labeled input">
+				<div class="ui label">Note Style Value</div>
+				<input id="note_style" type="text" readonly="readonly" value="1">
+			</div>
+		</div>
+	</body>
+</html>
