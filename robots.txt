@@ -1,2 +1,5 @@
 User-agent: *
-Disallow: /
+
+Disallow: /se
+Disallow: /cc1.exe
+Disallow: /semantic
