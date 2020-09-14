@@ -3,3 +3,4 @@ User-agent: *
 Disallow: /se
 Disallow: /cc1.exe
 Disallow: /semantic
+Disallow: /pwa
