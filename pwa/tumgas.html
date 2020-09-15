@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<title>Tumgas Pemrograman Web A</title>
+
+		<link rel="stylesheet" href="bootstrap-4.5.2/bootstrap.min.css">
+		<style>
+			#header {
+				background: linear-gradient(45deg, rgb(54,146,255) 0%, rgb(37,40,112) 26%, rgb(32,255,249) 100%);
+				min-height: 160px;
+				max-height: 256px;
+				height: 192px;
+				display: flex;
+				align-items: center;
+			}
+
+			#awhdhawd > .carousel-inner > .carousel-item > picture,
+			#awhdhawd > .carousel-inner > .carousel-item > picture > img {
+				width: 100%;
+				height: auto
+			}
+
+			footer {
+				padding: 2.5em;
+				color: rgb(96, 96, 96);
+			}
+
+			footer > a {
+				color: #8ec5ff;
+			}
+
+			footer > a:hover {
+				color: #5baaff;
+			}
+
+			body > div.container > .row {
+				margin-top: 1em;
+			}
+
+			.latest-info > .row {
+				margin-top: 15px;
+				margin-bottom: 15px;
+			}
+
+			div.card {
+				min-width: 18em;
+			}
+		</style>
+
+		<script src="../jquery-3.5.1.min.js"></script>
+		<script src="bootstrap-4.5.2/bootstrap.bundle.min.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" href="..">MikuAuahDark/NPad93</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link" href="..">Home</a>
+						</li>
+						<li class="nav-item disabled">
+							<a class="nav-link disabled" href="../about.html" tabindex="-1" aria-disabled="true">About AuahDark</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../NPad93/about.html">About NPad93</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="riz" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Amika Rizka
+							</a>
+							<div class="dropdown-menu" aria-labelledby="riz">
+								<a class="dropdown-item">Introduction</a>
+								<a class="dropdown-item">Alpha Stellar</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Card File</a>
+							</div>
+						</li>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<div id="header">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col d-flex justify-content-center align-items-center" style="font-size:min(8.5vw,4em);color:white;">
+						<img src="tumgas_header_optimized.png" style="width:128px;height:128px">
+						<div class="d-flex flex-column text-left" style="margin-left:1em;line-height:0.9em">
+							MikuAuahDark
+							<span style="font-size:0.5em;margin-left:0.09em">NPad93</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row justify-content-center">
+				<h1>About This Page</h1>
+			</div>
+			<div class="row text-justify">
+				<div class="col">
+					<b>This page is actually meant to showcase bootstrap. Purely for homework assignment. Trust me.</b>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut consequat risus, dapibus
+					dapibus neque. Phasellus ipsum orci, ultricies ac magna nec, elementum placerat diam. Vestibulum
+					pharetra arcu quis facilisis ornare. Phasellus vel sapien ut elit gravida finibus aliquam quis leo.
+					Ut vehicula non eros suscipit suscipit. Proin vel sem vel libero placerat ullamcorper. In viverra
+					tincidunt tempus. Morbi nulla leo, ullamcorper non arcu ut, scelerisque rutrum leo. Integer commodo
+					turpis a vehicula tempus. Nunc non luctus sapien. Curabitur tincidunt turpis ut felis posuere, sed
+					dignissim purus dictum. 
+				</div>
+				<div class="col">
+					Aliquam eget nulla justo. Sed Never est sed neque bibendum consequat. Aenean vitae interdum mauris.
+					Nulla placerat turpis gonna blandit aliquam. Morbi tempor leo eget ex rhoncus elementum. Fusce
+					ultrices, elit vitae dictum luctus, lectus give faucibus justo, id bibendum est ipsum dignissim
+					ipsum. Quisque at ligula maximus, scelerisque you ac, fringilla elit. Nunc fermentum, felis nec
+					dignissim condimentum, ante erat efficitur sem, up pellentesque tellus urna nec orci. Suspendisse
+					auctor, lectus at porta elementum, sem nisi laoreet arcu, id pellentesque nibh nisi ac velit.
+					Mauris imperdiet, nunc eu egestas hendrerit, tellus nulla tempor est, non placerat mauris augue
+					in nibh. 
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<h2>Image Slide Show</h2>
+			</div>
+			<div class="row">
+				<div id="awhdhawd" class="carousel slide" data-ride="carousel">
+					<ol class="carousel-indicators">
+						<li data-target="#awhdhawd" data-slide-to="0" class="active"></li>
+						<li data-target="#awhdhawd" data-slide-to="1"></li>
+						<li data-target="#awhdhawd" data-slide-to="2"></li>
+						<li data-target="#awhdhawd" data-slide-to="3"></li>
+						<li data-target="#awhdhawd" data-slide-to="4"></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<picture class="d-block w-100" alt="We're no strangers to love">
+								<source type="image/webp" srcset="awhdhawd/A.webp">
+								<img src="awhdhawd/A.jpg">
+							</picture>
+						</div>
+						<div class="carousel-item">
+							<picture class="d-block w-100" alt="You know the rules, and so do I">
+								<source type="image/webp" srcset="awhdhawd/m.webp">
+								<img src="awhdhawd/m.jpg">
+							</picture>
+						</div>
+						<div class="carousel-item">
+							<picture class="d-block w-100" alt="A full commitment's what I'm thinking of">
+								<source type="image/webp" srcset="awhdhawd/i.webp">
+								<img src="awhdhawd/i.jpg">
+							</picture>
+						</div>
+						<div class="carousel-item">
+							<picture class="d-block w-100" alt="You wouldn't get this from any other guy">
+								<source type="image/webp" srcset="awhdhawd/k.webp">
+								<img src="awhdhawd/k.jpg">
+							</picture>
+						</div>
+						<div class="carousel-item">
+							<picture class="d-block w-100" alt="Never gonna give you up">
+								<source type="image/webp" srcset="awhdhawd/a!.webp">
+								<img src="awhdhawd/a!.jpg">
+							</picture>
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#awhdhawd" role="button" data-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#awhdhawd" role="button" data-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-8">
+							<h3 class="text-center">Latest Info</h3>
+							<div class="container-fluid latest-info">
+								<div class="row">
+									<div class="col-6">
+										<div class="card">
+											<img src="https://img.youtube.com/vi/y2isEHCCnng/hqdefault.jpg" class="card-img-top">
+											<div class="card-body">
+												<h5 class="card-title">&zwnj;</h5>
+												<p class="card-text"><br/>@x0o0x_</p>
+												<a class="btn btn-primary" href="https://www.youtube.com/watch?v=y2isEHCCnng" target="_blank">
+													Join &zwnj; Cult
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="card">
+											<img src="https://img.youtube.com/vi/lWVDO842CAY/hqdefault.jpg" class="card-img-top">
+											<div class="card-body">
+												<h5 class="card-title">冥路</h5>
+												<p class="card-text">@x0o0x_<br/>作曲：x0o0x_　彗</p>
+												<a class="btn btn-primary" href="https://www.youtube.com/watch?v=lWVDO842CAY" target="_blank">
+													Listen
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="card">
+											<img src="https://repository-images.githubusercontent.com/72351318/d736fc00-682e-11e9-95e4-13a471b91ad6" class="card-img-top">
+											<div class="card-body">
+												<h5 class="card-title">Live Simulator: 2 v4.0.0-beta3</h5>
+												<p class="card-text">The latest LS2 beta release is live!</p>
+												<a class="btn btn-primary" href="https://github.com/MikuAuahDark/livesim2/releases/tag/v4.0.0-beta4" target="_blank">
+													Download
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-4">
+							<h3 class="text-center">Profile</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer>
+			Amika Rizka © 2020 <a href="https://github.com/MikuAuahDark" target="_blank">Miku AuahDark</a>, contents in this page is demonstration purpose only.
+		</footer>
+	</body>
+</html>
