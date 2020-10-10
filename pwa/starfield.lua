@@ -36,8 +36,8 @@ math.randomseed(os.time())
 for y = 1, HEIGHT / DIV do
 	for x = 1, WIDTH / DIV do
 		if math.random() >= CHANCE then
-			local px = math.floor(DIV * (x + math.random()) + 0.5)
-			local py = math.floor(DIV * (y + math.random()) + 0.5)
+			local px = math.floor(DIV * (x + math.random()) + 0.5) % WIDTH
+			local py = math.floor(DIV * (y + math.random()) + 0.5) % HEIGHT
 
 			io.write("\t<circle cx=\""..px.."\" cy=\""..py.."\" r=\""..math.random(1,3).."\" fill=\""..pickcolor().."\"/>\n")
 		end
