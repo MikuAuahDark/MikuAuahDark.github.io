@@ -1,7 +1,185 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<script src="sks.js"></script>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Tumgas JavaScript</title>
+
+		<link rel="icon" href="np_white.png" id="light-scheme-icon">
+		<link rel="icon" href="np_black.png" id="dark-scheme-icon">
+		<link rel="stylesheet" href="../semantic/semantic.min.css" />
+		<link rel="stylesheet" href="../index.css" />
+		<style>
+			pre {
+				word-wrap: break-word;
+			}
+		</style>
+
+		<script type="text/javascript" src="../jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="../semantic/semantic.min.js"></script>
+		<script type="text/javascript" src="sks.js"></script>
+		<script>
+			// The Game?
+			function youJustLostTheGame(id, func)
+			{
+				let p = $(id)
+				p.on("input", () => func(p))
+				func(p)
+			}
+
+			$(document).ready(() => {
+				youJustLostTheGame("#oddeven", (e) => {
+					let n = Number(e.val())
+
+					if (n == n && n > 0)
+						$("#oddevenout").text(oddEven(n).join("\n"))
+				})
+
+				youJustLostTheGame("#sumarr", (e) => {
+					let a = e.val().split(" ")
+					let b = []
+
+					for (let i = 0; i < a.length; i++)
+					{
+						if (a[i])
+						{
+							let n = Number(a[i])
+
+							if (n == n)
+								b.push(n)
+						}
+					}
+
+					let sum = 0
+					let avg = 0
+
+					if (b.length > 0)
+					{
+						sum = sumByArray(b)
+						avg = sum / b.length
+					}
+
+					$("#sumarrout").text(`Jumlah: ${sum}\nRata-Rata: ${avg}`)
+				})
+				
+				youJustLostTheGame("#sumn", (e) => {
+					let n = Number(e.val())
+
+					if (n == n && n > 0)
+					{
+						let sum = sumByNumber(n)
+						let avg = sum / n
+
+						$("#sumnout").text(`Jumlah: ${sum}\nRata-Rata: ${avg}`)
+					}
+				})
+
+				let sump = () => {
+					let x = Number($("#sumpx").val())
+					let n = Number($("#sumpn").val())
+
+					if (x == x && n == n && n > 0)
+					{
+						let sum = powerSumN(x, n)
+						$("#sumpout").text(`Jumlah: ${sum}`)
+					}
+				}
+				$("#sumpx").on("input", sump)
+				$("#sumpn").on("input", sump)
+				sump()
+
+				youJustLostTheGame("#mult10", (e) => {
+					let n = Number(e.val())
+
+					if (n == n)
+						$("#mult10out").text(multiplicationTable(n).join("\n"))
+				})
+
+				youJustLostTheGame("#fib", (e) => {
+					let n = Number(e.val())
+
+					if (n == n && n > 0)
+						$("#fibout").text(fibonacci(n).join(" "))
+				})
+
+				youJustLostTheGame("#sks", (e) => {
+					let n = Number(e.val())
+
+					if (n == n && n >= 0)
+					{
+						let v = incentiveCalc(n)
+
+						$("#sksout").text(v < 0 ? ("Bayar denda: -$" + (-v)) : ("Insentif: $" + v))
+					}
+				})
+			})
+		</script>
 	</head>
+	<body>
+		<div class="ui green segment">
+			<h1 class="ui header"><i class="js square icon"></i>Tugas Javascript</h1>
+			<section class="ui red segment">
+				<h3 class="ui header">Genap Ganjil</h3>
+				<label for="oddeven">Masukkan Angka (min. 1)</label>
+				<div class="ui input">
+					<input id="oddeven" type="number" min="1" value="1">
+				</div>
+				<pre id="oddevenout"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Jumlah &amp; Rata-Rata Dari Masukan</h3>
+				<label for="sumarr">Masukkan Angka Dipisah Spasi</label>
+				<div class="ui input">
+					<input id="sumarr" type="text">
+				</div>
+				<pre id="sumarrout"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Jumlah &amp; Rata-Rata Dari N</h3>
+				<label for="sumn">Masukkan Angka (min. 1)</label>
+				<div class="ui input">
+					<input id="sumn" type="number" min="1" value="1">
+				</div>
+				<pre id="sumnout"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Jumlah X pangkat N</h3>
+				<label for="sumpx">Masukkan Angka X</label>
+				<div class="ui input">
+					<input id="sumpx" type="number" value="1">
+				</div>
+				<label for="sumpn">Masukkan Angka N (min. 1)</label>
+				<div class="ui input">
+					<input id="sumpn" type="number" min="1" value="1">
+				</div>
+				<pre id="sumpout"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Tabel Perkalian 10</h3>
+				<label for="mult10">Masukkan Angka</label>
+				<div class="ui input">
+					<input id="mult10" type="number" value="0">
+				</div>
+				<pre id="mult10out"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Fibonacci</h3>
+				<label for="fib">Masukkan Urutan Fibonacci (min. 1)</label>
+				<div class="ui input">
+					<input id="fib" type="number" min="1" value="1">
+				</div>
+				<pre id="fibout"></pre>
+			</section>
+			<section class="ui red segment">
+				<h3 class="ui header">Insentif SKS</h3>
+				<label for="sks">Masukkan Jumlah SKS (min. 0)</label>
+				<div class="ui input">
+					<input id="sks" type="number" min="0" value="8">
+				</div>
+				<pre id="sksout"></pre>
+			</section>
+		</div>
+	</body>
 </html>
