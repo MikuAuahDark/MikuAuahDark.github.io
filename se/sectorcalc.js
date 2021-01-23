@@ -1,4 +1,5 @@
 let dictionary = null
+let sectorNameElement = null
 const UINT64_MAX = 2n**64n-1n
 
 function wangHash64(k)
@@ -71,7 +72,19 @@ function changeDictionary()
 	dictionary = null
 	$.getJSON($("#dictionary").val(), function(data)
 	{
+		let version = data.version ?? 0
 		dictionary = data
+
+		if (version == 0)
+		{
+			dictionary.size = 3
+
+			for (let i = 0; i < dictionary.initialState.length; i++)
+				dictionary.initialState[i] = dictionary.initialState[i].split("")
+
+			version = 1
+		}
+
 		calculateSectorName()
 	})
 }
@@ -80,6 +93,7 @@ function calculateSectorName()
 {
 	if (dictionary)
 	{
+		let size = dictionary.size
 		let x = Number($("#x_coord").val())
 		let y = Number($("#y_coord").val())
 
@@ -87,7 +101,7 @@ function calculateSectorName()
 		if (x == x && y == y && x >= -32767 && y >= -32767 && x <= 32767 && y <= 32767)
 		{
 			if (x == 0 && y == 0)
-				$("#sector_name").text("Sol")
+				sectorNameElement.textContent = "Sol"
 			else
 			{
 				// Initialize RNG state
@@ -96,14 +110,13 @@ function calculateSectorName()
 				rng.next()
 				rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
 
-				let length = 3 + Math.floor(rng.random() ** 0.885 * 10)
-				let initialState = dictionary.initialState[rng.range(1, dictionary.initialState.length) - 1]
-				let state = [initialState[0], initialState[1], initialState[2]]
+				let length = size + Math.floor(rng.random() ** 0.885 * 10)
+				let state = [...dictionary.initialState[rng.range(1, dictionary.initialState.length) - 1]]
 
 				while (state.length < length)
 				{
 					// Do binary search
-					let currentState = state.slice(-3).join("")
+					let currentState = state.slice(-size).join("")
 					let next = null
 					let min = 1
 					let max = dictionary.ma.length
@@ -140,17 +153,18 @@ function calculateSectorName()
 					}
 				}
 
-				state[0] = state[0].toUpperCase()
-				$("#sector_name").text(state.join(""))
+				let finalText = state.join("")
+				sectorNameElement.textContent = finalText[0].toUpperCase() + finalText.substr(1)
 			}
 		}
 		else
-			$("#sector_name").text("INVALID")
+			sectorNameElement.textContent = "INVALID"
 	}
 }
 
 $(document).ready(function()
 {
+	sectorNameElement = document.getElementById("sector_name")
 	$(".ui.dropdown").dropdown()
 	$("#x_coord").on("change paste keyup", calculateSectorName)
 	$("#y_coord").on("change paste keyup", calculateSectorName)
