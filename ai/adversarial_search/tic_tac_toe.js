@@ -14,6 +14,8 @@ const POSSIBLE_INDEX = [
 	[0, 4, 8],
 	[2, 4, 6]
 ];
+const CHARA_LOOKUP = [null, "X", "O"]
+const CLASS_LOOKUP = [null, "negative", "positive"]
 
 class TicTacToeBoard
 {
@@ -121,6 +123,33 @@ class TicTacToeBoard
 	}
 }
 
+class MinimaxResult
+{
+	constructor(index, score, node)
+	{
+		this.index = index
+		this.score = score
+		this.node = node
+	}
+}
+
+class BoardNode
+{
+	/**
+	 * @param {TicTacToeBoard} board 
+	 * @param {TicTacToeBoard[]} child 
+	 */
+	constructor(board, child)
+	{
+		this.board = board
+
+		if (child)
+			this.child = [...child]
+		else
+			this.child = []
+	}
+}
+
 // list of <td> elements
 /** @type {HTMLElement[]} */
 let state = [
@@ -128,13 +157,13 @@ let state = [
 	null, null, null,
 	null, null, null
 ];
-let boardState = new TicTacToeBoard()
 let statusInfo = null
 let startAIButton = null
-let playerNumber = 1
-let characterLookup = [null, "X", "O"]
-let classLookup = [null, "negative", "positive"]
+let pruningCheck = null
+
+let boardState = new TicTacToeBoard()
 let winnerDetermined = false
+let playerNumber = 1
 
 function init()
 {
@@ -157,11 +186,15 @@ function init()
 
 	startAIButton = document.getElementById("ai_button")
 	statusInfo = document.getElementById("status")
+	pruningCheck = document.getElementById("abpruning")
 
 	document.getElementById("reset_button").addEventListener("click", resetState)
 	startAIButton.addEventListener("click", letAIStart)
 
-	resetState();
+	if (typeof initHTML === 'function')
+		initHTML()
+
+	resetState()
 }
 
 function resetState()
@@ -172,16 +205,16 @@ function resetState()
 		state[i].children[0].textContent = i + 1
 	}
 
-	let minimaxEvaluation = document.getElementById("minimax_evaluation")
-	let copyNode = minimaxEvaluation.cloneNode(false)
-	minimaxEvaluation.parentNode.replaceChild(copyNode, minimaxEvaluation)
-
-	statusInfo.textContent = ""
+	statusInfo.textContent = String.fromCharCode(160)
 	playerNumber = 1
 	winnerDetermined = false
 
 	startAIButton.removeAttribute("disabled")
+	pruningCheck.removeAttribute("disabled")
 	boardState.resetBoard()
+
+	if (typeof boardReseted === 'function')
+		boardReseted()
 }
 
 function getOpponentNumber()
@@ -212,8 +245,10 @@ function selectBoard(index)
 		let opponent = getOpponentNumber()
 
 		startAIButton.setAttribute("disabled", "")
-		state[index].classList.add(classLookup[playerNumber])
-		state[index].children[0].textContent = characterLookup[playerNumber]
+		pruningCheck.setAttribute("disabled", "")
+
+		state[index].classList.add(CLASS_LOOKUP[playerNumber])
+		state[index].children[0].textContent = CHARA_LOOKUP[playerNumber]
 
 		if (status == 9)
 			setWinner(1)
@@ -222,11 +257,11 @@ function selectBoard(index)
 		else if (boardState.isBoardFull())
 			setWinner(0)
 
-		let value = walkTree(boardState, opponent)
-		console.log(...value)
-		boardState.setBoard(value[0], opponent)
-		state[value[0]].classList.add(classLookup[opponent])
-		state[value[0]].children[0].textContent = characterLookup[opponent]
+		let value = walkTree(boardState, opponent, pruningCheck.checked)
+		console.log(value)
+		boardState.setBoard(value.index, opponent)
+		state[value.index].classList.add(CLASS_LOOKUP[opponent])
+		state[value.index].children[0].textContent = CHARA_LOOKUP[opponent]
 		
 		status = boardState.utilityValue()
 		if (status == 9)
@@ -248,8 +283,8 @@ function letAIStart()
 	startAIButton.setAttribute("disabled", "")
 	boardState.setBoard(index, 1)
 
-	state[index].classList.add(classLookup[1])
-	state[index].children[0].textContent = characterLookup[1]
+	state[index].classList.add(CLASS_LOOKUP[1])
+	state[index].children[0].textContent = CHARA_LOOKUP[1]
 }
 
 /**
@@ -281,81 +316,96 @@ function successor(board, player)
 /**
  * @param {TicTacToeBoard} board 
  * @param {[number, number]} alphaBeta 
- * @returns {[number, number]}
+ * @returns {MinimaxResult}
  */
 function minimaxMaxValue(board, alphaBeta)
 {
 	// Terminal test
 	let status = board.utilityValue()
 	if (Math.abs(status) == 9 || board.isBoardFull())
-		return [-1, status]
+		return new MinimaxResult(-1, status, new BoardNode(board, null))
 	
 	let s = successor(board, 1)
 	let v = -Infinity
 	let index = -1
+	let childs = []
 
 	for (let i = 0; i < s.length; i++)
 	{
 		let successorBoard = s[i]
 		let result = minimaxMinValue(successorBoard[1], alphaBeta)
 
-		if (result[1] > v)
+		if (result.score > v)
 		{
-			v = result[1]
+			v = result.score
 			index = successorBoard[0]
 		}
-		else if (v >= alphaBeta[1])
-			break
-		
-		alphaBeta[0] = Math.max(alphaBeta[0], v)
+
+		if (alphaBeta)
+		{
+			if (v > alphaBeta[1])
+				break
+			
+			alphaBeta[0] = Math.max(alphaBeta[0], v)
+		}
+
+		childs.push(result.node)
 	}
 
-	return [index, v]
+	return new MinimaxResult(index, v, new BoardNode(board, childs))
 }
 
 /**
  * @param {TicTacToeBoard} board 
  * @param {[number, number]} alphaBeta 
- * @returns {[number, number]}
+ * @returns {MinimaxResult}
  */
 function minimaxMinValue(board, alphaBeta)
 {
 	// Terminal test
 	let status = board.utilityValue()
 	if (Math.abs(status) == 9 || board.isBoardFull())
-		return [-1, status]
+		return new MinimaxResult(-1, status, new BoardNode(board, null))
 
 	let s = successor(board, 2)
 	let v = Infinity
 	let index = -1
+	let childs = []
 
 	for (let i = 0; i < s.length; i++)
 	{
 		let successorBoard = s[i]
 		let result = minimaxMaxValue(successorBoard[1], alphaBeta)
 
-		if (result[1] < v)
+		if (result.score < v)
 		{
-			v = result[1]
+			v = result.score
 			index = successorBoard[0]
 		}
-		else if (v <= alphaBeta[0])
-			break
-		
-		alphaBeta[1] = Math.min(alphaBeta[1], v)
+
+		if (alphaBeta)
+		{
+			if (v < alphaBeta[0])
+				break
+			
+			alphaBeta[1] = Math.min(alphaBeta[1], v)
+		}
+
+		childs.push(result.node)
 	}
 
-	return [index, v]
+	return new MinimaxResult(index, v, new BoardNode(board, childs))
 }
 
 /**
  * 
  * @param {TicTacToeBoard} board 
  * @param {number} player 
+ * @param {boolean} useAlphaBetaPruning
  */
-function walkTree(board, player)
+function walkTree(board, player, useAlphaBetaPruning)
 {
-	let alphaBeta = [-Infinity, Infinity]
+	let alphaBeta = useAlphaBetaPruning ? [-Infinity, Infinity] : null
 
 	if (player == 2)
 		return minimaxMinValue(board, alphaBeta)
