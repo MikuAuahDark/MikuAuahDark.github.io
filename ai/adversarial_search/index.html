@@ -27,12 +27,44 @@
 			#tictactoe_playarea tbody tr td.selectable.negative a, #tictactoe_playarea tbody tr td.selectable.positive a {
 				cursor: unset;
 			}
+
+			#minimax_evaluation {
+				overflow-x: scroll;
+			}
 		</style>
 		<script>
+			let minimaxEvaluation = null
+
+			function initHTML()
+			{
+				minimaxEvaluation = document.getElementById("minimax_evaluation")
+			}
+
+			function clearTable()
+			{
+				let copyNode = minimaxEvaluation.cloneNode(false)
+				minimaxEvaluation.parentNode.replaceChild(copyNode, minimaxEvaluation)
+				minimaxEvaluation = copyNode
+			}
+
+			function boardReseted()
+			{
+				clearTable()
+			}
+
+			function buildHTMLTable(tree)
+			{
+				let newTable = minimaxEvaluation.cloneNode(false)
+
+				// TODO
+			}
+
 			function ready()
 			{
 				if (document.readyState != "loading")
+				{
 					init()
+				}
 				else
 					document.addEventListener("DOMContentLoaded", init)
 			}
@@ -43,10 +75,22 @@
 		<h1 class="ui center aligned header">TicTacToe Demonstration</h1>
 		<div class="ui center aligned text container">
 			<h2 class="ui header">The Game</h2>
-			<p id="status"></p>
-			<button id="reset_button" class="ui positive button">
-				Reset
-			</button>
+			<p id="status">&nbsp;</p>
+			<div class="ui grid">
+				<div class="four wide column"></div>
+				<div class="four wide column">
+					<button id="reset_button" class="ui positive button">
+						Reset
+					</button>
+				</div>
+				<div class="four wide column">
+					<div class="ui slider checkbox">
+						<input type="checkbox" id="abpruning" name="abpruning">
+						<label for="abpruning">α-β Pruning</label>
+					</div>
+				</div>
+				<div class="four wide column"></div>
+			</div>
 			<table id="tictactoe_playarea" class="ui celled large collapsing center aligned table">
 				<tbody>
 					<tr>
@@ -70,7 +114,8 @@
 				Let AI Start
 			</button>
 			<h2 class="ui header">Tree Evaluation</h2>
-			<div id="minimax_evaluation"></div>
+			<table id="minimax_evaluation" class="ui collapsing compact table">
+			</table>
 		</div>
 	</body>
 </html>
