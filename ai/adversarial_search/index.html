@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>TicTacToe Adversarial Search</title>
+		<link rel="stylesheet" href="../../semantic/semantic.min.css" />
+		<script type="text/javascript" src="../../jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="../../semantic/semantic.min.js"></script>
+		<script type="text/javascript" src="tic_tac_toe.js"></script>
+		<style>
+			#tictactoe_playarea {
+				font-family: monospace;
+				font-size: xx-large;
+				font-weight: bolder;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			#tictactoe_playarea tbody tr td.selectable a {
+				width: 3em;
+				height: 3em;
+				cursor: pointer;
+			}
+
+			#tictactoe_playarea tbody tr td.selectable.negative a, #tictactoe_playarea tbody tr td.selectable.positive a {
+				cursor: unset;
+			}
+		</style>
+		<script>
+			function ready()
+			{
+				if (document.readyState != "loading")
+					init()
+				else
+					document.addEventListener("DOMContentLoaded", init)
+			}
+			ready()
+		</script>
+	</head>
+	<body style="padding: 1em">
+		<h1 class="ui center aligned header">TicTacToe Demonstration</h1>
+		<div class="ui center aligned text container">
+			<h2 class="ui header">The Game</h2>
+			<p id="status"></p>
+			<button id="reset_button" class="ui positive button">
+				Reset
+			</button>
+			<table id="tictactoe_playarea" class="ui celled large collapsing center aligned table">
+				<tbody>
+					<tr>
+						<td class="selectable"><a>1</a></td>
+						<td class="selectable"><a>2</a></td>
+						<td class="selectable"><a>3</a></td>
+					</tr>
+					<tr>
+						<td class="selectable"><a>4</a></td>
+						<td class="selectable"><a>5</a></td>
+						<td class="selectable"><a>6</a></td>
+					</tr>
+					<tr>
+						<td class="selectable"><a>7</a></td>
+						<td class="selectable"><a>8</a></td>
+						<td class="selectable"><a>9</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<button id="ai_button" class="ui button">
+				Let AI Start
+			</button>
+			<h2 class="ui header">Tree Evaluation</h2>
+			<div id="minimax_evaluation"></div>
+		</div>
+	</body>
+</html>
