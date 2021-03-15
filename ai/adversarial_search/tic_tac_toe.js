@@ -256,28 +256,32 @@ function selectBoard(index)
 			setWinner(2)
 		else if (boardState.isBoardFull())
 			setWinner(0)
+		else
+		{
+			let value = walkTree(boardState.clone(), opponent, pruningCheck.checked)
 
-		let value = walkTree(boardState, opponent, pruningCheck.checked)
-		console.log(value)
-		boardState.setBoard(value.index, opponent)
-		state[value.index].classList.add(CLASS_LOOKUP[opponent])
-		state[value.index].children[0].textContent = CHARA_LOOKUP[opponent]
-		
-		status = boardState.utilityValue()
-		if (status == 9)
-			setWinner(1)
-		else if (status == -9)
-			setWinner(2)
-		else if (boardState.isBoardFull())
-			setWinner(0)
-		
-		// TODO: Tree evaluation
+			boardState.setBoard(value.index, opponent)
+			state[value.index].classList.add(CLASS_LOOKUP[opponent])
+			state[value.index].children[0].textContent = CHARA_LOOKUP[opponent]
+			
+			status = boardState.utilityValue()
+			if (status == 9)
+				setWinner(1)
+			else if (status == -9)
+				setWinner(2)
+			else if (boardState.isBoardFull())
+				setWinner(0)
+			
+			// TODO: Tree evaluation
+			if (typeof buildHTMLTable === 'function')
+				buildHTMLTable(value.node)
+		}
 	}
 }
 
 function letAIStart()
 {
-	let index = (Math.random() * 9 + 0.5) | 0
+	let index = (Math.random() * 9) | 0
 	playerNumber = 2
 
 	startAIButton.setAttribute("disabled", "")

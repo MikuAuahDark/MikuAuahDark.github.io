@@ -28,16 +28,52 @@
 				cursor: unset;
 			}
 
-			#minimax_evaluation {
-				overflow-x: scroll;
+			.red_colored {
+				background-color: red;
+			}
+
+			.green_colored {
+				background-color: lime;
 			}
 		</style>
 		<script>
+			/** @type {HTMLTableElement} */
 			let minimaxEvaluation = null
+			/** @type {HTMLTableElement} */
+			let minimaxTable = null
+			/** @type {HTMLTableElement} */
+			let ticTacToeTable = null
+			let minimaxTreeCheckbox = null
 
 			function initHTML()
 			{
 				minimaxEvaluation = document.getElementById("minimax_evaluation")
+				minimaxTreeCheckbox = document.getElementById("allow_minimax_tree")
+
+				minimaxTable = minimaxEvaluation.cloneNode(false)
+				let tbody = document.createElement("tbody")
+				let tr = document.createElement("tr")
+				let td = document.createElement("td")
+				tr.appendChild(td)
+				tr.appendChild(td.cloneNode(false))
+				tbody.appendChild(tr)
+				minimaxTable.appendChild(tbody)
+
+				ticTacToeTable = document.createElement("table")
+				let df = document.createDocumentFragment()
+				let tbody2 = tbody.cloneNode(false)
+				let tr2 = tr.cloneNode(false)
+
+				df.appendChild(td.cloneNode(false))
+				df.appendChild(td.cloneNode(false))
+				df.appendChild(td.cloneNode(false))
+				tr2.appendChild(df)
+				df = document.createDocumentFragment()
+				df.appendChild(tr2.cloneNode(true))
+				df.appendChild(tr2.cloneNode(true))
+				df.appendChild(tr2.cloneNode(true))
+				tbody2.appendChild(df)
+				ticTacToeTable.appendChild(tbody2)
 			}
 
 			function clearTable()
@@ -52,11 +88,75 @@
 				clearTable()
 			}
 
-			function buildHTMLTable(tree)
+			function representBoardWithTable(board)
 			{
-				let newTable = minimaxEvaluation.cloneNode(false)
+				let df = document.createDocumentFragment()
+				let table = ticTacToeTable.cloneNode(true)
+				let tbody = table.childNodes[0]
 
-				// TODO
+				for (let i = 0; i < 9; i++)
+				{
+					let value = board.getBoard(i)
+
+					if (value != 0)
+					{
+						let y = (i / 3) | 0
+						let x = i % 3
+
+						tbody.childNodes[y].childNodes[x].classList.add(value == 1 ? "red_colored" : "green_colored")
+					}
+				}
+
+				let p = document.createElement("p")
+				p.textContent = board.utilityValue().toString()
+
+				df.appendChild(table)
+				df.appendChild(p)
+				return df
+			}
+
+			function buildHTMLTableActual(boardNode)
+			{
+				/** @type {HTMLTableElement} */
+				let newTable = minimaxTable.cloneNode(true)
+				let hasChild = boardNode.child != null && boardNode.child.length > 0
+
+				//       table    tbody         1-st tr
+				let tr = newTable.childNodes[0].childNodes[0]
+				let td = tr.childNodes[0]
+
+				if (hasChild)
+				{
+					// Expand rows
+					let df = document.createDocumentFragment()
+					for (let i = 1; i < boardNode.child.length; i++)
+					{
+						let newTr = tr.cloneNode(false)
+						let td = document.createElement("td")
+						td.appendChild(buildHTMLTableActual(boardNode.child[i]))
+						newTr.appendChild(td)
+						df.appendChild(newTr)
+					}
+
+					// Create real board
+					td.setAttribute("rowspan", boardNode.child.length)
+					
+					newTable.childNodes[0].appendChild(df)
+				}
+
+				td.appendChild(representBoardWithTable(boardNode.board))
+
+				return newTable
+			}
+
+			function buildHTMLTable(boardNode)
+			{
+				if (minimaxTreeCheckbox.checked)
+				{
+					let finalTable = buildHTMLTableActual(boardNode)
+					minimaxEvaluation.parentNode.replaceChild(finalTable, minimaxEvaluation)
+					minimaxEvaluation = finalTable
+				}
 			}
 
 			function ready()
@@ -77,7 +177,13 @@
 			<h2 class="ui header">The Game</h2>
 			<p id="status">&nbsp;</p>
 			<div class="ui grid">
-				<div class="four wide column"></div>
+				<div class="two wide column"></div>
+				<div class="four wide column">
+					<div class="ui slider checkbox">
+						<input type="checkbox" id="allow_minimax_tree" name="allow_minimax_tree">
+						<label for="allow_minimax_tree">Tree (slow)</label>
+					</div>
+				</div>
 				<div class="four wide column">
 					<button id="reset_button" class="ui positive button">
 						Reset
@@ -89,7 +195,7 @@
 						<label for="abpruning">α-β Pruning</label>
 					</div>
 				</div>
-				<div class="four wide column"></div>
+				<div class="two wide column"></div>
 			</div>
 			<table id="tictactoe_playarea" class="ui celled large collapsing center aligned table">
 				<tbody>
@@ -114,8 +220,10 @@
 				Let AI Start
 			</button>
 			<h2 class="ui header">Tree Evaluation</h2>
-			<table id="minimax_evaluation" class="ui collapsing compact table">
-			</table>
+			<div style="overflow-x: auto">
+				<table id="minimax_evaluation" class="ui collapsing compact structured table">
+				</table>
+			</div>
 		</div>
 	</body>
 </html>
