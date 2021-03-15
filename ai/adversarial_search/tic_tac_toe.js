@@ -319,10 +319,9 @@ function successor(board, player)
 
 /**
  * @param {TicTacToeBoard} board 
- * @param {[number, number]} alphaBeta 
  * @returns {MinimaxResult}
  */
-function minimaxMaxValue(board, alphaBeta)
+function minimaxMaxValue(board, alpha, beta)
 {
 	// Terminal test
 	let status = board.utilityValue()
@@ -337,7 +336,7 @@ function minimaxMaxValue(board, alphaBeta)
 	for (let i = 0; i < s.length; i++)
 	{
 		let successorBoard = s[i]
-		let result = minimaxMinValue(successorBoard[1], alphaBeta)
+		let result = minimaxMinValue(successorBoard[1], alpha, beta)
 
 		if (result.score > v)
 		{
@@ -345,12 +344,12 @@ function minimaxMaxValue(board, alphaBeta)
 			index = successorBoard[0]
 		}
 
-		if (alphaBeta)
+		if (alpha != null && beta != null)
 		{
-			if (v > alphaBeta[1])
+			if (v > beta)
 				break
 			
-			alphaBeta[0] = Math.max(alphaBeta[0], v)
+			alpha = Math.max(alpha, v)
 		}
 
 		childs.push(result.node)
@@ -361,10 +360,9 @@ function minimaxMaxValue(board, alphaBeta)
 
 /**
  * @param {TicTacToeBoard} board 
- * @param {[number, number]} alphaBeta 
  * @returns {MinimaxResult}
  */
-function minimaxMinValue(board, alphaBeta)
+function minimaxMinValue(board, alpha, beta)
 {
 	// Terminal test
 	let status = board.utilityValue()
@@ -379,7 +377,7 @@ function minimaxMinValue(board, alphaBeta)
 	for (let i = 0; i < s.length; i++)
 	{
 		let successorBoard = s[i]
-		let result = minimaxMaxValue(successorBoard[1], alphaBeta)
+		let result = minimaxMaxValue(successorBoard[1], alpha, beta)
 
 		if (result.score < v)
 		{
@@ -387,12 +385,12 @@ function minimaxMinValue(board, alphaBeta)
 			index = successorBoard[0]
 		}
 
-		if (alphaBeta)
+		if (alpha != null && beta != null)
 		{
-			if (v < alphaBeta[0])
+			if (v < alpha)
 				break
 			
-			alphaBeta[1] = Math.min(alphaBeta[1], v)
+				beta = Math.min(beta, v)
 		}
 
 		childs.push(result.node)
@@ -409,10 +407,15 @@ function minimaxMinValue(board, alphaBeta)
  */
 function walkTree(board, player, useAlphaBetaPruning)
 {
-	let alphaBeta = useAlphaBetaPruning ? [-Infinity, Infinity] : null
+	let alpha = null, beta = null
+	if (useAlphaBetaPruning)
+	{
+		alpha = -Infinity
+		beta = Infinity
+	}
 
 	if (player == 2)
-		return minimaxMinValue(board, alphaBeta)
+		return minimaxMinValue(board, alpha, beta)
 	else
-		return minimaxMaxValue(board, alphaBeta)
+		return minimaxMaxValue(board, alpha, beta)
 }
