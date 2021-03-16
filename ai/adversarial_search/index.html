@@ -22,6 +22,8 @@
 				width: 3em;
 				height: 3em;
 				cursor: pointer;
+				display: table-cell;
+				vertical-align: middle;
 			}
 
 			#tictactoe_playarea tbody tr td.selectable.negative a, #tictactoe_playarea tbody tr td.selectable.positive a {
@@ -177,51 +179,53 @@
 			<h2 class="ui header">The Game</h2>
 			<p id="status">&nbsp;</p>
 			<div class="ui grid">
-				<div class="two wide column"></div>
-				<div class="four wide column">
-					<div class="ui slider checkbox">
-						<input type="checkbox" id="allow_minimax_tree" name="allow_minimax_tree">
-						<label for="allow_minimax_tree">Tree (slow)</label>
+				<div class="three column row">
+					<div class="column">
+						<div class="ui slider checkbox">
+							<input type="checkbox" id="allow_minimax_tree" name="allow_minimax_tree">
+							<label for="allow_minimax_tree">Tree (slow)</label>
+						</div>
+					</div>
+					<div class="column">
+						<button id="reset_button" class="ui positive button">
+							Reset
+						</button>
+					</div>
+					<div class="column">
+						<div class="ui slider checkbox">
+							<input type="checkbox" id="abpruning" name="abpruning">
+							<label for="abpruning">α-β Pruning</label>
+						</div>
 					</div>
 				</div>
-				<div class="four wide column">
-					<button id="reset_button" class="ui positive button">
-						Reset
-					</button>
-				</div>
-				<div class="four wide column">
-					<div class="ui slider checkbox">
-						<input type="checkbox" id="abpruning" name="abpruning">
-						<label for="abpruning">α-β Pruning</label>
-					</div>
-				</div>
-				<div class="two wide column"></div>
 			</div>
-			<table id="tictactoe_playarea" class="ui celled large collapsing center aligned table">
-				<tbody>
-					<tr>
-						<td class="selectable"><a>1</a></td>
-						<td class="selectable"><a>2</a></td>
-						<td class="selectable"><a>3</a></td>
-					</tr>
-					<tr>
-						<td class="selectable"><a>4</a></td>
-						<td class="selectable"><a>5</a></td>
-						<td class="selectable"><a>6</a></td>
-					</tr>
-					<tr>
-						<td class="selectable"><a>7</a></td>
-						<td class="selectable"><a>8</a></td>
-						<td class="selectable"><a>9</a></td>
-					</tr>
-				</tbody>
-			</table>
+		</div>
+		<table id="tictactoe_playarea" class="ui celled large collapsing center aligned unstackable table">
+			<tbody>
+				<tr>
+					<td class="selectable"><a>1</a></td>
+					<td class="selectable"><a>2</a></td>
+					<td class="selectable"><a>3</a></td>
+				</tr>
+				<tr>
+					<td class="selectable"><a>4</a></td>
+					<td class="selectable"><a>5</a></td>
+					<td class="selectable"><a>6</a></td>
+				</tr>
+				<tr>
+					<td class="selectable"><a>7</a></td>
+					<td class="selectable"><a>8</a></td>
+					<td class="selectable"><a>9</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="ui center aligned text container">
 			<button id="ai_button" class="ui button">
 				Let AI Start
 			</button>
 			<h2 class="ui header">Tree Evaluation</h2>
 			<div style="overflow-x: auto">
-				<table id="minimax_evaluation" class="ui collapsing compact structured table">
+				<table id="minimax_evaluation" class="ui collapsing compact structured unstackable table">
 				</table>
 			</div>
 		</div>
