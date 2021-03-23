@@ -125,6 +125,11 @@ class TicTacToeBoard
 
 class MinimaxResult
 {
+	/**
+	 * @param {number} index 
+	 * @param {number} score 
+	 * @param {BoardNode} node 
+	 */
 	constructor(index, score, node)
 	{
 		this.index = index
