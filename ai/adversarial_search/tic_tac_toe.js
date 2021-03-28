@@ -395,7 +395,7 @@ function minimaxMinValue(board, alpha, beta)
 			if (v < alpha)
 				break
 			
-				beta = Math.min(beta, v)
+			beta = Math.min(beta, v)
 		}
 
 		childs.push(result.node)
