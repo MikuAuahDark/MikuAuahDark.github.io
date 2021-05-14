@@ -642,6 +642,19 @@
 				localStorage.setItem("__activetab", elem.getAttribute("data-tab"))
 			}
 
+			function clearAllCheckbox()
+			{
+				let elems = document.querySelectorAll("div.ui.text.container div.ui.bottom.attached div.ui.checkbox input[type=\"checkbox\"]")
+
+				for (let i = 0; i < elems.length; i++)
+				{
+					localStorage.removeItem(elems[i].getAttribute("name"))
+					elems[i].checked = false
+				}
+
+				ProgressElement.textContent = 0
+			}
+
 			$(document).ready(() => {
 				// Get last active tab
 				let tab = localStorage.getItem("__activetab")
@@ -687,7 +700,26 @@
 				this page as needed and your progress will be saved. If you'd like to start over, press the button below.
 			</p>
 			<p>Progress: <strong id="progress">0</strong>%</p>
-			<button class="ui red button">Reset Progress</button>
+			<button class="ui red button" onclick="$('#clear_confirm').modal('show')">Reset Progress</button>
+		</div>
+		<div id="clear_confirm" class="ui basic modal">
+			<div class="ui icon header">
+				<i class="trash alternate icon"></i>
+				Clear All Checklist
+			</div>
+			<div class="content">
+				<p style="text-align:center">Are you sure want to clear all checklist? This action cannot be undone.</p>
+			</div>
+			<div class="actions">
+				<div class="ui red basic cancel inverted button">
+					<i class="remove icon"></i>
+					No
+				</div>
+				<div class="ui green ok inverted button" onclick="clearAllCheckbox()">
+					<i class="checkmark icon"></i>
+					Yes
+				</div>
+			</div>
 		</div>
 		<div class="ui text container" style="margin-bottom: 1em">
 			<div class="ui top attached tabular menu">
