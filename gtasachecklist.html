@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>GTA: San Andreas 100% Checklist</title>
+		<link rel="stylesheet" href="semantic/semantic.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script>
+			const STORYLINE_MISSIONS = [
+				{
+					name: "Los Santos",
+					nosub: false,
+					list: [
+						{
+							name: "Carl Johnson",
+							list: ["Big Smoke + Sweet & Kendl",]
+						},
+						{
+							name: "Ryder (Part 1)",
+							list: ["Ryder"],
+						},
+						{
+							name: "Sweet (Part 1)",
+							list: [
+								"Tagging Up Turf",
+								"Cleaning The Hood",
+								"Drive-Thru",
+								"Nines And AK's",
+								"Drive-By",
+								"Sweet's Girl",
+								"Cesar Vialpando"
+							]
+						},
+						{
+							name: "Big Smoke",
+							list: [
+								"OG Loc",
+								"Running Dog",
+								"Wrong Side Of The Tracks",
+								"Just Business"
+							]
+						},
+						{
+							name: "Ryder (Part 2)",
+							list: [
+								"Home Invasion",
+								"Catalyst",
+								"Robbing Uncle Sam"
+							]
+						},
+						{
+							name: "Cesar Vialpando",
+							list: ["High Stakes, Low Rider"]
+						},
+						{
+							name: "OG Loc",
+							list: [
+								"Life's A Beach",
+								"Madd Dogg's Rhymes",
+								"Management Issues",
+								"House Party"
+							]
+						},
+						{
+							name: "C.R.A.S.H",
+							list: [
+								"Burning Desire",
+								"Gray Imports"
+							]
+						},
+						{
+							name: "Sweet (Part 2)",
+							list: [
+								"Doberman",
+								"Los Sepulcros",
+								"Reuniting The Families",
+								"The Green Sabre"
+							]
+						}
+					]
+				},
+				{
+					name: "Countryside",
+					nosub: false,
+					list: [
+						{
+							name: "C.R.A.S.H.",
+							list: ["Badlands"]
+						},
+						{
+							name: "Catalina",
+							list: [
+								"Tanker Commander",
+								"Local Liquor Store",
+								"Against All Odds",
+								"Small Town Bank"
+							]
+						},
+						{
+							name: "Cesar Vialpando (Part 1)",
+							list: ["King in Exile"]
+						},
+						{
+							name: "The Truth (Part 1)",
+							list: ["Body Harvest"]
+						},
+						{
+							name: "Cesar Vialpando (Part 2)",
+							list: [
+								"Wu Zi Mu",
+								"Farewell, My Love..."
+							]
+						},
+						{
+							name: "The Truth (Part 2)",
+							list: ["Are You Going To San Fierro?"]
+						},
+					]
+				},
+				{
+					name: "San Fierro",
+					nosub: false,
+					list: [
+						{
+							name: "Carl Johnson (Part 1)",
+							list: ["Wear Flowers in Your Hair"],
+						},
+						{
+							name: "C.R.A.S.H. (Part 1)",
+							list: ["555 We Tip"]
+						},
+						{
+							name: "Carl Johnson (Part 2)",
+							list: ["Deconstruction"],
+						},
+						{
+							name: "Zero",
+							list: [
+								"Air Raid",
+								"Supply Lines...",
+								"New Model Army"
+							]
+						},
+						{
+							name: "Cesar Vialpando (Part 1)",
+							list: ["Photo Opportunity"],
+						},
+						{
+							name: "Jizzy B. (Part 1)",
+							list: [
+								"Jizzy",
+								"T-Bone Mendez",
+								"Mike Toreno"
+							]
+						},
+						{
+							name: "Wu Zi Mu (Part 1)",
+							list: [
+								"Mountain Cloud Boys",
+								"Ran Fa Li",
+								"Lure",
+								"Amphibious Assault",
+								"The Da Nang Thang"
+							]
+						},
+						{
+							name: "Jizzy B. (Part 2)",
+							list: ["Outrider"]
+						},
+						{
+							name: "C.R.A.S.H. (Part 2)",
+							list: ["Snail Trail"]
+						},
+						{
+							name: "Carl Johnson (Part 3)",
+							list: ["Ice Cold Killa"],
+						},
+						{
+							name: "Cesar Vialpando (Part 2)",
+							list: ["Pier 69"],
+						},
+						{
+							name: "Wu Zi Mu (Part 2)",
+							list: [
+								"Toreno's Last Flight",
+								"Yay Ka-Boom-Boom"
+							]
+						},
+						{
+							name: "Cesar Vialpando (Wang Cars)",
+							list: [
+								"Zeroing In",
+								"Test Drive",
+								"Customs Fast Track",
+								"Puncture Wounds"
+							],
+						},
+					]
+				},
+				{
+					name: "Desert",
+					nosub: false,
+					list: [
+						{
+							name: "Mike Toreno",
+							list: [
+								"Monster",
+								"Highjack",
+								"Interdiction",
+								"Verdant Meadows",
+								"N.O.E.",
+								"Stowaway"
+							]
+						},
+						{
+							name: "The Truth",
+							list: [
+								"Black Project",
+								"Green Goo"
+							]
+						}
+					]
+				},
+				{
+					name: "Las Venturas",
+					nosub: false,
+					list: [
+						{
+							name: "Triads (Part 1)",
+							list: [
+								"Fender Ketchup",
+								"Explosive Situation",
+								"You've Had Your Chips",
+								"Don Peyote"
+							]
+						},
+						{
+							name: "Mafia (Part 1)",
+							list: [
+								"Intensive Care",
+								"The Meat Business"
+							]
+						},
+						{
+							name: "Triads (Part 2)",
+							list: ["Fish In A Barrel"]
+						},
+						{
+							name: "Madd Dogg",
+							list: ["Madd Dogg"]
+						},
+						{
+							name: "Mafia (Part 2)",
+							list: ["Freefall"]
+						},
+						{
+							name: "C.R.A.S.H.",
+							list: [
+								"Misappropriation",
+								"High Noon"
+							]
+						},
+						{
+							name: "Triads (Robbery)",
+							list: [
+								"Architectual Espionage",
+								"Key to Her Heart",
+								"Dam and Blast",
+								"Cop Wheels",
+								"Up, Up and Away!",
+								"Breaking the Bank at Caligula's"
+							]
+						},
+						{
+							name: "Triads (Part 3)",
+							list: ["A Home in the Hills"]
+						}
+					]
+				},
+				{
+					name: "Return to Los Santos",
+					nosub: false,
+					list: [
+						{
+							name: "Mike Toreno",
+							list: [
+								"Vertical Bird",
+								"Home Coming"
+							]
+						},
+						{
+							name: "Madd Dogg",
+							list: ["Cut Throat Business"]
+						},
+						{
+							name: "Sweet (Part 1)",
+							list: [
+								"Beat Down on B Dup",
+								"Grove 4 Life"
+							]
+						},
+						{
+							name: "Carl Johnson",
+							list: ["Riot"]
+						},
+						{
+							name: "Sweet (Part 2)",
+							list: [
+								"Los Desperados",
+								"End of the Line"
+							]
+						}
+					]
+				}
+			]
+			const SIDE_MISSIONS = [
+				{
+					name: "Collectables",
+					nosub: true,
+					list: [
+						"100 Tags",
+						"50 Snapshots",
+						"50 Horseshoes",
+						"50 Oysters"
+					]
+				},
+				{
+					name: "Sub-Missions",
+					nosub: true,
+					list: [
+						"50 Fares Taxi",
+						"Level 12 Firefighter",
+						"Level 12 Paramedic",
+						"Level 12 Vigilante",
+						"Level 10 Pimping",
+						"Level 2 Freight Train"
+					]
+				},
+				{
+					name: "Hidden Side Missions",
+					nosub: true,
+					list: [
+						"BMX Challenge",
+						"NRG-500 Challenge",
+						"3 Chiliad Challenges"
+					]
+				},
+				{
+					name: "Stadium Challenges",
+					nosub: false,
+					list: [
+						{
+							name: "Los Santos",
+							list: ["8-Track"]
+						},
+						{
+							name: "San Fierro",
+							list: ["Blood Bowl"]
+						},
+						{
+							name: "Las Venturas",
+							list: [
+								"Dirt Track",
+								"Kick Start"
+							]
+						}
+					]
+				},
+				{
+					name: "Gym Moves",
+					nosub: true,
+					list: [
+						"Learn Los Santos Gym Moves",
+						"Learn San Fierro Gym Moves",
+						"Learn Las Venturas Gym Moves"
+					]
+				},
+				{
+					name: "Ammu-Nation Gun Challenges",
+					nosub: true,
+					list: [
+						"Pistol Challenge",
+						"Micro SMG Challenge",
+						"Shotgun Challenge",
+						"AK-47 Challenge"
+					]
+				},
+				{
+					name: "School",
+					nosub: true,
+					list: [
+						"Pass All Tests at Driving School",
+						"Pass All Tests at Boat School",
+						"Pass All Tests at Flying School",
+						"Pass All Tests at Bike School"
+					]
+				},
+				{
+					name: "Assets",
+					nosub: false,
+					list: [
+						{
+							name: "Asset Missions",
+							list: [
+								"Level 5 Valet Parking",
+								"Level 8 Trucking",
+								"Level 7 Quarry"
+							]
+						},
+						{
+							name: "Courier Missions",
+							list: [
+								"Roboi's Food Mart (Los Santos)",
+								"Hippy Shopper (San Fierro)",
+								"Burger Shot (Las Venturas)"
+							]
+						}
+					]
+				},
+				{
+					name: "Import/Export",
+					nosub: true,
+					list: [
+						"Import List 1 (10 vehicles total)",
+						"Import List 2 (20 vehicles total)",
+						"Import List 3 (30 vehicles total)"
+					]
+				},
+				{
+					name: "Race Tournaments",
+					nosub: false,
+					list: [
+						{
+							name: "Los Santos",
+							list: [
+								"Little Loop",
+								"Backroad Wanderer",
+								"City Circuit",
+								"Vinewood",
+								"Freeway",
+								"Into The Country"
+							]
+						},
+						{
+							name: "San Fierro",
+							list: [
+								"Dirtbike Danger",
+								"Bandito Country",
+								"Go-Go Karting",
+								"San Fierro Fastlane",
+								"San Fierro Hills",
+								"Country Endurance"
+							]
+						},
+						{
+							name: "Las Venturas",
+							list: [
+								"SF to LV",
+								"Dam Rider",
+								"Desert Tricks",
+								"LV Ringroad"
+							]
+						},
+						{
+							name: "Las Venturas Air Races",
+							list: [
+								"World War Ace",
+								"Barnstorming",
+								"Military Service",
+								"Chooper Checkpoint",
+								"Whirly bird Waypoint",
+								"Heli Heli"
+							]
+						}
+					]
+				}
+			]
+
+			const SAFEHOUSE = [
+				{
+					name: "Los Santos",
+					nosub: true,
+					list: [
+						"Jefferson",
+						"Verona Beach",
+						"Willowfield",
+						"Mulholland",
+						"El Corona",
+						"Santa Maria Beach"
+					]
+				},
+				{
+					name: "Countryside",
+					nosub: true,
+					list: [
+						"Dillimore",
+						"Blueberry",
+						"Palomino Creek",
+						"Angel Pine",
+						"Whetstone"
+					]
+				},
+				{
+					name: "San Fierro",
+					nosub: true,
+					list: [
+						"Hashbury",
+						"Queens",
+						"Doherty",
+						"Chinatown",
+						"Calton Heights",
+						"Paradiso",
+						"Zero's RC Shop",
+						"Wang Cars"
+					]
+				},
+				{
+					name: "Desert",
+					nosub: true,
+					list: [
+						"El Quebrados",
+						"Tierra Robada",
+						"Fort Carson",
+						"Abandoned Airfield (Verdant Meadows)"
+					]
+				},
+				{
+					name: "Las Venturas",
+					nosub: true,
+					list: [
+						"Whitewood Estate",
+						"Pirates In Men's Pants",
+						"The Camel's Toe",
+						"The Clown's Pocket",
+						"Old Venturas Strip",
+						"Creek",
+						"Rockshore West",
+						"Prickle Pine",
+						"Redsands West"
+					]
+				}
+			]
+
+			let TotalProgress = 0
+			let CurrentProgress = 0
+			let ProgressElement = null
+
+			function convertNames(name)
+			{
+				return name.replace(/\s+/g, '_').replace(/\W/g, '')
+			}
+
+			function setCheckboxValue(event)
+			{
+				let elem = event.target
+
+				if (elem.checked)
+				{
+					localStorage.setItem(elem.getAttribute("name"), "1")
+					CurrentProgress++
+				}
+				else
+				{
+					localStorage.removeItem(elem.getAttribute("name"))
+					CurrentProgress--
+				}
+
+				ProgressElement.textContent = (CurrentProgress * 100 / TotalProgress).toFixed(2)
+			}
+
+			function createMissionSubcat(missionSubcat, fragment, h)
+			{
+				let header = document.createElement(h)
+
+				header.textContent = missionSubcat.name
+				header.classList.add("ui", "header")
+
+				fragment.appendChild(header)
+
+				for (let k = 0; k < missionSubcat.list.length; k++)
+				{
+					let divCheck = document.createElement("div")
+					let inputCheck = document.createElement("input")
+					let labelCheck = document.createElement("label")
+					let missionName = missionSubcat.list[k]
+					let name = convertNames(missionName)
+
+					divCheck.classList.add("ui", "checkbox")
+					inputCheck.setAttribute("type", "checkbox")
+					inputCheck.setAttribute("name", name)
+					inputCheck.addEventListener("change", setCheckboxValue)
+					labelCheck.setAttribute("for", name)
+					labelCheck.textContent = missionName
+
+					if (localStorage.getItem(name) != null)
+					{
+						CurrentProgress++
+						inputCheck.checked = true
+					}
+
+					divCheck.appendChild(inputCheck)
+					divCheck.appendChild(labelCheck)
+					fragment.appendChild(divCheck)
+				}
+
+				TotalProgress += missionSubcat.list.length
+			}
+
+			function generateTabs(dest, list)
+			{
+				// Create missions tab
+				let fragment = document.createDocumentFragment()
+
+				for (let i = 0; i < list.length; i++)
+				{
+					let missionCat = list[i]
+
+					if (missionCat.nosub)
+						createMissionSubcat(missionCat, fragment, "h2")
+					else
+					{
+						let header = document.createElement("h2")
+
+						header.textContent = missionCat.name
+						header.classList.add("ui", "header")
+
+						fragment.appendChild(header)
+
+						for (let j = 0; j < missionCat.list.length; j++)
+							createMissionSubcat(missionCat.list[j], fragment, "h3")
+					}
+				}
+
+				dest.appendChild(fragment)
+			}
+
+			function changeTab(elem)
+			{
+				localStorage.setItem("__activetab", elem.getAttribute("data-tab"))
+			}
+
+			$(document).ready(() => {
+				// Get last active tab
+				let tab = localStorage.getItem("__activetab")
+
+				if (tab != null)
+				{
+					let elem = document.querySelector("a[data-tab=\"" + tab + "\"]")
+
+					if (elem)
+					{
+						elem.classList.add("active")
+						document.getElementById(tab).classList.add("active")
+					}
+				}
+				else
+				{
+					document.querySelector("a[data-tab=\"missions\"]").classList.add("active")
+					document.getElementById("missions").classList.add("active")
+				}
+
+				$('.menu .item').tab()
+
+				generateTabs(document.getElementById("missions"), STORYLINE_MISSIONS)
+				generateTabs(document.getElementById("sidemi"), SIDE_MISSIONS)
+				generateTabs(document.getElementById("safehouse"), SAFEHOUSE)
+				ProgressElement = document.getElementById("progress")
+				ProgressElement.textContent = (CurrentProgress * 100 / TotalProgress).toFixed(2)
+			})
+		</script>
+		<style>
+			div.ui.segment div.ui.checkbox {
+				display: block;
+				margin: 0.3em
+			}
+		</style>
+	</head>
+	<body style="padding: 1em">
+		<div class="ui text container orange segment">
+			<h1 class="ui header"><i class="check icon"></i>GTASA 100% Checklist</h1>
+			<p>
+				Yet another GTA: San Andreas 100% checklist. Based on <a href="https://www.gta-sanandreas.com/guides/100percent/index.php">
+				this 100% checklist page</a>. All your progress are saved in your local browser so feel free to close and open
+				this page as needed and your progress will be saved. If you'd like to start over, press the button below.
+			</p>
+			<p>Progress: <strong id="progress">0</strong>%</p>
+			<button class="ui red button">Reset Progress</button>
+		</div>
+		<div class="ui text container" style="margin-bottom: 1em">
+			<div class="ui top attached tabular menu">
+				<a class="item" data-tab="missions" onclick="changeTab(this)">Storyline Missions</a>
+				<a class="item" data-tab="sidemi" onclick="changeTab(this)">Side Missions</a>
+				<a class="item" data-tab="safehouse" onclick="changeTab(this)">Safehouse</a>
+			</div>
+			<div id="missions" class="ui bottom attached tab segment" data-tab="missions">
+			</div>
+			<div id="sidemi" class="ui bottom attached tab segment" data-tab="sidemi">
+				<h2 class="ui header">Import/Export</h2>
+			</div>
+			<div id="safehouse" class="ui bottom attached tab segment" data-tab="safehouse">
+			</div>
+		</div>
+	</body>
+</html>
