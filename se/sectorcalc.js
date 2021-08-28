@@ -85,89 +85,91 @@ function changeDictionary()
 			version = 1
 		}
 
-		calculateSectorName()
+		updateSectorName()
 	})
 }
 
-function calculateSectorName()
+function updateSectorName()
 {
-	if (dictionary)
+	let x = Number(document.getElementById("x_coord").value)
+	let y = Number(document.getElementById("y_coord").value)
+	sectorNameElement.textContent = calculateSectorName(dictionary, x, y)
+}
+
+function calculateSectorName(dict, x, y)
+{
+	let size = dict.size
+
+	// NaN-check
+	if (x == x && y == y && x >= -32767 && y >= -32767 && x <= 32767 && y <= 32767)
 	{
-		let size = dictionary.size
-		let x = Number($("#x_coord").val())
-		let y = Number($("#y_coord").val())
-
-		// NaN-check
-		if (x == x && y == y && x >= -32767 && y >= -32767 && x <= 32767 && y <= 32767)
+		if (x == 0 && y == 0)
+			return "Sol"
+		else
 		{
-			if (x == 0 && y == 0)
-				sectorNameElement.textContent = "Sol"
-			else
+			// Initialize RNG state
+			let rng = new Xorshift(computeSeed64(x, y, 2147463847n, 1013n, 337n))
+			rng.next()
+			rng.next()
+			rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
+
+			let length = size + Math.floor(rng.random() ** 0.885 * 10)
+			let state = [...dict.initialState[rng.range(1, dict.initialState.length) - 1]]
+
+			while (state.length < length)
 			{
-				// Initialize RNG state
-				let rng = new Xorshift(computeSeed64(x, y, 2147463847n, 1013n, 337n))
-				rng.next()
-				rng.next()
-				rng = new Xorshift(BigInt.asUintN(64, rng.next() * 214013n + 2531011n))
+				// Do binary search
+				let currentState = state.slice(-size).join("")
+				let next = null
+				let min = 1
+				let max = dict.ma.length
 
-				let length = size + Math.floor(rng.random() ** 0.885 * 10)
-				let state = [...dictionary.initialState[rng.range(1, dictionary.initialState.length) - 1]]
-
-				while (state.length < length)
+				while (min <= max)
 				{
-					// Do binary search
-					let currentState = state.slice(-size).join("")
-					let next = null
-					let min = 1
-					let max = dictionary.ma.length
+					let mid = Math.floor((min + max) / 2)
+					let target = dict.ma[mid - 1]
 
-					while (min <= max)
+					if (currentState > target.name)
+						min = mid + 1
+					else if (currentState < target.name)
+						max = mid - 1
+					else
 					{
-						let mid = Math.floor((min + max) / 2)
-						let target = dictionary.ma[mid - 1]
-
-						if (currentState > target.name)
-							min = mid + 1
-						else if (currentState < target.name)
-							max = mid - 1
-						else
-						{
-							next = target
-							break
-						}
-					}
-
-					if (next == null)
+						next = target
 						break
-					
-					let list = next.paths
-					let nextValue = rng.range(0, list[list.length - 1][1])
-
-					for (const v of list)
-					{
-						if (nextValue <= v[1])
-						{
-							state.push(v[0])
-							break
-						}
 					}
 				}
 
-				let finalText = state.join("")
-				sectorNameElement.textContent = finalText[0].toUpperCase() + finalText.substr(1)
+				if (next == null)
+					break
+				
+				let list = next.paths
+				let nextValue = rng.range(0, list[list.length - 1][1])
+
+				for (const v of list)
+				{
+					if (nextValue <= v[1])
+					{
+						state.push(v[0])
+						break
+					}
+				}
 			}
+
+			let finalText = state.join("")
+			return finalText[0].toUpperCase() + finalText.substr(1)
 		}
-		else
-			sectorNameElement.textContent = "INVALID"
 	}
+	else
+		return null
 }
 
 $(document).ready(function()
 {
 	sectorNameElement = document.getElementById("sector_name")
 	$(".ui.dropdown").dropdown()
-	$("#x_coord").on("change paste keyup", calculateSectorName)
-	$("#y_coord").on("change paste keyup", calculateSectorName)
+	$("#x_coord").on("change paste keyup", updateSectorName)
+	$("#y_coord").on("change paste keyup", updateSectorName)
 	$("#dictionary").change(changeDictionary)
 
 	changeDictionary()
