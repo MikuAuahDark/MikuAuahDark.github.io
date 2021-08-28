@@ -1,6 +1,23 @@
-let dictionary = null
-let sectorNameElement = null
 const UINT64_MAX = 2n**64n-1n
+
+
+let singleNameDictionary = null
+let singleDictionaryElem = null
+let sectorNameElement = null
+let xCoordElem = null
+let yCoordElem = null
+
+let multiNameDictionary = null
+let multiDictionaryElem = null
+let multiNameQueued = false
+let multiNamesCountElem = null
+let multiNamesTbody = null
+let multiNamesTdataTemplate = null
+let minXRangeElem = null
+let minYRangeElem = null
+let maxXRangeElem = null
+let maxYRangeElem = null
+let lastGenerated = null
 
 function wangHash64(k)
 {
@@ -67,33 +84,55 @@ class Xorshift
 	}
 }
 
-function changeDictionary()
+function updateDictionaryVersion(data)
 {
-	dictionary = null
-	$.getJSON($("#dictionary").val(), function(data)
+	let version = data.version ?? 0
+
+	if (version == 0)
 	{
-		let version = data.version ?? 0
-		dictionary = data
+		data.size = 3
 
-		if (version == 0)
-		{
-			dictionary.size = 3
+		for (let i = 0; i < data.initialState.length; i++)
+		data.initialState[i] = data.initialState[i].split("")
 
-			for (let i = 0; i < dictionary.initialState.length; i++)
-				dictionary.initialState[i] = dictionary.initialState[i].split("")
+		version = 1
+	}
+}
 
-			version = 1
-		}
-
+function changeSingleNameDictionary()
+{
+	singleNameDictionary = null
+	$.getJSON(singleDictionaryElem.value, function(data)
+	{
+		singleNameDictionary = data
+		updateDictionaryVersion(data)
 		updateSectorName()
+	})
+}
+
+function changeMultiNameDictionary()
+{
+	multiNameDictionary = null
+	$.getJSON(multiDictionaryElem.value, function(data)
+	{
+		multiNameDictionary = data
+		updateDictionaryVersion(data)
+
+		if (multiNameQueued)
+			generateLotsOfNames()
 	})
 }
 
 function updateSectorName()
 {
-	let x = Number(document.getElementById("x_coord").value)
-	let y = Number(document.getElementById("y_coord").value)
-	sectorNameElement.textContent = calculateSectorName(dictionary, x, y)
+	let x = Number(xCoordElem.value)
+	let y = Number(yCoordElem.value)
+	sectorNameElement.textContent = calculateSectorName(singleNameDictionary, x, y) ?? "INVALID!"
+}
+
+function isCoordInRange(coord)
+{
+	return coord == coord && coord >= -32767 && coord <= 32767
 }
 
 function calculateSectorName(dict, x, y)
@@ -101,7 +140,7 @@ function calculateSectorName(dict, x, y)
 	let size = dict.size
 
 	// NaN-check
-	if (x == x && y == y && x >= -32767 && y >= -32767 && x <= 32767 && y <= 32767)
+	if (isCoordInRange(x) && isCoordInRange(y))
 	{
 		if (x == 0 && y == 0)
 			return "Sol"
@@ -164,13 +203,118 @@ function calculateSectorName(dict, x, y)
 		return null
 }
 
+// https://stackoverflow.com/a/1527820
+function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function generateLotsOfNames()
+{
+	if (multiNameDictionary == null)
+	{
+		multiNameQueued = true
+		return
+	}
+
+	multiNameQueued = false
+
+	let amount = Number(multiNamesCountElem.value)
+	let minX = Number(minXRangeElem.value)
+	let minY = Number(minYRangeElem.value)
+	let maxX = Number(maxXRangeElem.value)
+	let maxY = Number(maxYRangeElem.value)
+
+	if (
+		amount == amount &&
+		amount >= 2 &&
+		isCoordInRange(minX) &&
+		isCoordInRange(maxX) &&
+		isCoordInRange(minY) &&
+		isCoordInRange(maxY) &&
+		minX <= maxX &&
+		minY <= minY
+	)
+	{
+		let fragment = document.createDocumentFragment()
+		lastGenerated = []
+
+		for (let i = 0; i < amount; i++)
+		{
+			/** @type HTMLTableRowElement */
+			let tableData = multiNamesTdataTemplate.cloneNode(true)
+			let x = getRandomInt(minX, maxX)
+			let y = getRandomInt(minY, maxY)
+			let name = calculateSectorName(multiNameDictionary, x, y) ?? "INVALID!"
+
+			tableData.childNodes[0].textContent = name
+			tableData.childNodes[1].textContent = x
+			tableData.childNodes[2].textContent = y
+			fragment.appendChild(tableData)
+			lastGenerated[i] = [name, x, y]
+		}
+
+		multiNamesTbody.innerHTML = ""
+		multiNamesTbody.appendChild(fragment)
+	}
+}
+
+function saveToCSV(semicolon)
+{
+	if (lastGenerated == null)
+		return
+
+	let delim = semicolon ? ";" : ","
+	let each = [["Name", "X", "Y"].join(delim)]
+
+	for (let i = 0; i < lastGenerated.length; i++)
+		each[i + 1] = lastGenerated[i].join(delim)
+
+	let a = document.createElement("a")
+	let link = URL.createObjectURL(new Blob([each.join("\n")], {"type": "text/csv"}))
+	a.setAttribute("download", "sectorcalc_" + Math.trunc(+new Date() / 1000) + ".csv")
+	a.setAttribute("href", link)
+	a.click()
+}
+
+function registerCoordChange(elem, func)
+{
+	elem.addEventListener("change", func)
+	elem.addEventListener("paste", func)
+	elem.addEventListener("keyup", func)
+}
+
 $(document).ready(function()
 {
-	sectorNameElement = document.getElementById("sector_name")
 	$(".ui.dropdown").dropdown()
-	$("#x_coord").on("change paste keyup", updateSectorName)
-	$("#y_coord").on("change paste keyup", updateSectorName)
-	$("#dictionary").change(changeDictionary)
 
-	changeDictionary()
+	// Get elements
+	sectorNameElement = document.getElementById("sector_name")
+	xCoordElem = document.getElementById("x_coord")
+	yCoordElem = document.getElementById("y_coord")
+	singleDictionaryElem = document.getElementById("dictionary")
+	minXRangeElem = document.getElementById("x_min_range")
+	minYRangeElem = document.getElementById("y_min_range")
+	maxXRangeElem = document.getElementById("x_max_range")
+	maxYRangeElem = document.getElementById("y_max_range")
+	multiNamesCountElem = document.getElementById("multiple_amount")
+	multiDictionaryElem = document.getElementById("dictionary_multiple")
+	multiNamesTbody = document.getElementById("multiple_sectors")
+
+	// Build template
+	multiNamesTdataTemplate = document.createElement("tr")
+	let td = document.createElement("td")
+	multiNamesTdataTemplate.appendChild(td)
+	multiNamesTdataTemplate.appendChild(td.cloneNode())
+	multiNamesTdataTemplate.appendChild(td.cloneNode())
+
+	// Register events
+	registerCoordChange(xCoordElem, updateSectorName)
+	registerCoordChange(yCoordElem, updateSectorName)
+	singleDictionaryElem.addEventListener("change", changeSingleNameDictionary)
+	multiDictionaryElem.addEventListener("change", changeMultiNameDictionary)
+
+	changeSingleNameDictionary()
+	changeMultiNameDictionary()
 })
