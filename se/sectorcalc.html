@@ -20,7 +20,6 @@
 					<p>Just input the X and Y coordinates to get a name. Note that (0,0) is hardcoded to "Sol"</p>
 					<p>
 						Alpha Stellar only uses coordinates in range of (-999, -999)...(999, 999) and US Baby Names dictionary for sector names.
-						The dictionary selection below affects all sector name computation, including "Multiple Sector Name Generator" below.
 						For JMdict database, "x" may translate to "~", depending on the context (I'm not Japanese).
 					</p>
 					<div class="ui three column stackable grid">
@@ -49,6 +48,77 @@
 				</div>
 				<div class="ui center aligned inverted segment">
 					<span id="sector_name" style="font-size:xx-large"></span>
+				</div>
+				<div class="ui inverted segment">
+					<h2 class="ui header">Multiple Names</h2>
+					<p>
+						For this one, select the coordinate ranges and amount of names to generate. Note that you can generate unlimited
+						names (resource permitting) because all the computation is done in your browser, no data are sent.
+					</p>
+					<p>
+						Save to CSV has 2 options, one that uses comma as separator (<i>de facto</i> standard) and one that uses
+						semicolon (for Microsoft Excel).
+					</p>
+					<div class="ui two column stackable grid">
+						<div class="column">
+							<div class="ui inverted labeled fluid input">
+								<div class="ui label">Amount</div>
+								<input id="multiple_amount" type="number" min="2" value="10">
+							</div>
+						</div>
+						<div class="column">
+							<select id="dictionary_multiple" class="ui fluid dropdown">
+								<option value="us_names.json" selected>US Baby Names (1880-2018)</option>
+								<option value="id_dict.json">Indonesia Word Dictionary</option>
+								<option value="edict_female.json">JMdict 2017 Female Names</option>
+								<option value="edict_male.json">JMdict 2017 Male Names</option>
+								<option value="edict_other.json">JMdict 2017 Other Names</option>
+							</select>
+						</div>
+						<div class="column">
+							<div class="ui inverted labeled fluid input">
+								<div class="ui label">Minimum X</div>
+								<input id="x_min_range" type="number" min="-32767" max="32767" value="-32767">
+							</div>
+						</div>
+						<div class="column">
+							<div class="ui inverted labeled fluid input">
+								<div class="ui label">Minimum Y</div>
+								<input id="y_min_range" type="number" min="-32767" max="32767" value="-32767">
+							</div>
+						</div>
+						<div class="column">
+							<div class="ui inverted labeled fluid input">
+								<div class="ui label">Maximum X</div>
+								<input id="x_max_range" type="number" min="-32767" max="32767" value="32767">
+							</div>
+						</div>
+						<div class="column">
+							<div class="ui inverted labeled fluid input">
+								<div class="ui label">Maximum Y</div>
+								<input id="y_max_range" type="number" min="-32767" max="32767" value="32767">
+							</div>
+						</div>
+						<div class="eight wide column">
+							<button class="ui fluid button" onclick="generateLotsOfNames()">Generate</button>
+						</div>
+						<div class="four wide column">
+							<button class="ui fluid green button" onclick="saveToCSV(false)">Save CSV (comma, standard)</button>
+						</div>
+						<div class="four wide column">
+							<button class="ui fluid green button" onclick="saveToCSV(true)">Save CSV (Excel compatible)</button>
+						</div>
+					</div>
+					<table class="ui inverted table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>X</th>
+								<th>Y</th>
+							</tr>
+						</thead>
+						<tbody id="multiple_sectors"></tbody>
+					</table>
 				</div>
 			</div>
 		</div>
