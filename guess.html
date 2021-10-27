@@ -6,17 +6,101 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="semantic/semantic.min.css" />
 		<link rel="stylesheet" href="index.css" />
+		<style>
+			.currently_playing {
+				font-weight: bold;
+			}
+		</style>
 		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
 		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script>
+			const BPM = 94
+			const SEEKPOINTS = [
+			//	1  2  3  4  5  6  7  8  9  0  1  2  3  4
+				0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+				0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0
+			]
+			const SEC_PER_BEAT = 60/BPM
+
+			function getSongIndex(time)
+			{
+				if (time < SEC_PER_BEAT * 4)
+					return 0
+
+				let beat = -28
+				let i = 0;
+				for (; i < SEEKPOINTS.length; i++)
+				{
+					beat += (1 + SEEKPOINTS[i]) * 32
+
+					if (SEC_PER_BEAT * beat > time)
+						break
+				}
+
+				return i
+			}
+
+			$(document).ready(() => {
+				// Get last active tab
+				/** @type HTMLAudioElement */
+				let audioElem = document.getElementById("audio")
+				let audioIdx = document.getElementById("audio_index")
+				let fragment = document.createDocumentFragment()
+				let allAudio = []
+
+				// New elements
+				let beat = -28
+				for (let i = 0; i < SEEKPOINTS.length; i++)
+				{
+					let li = document.createElement("li")
+					let a = document.createElement("a")
+					let sec = (beat += (1 + SEEKPOINTS[i]) * 32) * SEC_PER_BEAT
+
+					a.textContent = "Song Index #" + (i + 1).toString()
+					a.setAttribute("href", "#")
+					a.addEventListener("click", () => {
+						audioElem.currentTime = sec
+					})
+					li.appendChild(a)
+					fragment.appendChild(li)
+					allAudio.push(a)
+				}
+
+				document.getElementById("seekpoints").appendChild(fragment)
+
+				// Insert event
+				audioElem.addEventListener("timeupdate", () => {
+					let idx = getSongIndex(audioElem.currentTime)
+					let last = audioIdx.textContent == "Unknown" ? 0 : Number(audioIdx.textContent)
+
+					if (last != idx)
+					{
+						if (last > 0)
+							allAudio[last - 1].classList.remove("currently_playing")
+						if (idx > 0)
+							allAudio[idx - 1].classList.add("currently_playing")
+					}
+
+					audioIdx.textContent = idx == 0 ? "Unknown" : idx.toString()
+				})
+			})
+		</script>
 	</head>
 	<body>
 		<div class="ui violet segment">
-			<h1 class="ui header">22/7</h1>
+			<h1 class="ui header">Guesser</h1>
 			<p>Guess what musics I put in this audio below!</p>
-			<audio style="width: 100%" controls>
+			<audio id="audio" style="width: 100%" controls>
 				<source src="adawdf3f3.opus" type="audio/ogg">
 			</audio>
-			<a href="data:text/plain;charset=UTF-8;base64,QW5zd2VyOgoxLiAyMi83IC0gQm9rdSB3YSBTb256YWkgU2hpdGVpbmFrYXR0YQoyLiBSaWNrIEFzdGxleSAtIE5ldmVyIEdvbm5hIEdpdmUgeW91IFVwCjMuIFJvc2VsaWEgLSBSaW5naW5nIEJsb29tCjQuIFBvcHBpbidQYXJ0eSAtIFl1bWUgd28gVWNoaW51a3UgU2h1bmthbiBuaSEKNS4gSGFsb3p5IC0gTWFzc2hpcm8gbmEgWXVraQo2LiBUaGVGYXRSYXQgLSBXZSdsbCBNZWV0IEFnYWluCjcuIFByaW50ZW1wcyAtIFVOQkFMQU5DRUQgTE9WRQo4LiBLdXJvdXNhUCAtIFNlbmJvbnpha3VyYQo5LiBEaWEgS3Vyb3Nhd2EgLSBXSElURSBGSVJTVCBMT1ZFCjEwLiBLb2htaSBIaXJvc2UgLSBQcm9taXNlCjExLiBUb3Vob3UgLSBGbG93ZXJpbmcgTmlnaHQKMTIuIEYtNzc3IC0gQWR2ZW50dXJlIEZhbnRhc3kKMTMuIDIyLzcgLSBTb3JhIG5vIEVtZXJhbGQKMTQuICAtIE1laXJv" target="_blank" style="display:block;width:1em;height:1em"></a>
+			<p>Song Index: <span id="audio_index">Unknown</span></p>
+			<a href="https://www.youtube.com/playlist?list=PLdtYS688bxvT7uORq5X7uoYMOF2JPc-Bj">Some little references.</a>
+			<ul id="seekpoints"></ul>
 		</div>
 	</body>
 </html>
