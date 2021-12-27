@@ -11,6 +11,11 @@
 		<link rel="stylesheet" href="../index.css" />
 		<script type="text/javascript" src="../jquery-3.5.1.min.js"></script>
 		<script type="text/javascript" src="../semantic/semantic.min.js"></script>
+		<style>
+			table.ui.table tbody th {
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="ui yellow segment">
@@ -18,110 +23,211 @@
 			<h2 class="ui header">Characters</h2>
 			<p>Only officially exist/announced characters are listed.</p>
 			<table class="ui table">
-				<tr>
-					<th></th>
-					<th>Anemo</th>
-					<th>Geo</th>
-					<th>Electro</th>
-					<th>Dendro</th>
-					<th>Hydro</th>
-					<th>Pyro</th>
-					<th>Cryo</th>
-				</tr>
-				<tr>
-					<td>Mondstadt</td>
-					<td><ul class="ui list">
-						<li>Jean</li>
-						<li>Sucrose</li>
-						<li>Venti</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Albedo</li>
-						<li>Noelle</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Fischl</li>
-						<li>Lisa</li>
-						<li>Razor</li>
-					</ul></td>
-					<td></td>
-					<td><ul class="ui list">
-						<li>Barbara</li>
-						<li>Mona</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Amber</li>
-						<li>Bennett</li>
-						<li>Diluc</li>
-						<li>Klee</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Diona</li>
-						<li>Eula</li>
-						<li>Kaeya</li>
-						<li>Rosaria</li>
-					</ul></td>
-				</tr>
-				<tr>
-					<td>Liyue</td>
-					<td>Xiao</td>
-					<td><ul class="ui list">
-						<li>Ningguang</li>
-						<li>Yunjin</li>
-						<li>Zhongli</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Beidou</li>
-						<li>Keqing</li>
-					</ul></td>
-					<td></td>
-					<td>Xinqiu</td>
-					<td><ul class="ui list">
-						<li>Hu Tao</li>
-						<li>Xiangling</li>
-						<li>Xinyan</li>
-						<li>Yanfei</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Chongyun</li>
-						<li>Ganyu</li>
-						<li>Qiqi</li>
-						<li>Shenhe</li>
-					</ul></td>
-				</tr>
-				<tr>
-					<td>Inazuma</td>
-					<td><ul class="ui list">
-						<li>Kazuha</li>
-						<li>Sayu</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Gorou</li>
-						<li>Itto</li>
-					</ul></td>
-					<td><ul class="ui list">
-						<li>Raiden Shogun</li>
-						<li>Sara</li>
-					</ul></td>
-					<td></td>
-					<td>Kokomi</td>
-					<td><ul class="ui list">
-						<li>Thoma</li>
-						<li>Yoimiya</li>
-					</ul></td>
-					<td>Ayaka</td>
-				</tr>
-				<tr>
-					<td>...</td>
-					<td colspan="7"></td>
-				</tr>
-				<tr>
-					<td>Snezhnaya</td>
-					<td colspan="4"></td>
-					<td>Childe</td>
-					<td colspan="2"></td>
-				</tr>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Anemo</th>
+						<th>Geo</th>
+						<th>Electro</th>
+						<th>Dendro</th>
+						<th>Hydro</th>
+						<th>Pyro</th>
+						<th>Cryo</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Mondstadt</td>
+						<td><ul class="ui list">
+							<li>Jean</li>
+							<li>Sucrose</li>
+							<li>Venti</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Albedo</li>
+							<li>Noelle</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Fischl</li>
+							<li>Lisa</li>
+							<li>Razor</li>
+						</ul></td>
+						<td></td>
+						<td><ul class="ui list">
+							<li>Barbara</li>
+							<li>Mona</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Amber</li>
+							<li>Bennett</li>
+							<li>Diluc</li>
+							<li>Klee</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Diona</li>
+							<li>Eula</li>
+							<li>Kaeya</li>
+							<li>Rosaria</li>
+						</ul></td>
+					</tr>
+					<tr>
+						<td>Liyue</td>
+						<td>Xiao</td>
+						<td><ul class="ui list">
+							<li>Ningguang</li>
+							<li>Yunjin</li>
+							<li>Zhongli</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Beidou</li>
+							<li>Keqing</li>
+						</ul></td>
+						<td></td>
+						<td>Xinqiu</td>
+						<td><ul class="ui list">
+							<li>Hu Tao</li>
+							<li>Xiangling</li>
+							<li>Xinyan</li>
+							<li>Yanfei</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Chongyun</li>
+							<li>Ganyu</li>
+							<li>Qiqi</li>
+							<li>Shenhe</li>
+						</ul></td>
+					</tr>
+					<tr>
+						<td>Inazuma</td>
+						<td><ul class="ui list">
+							<li>Kazuha</li>
+							<li>Sayu</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Gorou</li>
+							<li>Itto</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Raiden Shogun</li>
+							<li>Sara</li>
+						</ul></td>
+						<td></td>
+						<td>Kokomi</td>
+						<td><ul class="ui list">
+							<li>Thoma</li>
+							<li>Yoimiya</li>
+						</ul></td>
+						<td>Ayaka</td>
+					</tr>
+					<tr>
+						<td>...</td>
+						<td colspan="7"></td>
+					</tr>
+					<tr>
+						<td>Snezhnaya</td>
+						<td colspan="4"></td>
+						<td>Childe</td>
+						<td colspan="2"></td>
+					</tr>
+				</tbody>
 			</table>
+			<h2 class="ui header">Shield Table</h2>
+			<table class="ui celled fixed table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Noelle</th>
+						<th>Diona</th>
+						<th>Xinyan</th>
+						<th>Zhongli</th>
+						<th>Yanfei</th>
+						<th>Thoma</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th><abbr title="The character aspect where the shield scales based on.">Scaling</abbr></th>
+						<td>DEF</td>
+						<td>Max HP</td>
+						<td>DEF</td>
+						<td>Max HP</td>
+						<td>Max HP</td>
+						<td>Max HP</td>
+					</tr>
+					<tr>
+						<th><abbr title="How to use the shield.">Invocation</abbr></th>
+						<td>Tap Elemental Skill/Get Hit on Low HP*</td>
+						<td>Tap/Hold Elemental Skill</td>
+						<td>Tap Elemental Skill</td>
+						<td>Hold Elemental Skill/Tap Elemental Burst*</td>
+						<td>Tap Elemental Burst*</td>
+						<td>Tap Elemental Skill/Burst</td>
+					</tr>
+					<tr>
+						<th>Duration</th>
+						<td>12s/20s</td>
+						<td>5s/12s*</td>
+						<td>12s</td>
+						<td>20s</td>
+						<td>15s</td>
+						<td>8s</td>
+					</tr>
+					<tr>
+						<th>Cooldown</th>
+						<td>24s/60s</td>
+						<td>6s/15s</td>
+						<td>18s</td>
+						<td>12s</td>
+						<td>20s</td>
+						<td>15s/20s</td>
+					</tr>
+					<tr>
+						<th><abbr title="Duration divided by Cooldown">Uptime</abbr></th>
+						<td class="negative">50%/33%</td>
+						<td class="positive">83%/75%</td>
+						<td class="warning">67%</td>
+						<td class="positive">100%</td>
+						<td class="positive">75%</td>
+						<td class="negative">53%/40%</td>
+					</tr>
+					<tr>
+						<th>Stackability</th>
+						<td class="warning">Independent Normal & Low HP Shield</td>
+						<td class="negative">Reset</td>
+						<td class="negative">Reset</td>
+						<td class="negative">Reset</td>
+						<td class="negative">Reset</td>
+						<td class="positive">Stack shield remaining HP on each Invocation</td>
+					</tr>
+					<tr>
+						<th><abbr title="Additional shield effectiveness on certain elements.">Efficiency</abbr></th>
+						<td>150% All</td>
+						<td>250% Cryo</td>
+						<td>250% Pyro</td>
+						<td>150% All</td>
+						<td>250% Pyro</td>
+						<td>250% Pyro</td>
+					</tr>
+					<tr>
+						<th>Notes</th>
+						<td>
+							* Low HP shield requires Ascend Phase 1.<br/>
+							* Low HP shield is tied to one character only.<br/>
+							* Noelle herself is excluded from getting low HP shield.
+						</td>
+						<td>* Shield duration is measured manually.</td>
+						<td></td>
+						<td>
+							* Elemental Burst shield is only available on Constellation 2.<br/>
+							* Grants other players a shield in the burst area.</td>
+						<td>* Shield only available on Constellation 4.</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<p>Q: Where's Beidou?<br/>A: Her burst is only a damage reduction, not actually shielding player.</p>
+			<p>Q: Where's Kaeya?<br/>A: Kaeya's shield requires Constellation 4, only triggered if Kaeya's HP below 20%, and tied to Kaeya.</p>
+			<p>Q: Where Crystallize reaction?<br/>A: Oh come on!</p>
 		</div>
 	</body>
 </html>
