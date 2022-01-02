@@ -110,6 +110,7 @@
 						<td><ul class="ui list">
 							<li>Raiden Shogun</li>
 							<li>Sara</li>
+							<li>Yae Miko</li>
 						</ul></td>
 						<td></td>
 						<td>Kokomi</td>
@@ -138,9 +139,10 @@
 						<th></th>
 						<th>Noelle</th>
 						<th>Diona</th>
+						<th>Beidou</th>
 						<th>Xinyan</th>
 						<th>Zhongli</th>
-						<th>Yanfei</th>
+						<th>Yanfei*</th>
 						<th>Thoma</th>
 					</tr>
 				</thead>
@@ -148,6 +150,7 @@
 					<tr>
 						<th><abbr title="The character aspect where the shield scales based on.">Scaling</abbr></th>
 						<td>DEF</td>
+						<td>Max HP</td>
 						<td>Max HP</td>
 						<td>DEF</td>
 						<td>Max HP</td>
@@ -157,16 +160,18 @@
 					<tr>
 						<th><abbr title="How to use the shield.">Invocation</abbr></th>
 						<td>Tap Elemental Skill/Get Hit on Low HP*</td>
-						<td>Tap/Hold Elemental Skill</td>
+						<td>Tap/Hold Elemental Skill/Other Icy Paws Hits Target*</td>
+						<td>Hold Elemental Skill/Tap Elemental Burst*</td>
 						<td>Tap Elemental Skill</td>
 						<td>Hold Elemental Skill/Tap Elemental Burst*</td>
-						<td>Tap Elemental Burst*</td>
+						<td>Tap Elemental Burst</td>
 						<td>Tap Elemental Skill/Burst</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
 						<td>12s/20s</td>
-						<td>5s/12s*</td>
+						<td>5s/12s**</td>
+						<td>3s**/15s</td>
 						<td>12s</td>
 						<td>20s</td>
 						<td>15s</td>
@@ -176,6 +181,7 @@
 						<th>Cooldown</th>
 						<td>24s/60s</td>
 						<td>6s/15s</td>
+						<td>7.5s/20s</td>
 						<td>18s</td>
 						<td>12s</td>
 						<td>20s</td>
@@ -185,6 +191,7 @@
 						<th><abbr title="Duration divided by Cooldown">Uptime</abbr></th>
 						<td class="negative">50%/33%</td>
 						<td class="positive">83%/75%</td>
+						<td class="warning">40%/75%</td>
 						<td class="warning">67%</td>
 						<td class="positive">100%</td>
 						<td class="positive">75%</td>
@@ -197,12 +204,14 @@
 						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
+						<td class="negative">Reset</td>
 						<td class="positive">Stack shield remaining HP on each Invocation</td>
 					</tr>
 					<tr>
 						<th><abbr title="Additional shield effectiveness on certain elements.">Efficiency</abbr></th>
 						<td>150% All</td>
 						<td>250% Cryo</td>
+						<td>150% Electro</td>
 						<td>250% Pyro</td>
 						<td>150% All</td>
 						<td>250% Pyro</td>
@@ -211,11 +220,18 @@
 					<tr>
 						<th>Notes</th>
 						<td>
-							* Low HP shield requires Ascend Phase 1.<br/>
-							* Low HP shield is tied to one character only.<br/>
+							* Low HP shield requires Ascend Phase 1 and tied to one character at a time.<br/>
 							* Noelle herself is excluded from getting low HP shield.
 						</td>
-						<td>* Shield duration is measured manually.</td>
+						<td>
+							* Giving other players a shield when using Icy Paws requires Constellation 2.<br/>
+							** Shield duration is measured manually.<br/>
+							** Given shield from other player (*) has duration of 5s instead.
+						</td>
+						<td>
+							* Shield requires Constellation 1. Otherwise, only 20% damage reduction.<br/>
+							** Shield max duration is measured manually. Shield lasts as long as Elemental Skill button is pressed.
+						</td>
 						<td></td>
 						<td>
 							* Elemental Burst shield is only available on Constellation 2.<br/>
@@ -225,8 +241,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<p>Q: Where's Beidou?<br/>A: Her burst is only a damage reduction, not actually shielding player.</p>
-			<p>Q: Where's Kaeya?<br/>A: Kaeya's shield requires Constellation 4, only triggered if Kaeya's HP below 20%, and tied to Kaeya.</p>
+			<p>Q: Where's Kaeya?<br/>A: Kaeya's shield requires Constellation 4, only triggered if Kaeya's HP below 20%, and tied to Kaeya himself. If you reached Constellation 4, you must be a Kaeya DPS user and knows all about his shield stats.</p>
 			<p>Q: Where Crystallize reaction?<br/>A: Oh come on!</p>
 		</div>
 	</body>
