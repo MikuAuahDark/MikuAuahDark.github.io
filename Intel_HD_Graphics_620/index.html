@@ -257,6 +257,7 @@
 						<th>Xiangling</th>
 						<th>Ganyu</th>
 						<th>Sayu</th>
+						<th>Kokomi</th>
 						<th>Itto</th>
 					</tr>
 				</thead>
@@ -269,27 +270,30 @@
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Burst</td>
-						<td>Tap Elemental Skill
+						<td>Tap Elemental Skill</td>
+						<td>Tap Elemental Skill</td>
 					</tr>
 					<tr>
 						<th>Change Location</th>
 						<td>Hold Elemental Skill</td>
 						<td>Tap**/Hold Elemental Skill</td>
-						<td>Not Possible</td>
-						<td>Not Possible</td>
-						<td>Not Possible</td>
-						<td>Not Possible</td>
+						<td class="negative">Not Possible</td>
+						<td class="negative">Not Possible</td>
+						<td class="negative">Not Possible</td>
+						<td class="negative">Not Possible</td>
+						<td class="negative">Not Possible</td>
 						<td>Hold Elemental Skill</td>
 					</tr>
 					<tr>
 						<th>Has HP</th>
-						<td>Yes</td>
-						<td>No</td>
-						<td>No</td>
-						<td>No</td>
-						<td>Yes</td>
-						<td>No</td>
-						<td>Yes</td>
+						<td class="warning">Yes</td>
+						<td class="positive">No</td>
+						<td class="positive">No</td>
+						<td class="positive">No</td>
+						<td class="warning">Yes</td>
+						<td class="positive">No</td>
+						<td class="positive">No</td>
+						<td class="warning">Yes</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -298,6 +302,7 @@
 						<td>5s**/2s*</td>
 						<td>7s*</td>
 						<td>6s</td>
+						<td>12s</td>
 						<td>12s</td>
 						<td>6s</td>
 					</tr>
@@ -309,17 +314,19 @@
 						<td>12s</td>
 						<td>10s</td>
 						<td>20s</td>
+						<td>20s</td>
 						<td>10s</td>
 					</tr>
 					<tr>
 						<th>Uptime</th>
-						<td>53%</td>
-						<td>40%***</td>
-						<td>42%</td>
-						<td>58%</td>
-						<td>60%</td>
-						<td>60%</td>
-						<td>60%</td>
+						<td class="warning">53%</td>
+						<td class="negative">40%***</td>
+						<td class="negative">42%</td>
+						<td class="warning">58%</td>
+						<td class="positive">60%</td>
+						<td class="positive">60%</td>
+						<td class="positive">60%</td>
+						<td class="positive">60%</td>
 					</tr>
 					<tr>
 						<th><abbr title="What does the companion do?">Behavior</abbr></th>
@@ -329,17 +336,19 @@
 						<td>Attack enemies</td>
 						<td>Taunt enemies</td>
 						<td>Heals player/Attack enemies*</td>
+						<td>Heals player and Attack enemies</td>
 						<td>Taunt enemies</td>
 					</tr>
 					<tr>
 						<th><abbr title="What happends when the companion duration ends?">Aftermath</abbr></th>
 						<td>Explode</td>
-						<td>None</td>
+						<td class="negative">None</td>
 						<td>Explode</td>
 						<td>Drops Chilli**</td>
 						<td>Explode</td>
-						<td>None</td>
-						<td>None</td>
+						<td class="negative">None</td>
+						<td class="negative">None</td>
+						<td class="negative">None</td>
 					</tr>
 					<tr class="notes">
 						<th>Notes</th>
@@ -363,6 +372,9 @@
 						<td></td>
 						<td>
 							* Only when all characters/players HP are above 70%, otherwise heals that characters/players.
+						</td>
+						<td>
+							This column may need more information.
 						</td>
 						<td></td>
 					</tr>
