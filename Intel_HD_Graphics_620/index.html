@@ -135,7 +135,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<h2 class="ui header">Shield Table</h2>
+			<h2 class="ui header" id="shield">Shield Table</h2>
 			<table class="ui celled fixed table">
 				<thead>
 					<tr>
@@ -182,7 +182,7 @@
 					</tr>
 					<tr>
 						<th>Cooldown</th>
-						<td>24s/60s</td>
+						<td>24s**/60s</td>
 						<td>6s/15s</td>
 						<td>7.5s/20s</td>
 						<td>18s</td>
@@ -192,7 +192,7 @@
 					</tr>
 					<tr>
 						<th><abbr title="Duration divided by Cooldown">Uptime</abbr></th>
-						<td class="negative">50%/33%</td>
+						<td class="negative">50%**/33%</td>
 						<td class="positive">83%/75%</td>
 						<td class="warning">40%/75%</td>
 						<td class="warning">67%</td>
@@ -224,7 +224,8 @@
 						<th>Notes</th>
 						<td>
 							* Low HP shield requires Ascend Phase 1 and tied to one character at a time.<br/>
-							* Noelle herself is excluded from getting low HP shield.
+							* Noelle herself is excluded from getting low HP shield.<br/>
+							** On Ascend Phase 4, duration is decreased by 1s for every 4 combo hit that's counted every 0.1s.
 						</td>
 						<td>
 							* Giving other players a shield when using Icy Paws requires Constellation 2.<br/>
@@ -246,7 +247,7 @@
 			</table>
 			<p>Q: Where's Kaeya?<br/>A: Kaeya's shield requires Constellation 4, only triggered if Kaeya's HP below 20%, and tied to Kaeya himself. If you reached Constellation 4, you must be a Kaeya DPS user and knows all about his shield stats.</p>
 			<p>Q: Where Crystallize reaction?<br/>A: Oh come on!</p>
-			<h2 class="ui header">Companion/Helper Table</h2>
+			<h2 class="ui header" id="helper">Companion/Helper Table</h2>
 			<table class="ui celled fixed table">
 				<thead>
 					<tr>
@@ -368,7 +369,7 @@
 						</td>
 						<td>
 							* Measured manually.<br/>
-							** When picked up, increase character ATK for 10s.
+							** When picked up, increase character ATK for 10s. Requires Ascend Phase 1.
 						</td>
 						<td></td>
 						<td>
@@ -382,6 +383,149 @@
 					</tr>
 				</tbody> 
 			</table>
+			<h2 class="ui header" id="healer">Healer Table</h2>
+			<p>Any skill that heals themselves are not counted. Don't ask for Kaeya, Fischl, and Hu Tao!</p>
+			<table class="ui celled fixed table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Barbara</th>
+						<th>Noelle</th>
+						<th>Jean</th>
+						<th>Diona</th>
+						<th>Bennett</th>
+						<th>Qiqi</th>
+						<th>Sayu</th>
+						<th>Kokomi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>Scaling</th>
+						<td>Max HP</td>
+						<td>DEF</td>
+						<td>ATK</td>
+						<td>Max HP</td>
+						<td>Max HP</td>
+						<td>ATK</td>
+						<td>ATK</td>
+						<td>Max HP</td>
+					</tr>
+					<tr>
+						<th>Invocation</th>
+						<td>Tap Elemental Skill/Burst</td>
+						<td>Tap Elemental Skill</td>
+						<td>Tap Elemental Burst/Normal ATK*</td>
+						<td>Tap Elemental Burst</td>
+						<td>Tap Elemental Burst</td>
+						<td>Tap Elemental Skill</td>
+						<td>Tap Elemental Burst</td>
+						<td>Tap Elemental Skill/Burst</td>
+					</tr>
+					<tr>
+						<th><abbr title="Additional requirements needed for healing.">Requirement</abbr></th>
+						<td class="positive">None</td>
+						<td>Noelle Normal/Charged Attack</td>
+						<td>In <abbr title="Area of Effect">AoE</abbr></td>
+						<td>In AoE</td>
+						<td>In AoE</td>
+						<td class="positive">None</td>
+						<td>In AoE</td>
+						<td>None/Kokomi Normal ATK</td>
+					</tr>
+					<tr>
+						<th><abbr title="Which character it will heal?">Target Character</abbr></th>
+						<td>Active/All</td>
+						<td>All</td>
+						<td>Active/All*</td>
+						<td>Active</td>
+						<td>Active*</td>
+						<td>Active</td>
+						<td>Least Health*</td>
+						<td>Active/All</td>
+					</tr>
+					<tr>
+						<th>Duration</th>
+						<td>15s*/Instant</td>
+						<td>12s</td>
+						<td>Instant</td>
+						<td>12s</td>
+						<td>12s</td>
+						<td>15s</td>
+						<td>12s</td>
+						<td>12s*/10s</td>
+					</tr>
+					<tr>
+						<th>Cooldown</th>
+						<td>32s**/20s</td>
+						<td>24s*</td>
+						<td>20s</td>
+						<td>20s</td>
+						<td>15s</td>
+						<td>30s</td>
+						<td>20s</td>
+						<td>20s/18s</td>
+					</tr>
+					<tr>
+						<th>Uptime</th>
+						<td>46.8%*/-</td>
+						<td>50%</td>
+						<td>-</td>
+						<td>60%</td>
+						<td>80%</td>
+						<td>50%</td>
+						<td>60%</td>
+						<td>60%*/55.5%</td>
+					</tr>
+					<tr>
+						<th><abbr title="Additional ways of healing after invoking Elemental Skill or Burst?">More Healing</abbr></th>
+						<td>Barbara Normal ATK while Elemental Skill is active.</td>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+						<td>None</td>
+						<td>Qiqi Normal ATK while Elemental Skill is active heals All characters. Heals more if enemies marked by Elemental Burst is hit.</td>
+						<td>None</td>
+					</tr>
+					<tr>
+						<th><abbr title="Cooking healing food has 12% chance to double the result.">Passive Cooking</abbr></th>
+						<td class="positive">Yes</td>
+						<td class="negative">No</td>
+						<td class="positive">Yes</td>
+						<td class="positive">Yes</td>
+						<td class="negative">No</td>
+						<td class="negative">No</td>
+						<td class="negative">No</td>
+						<td class="negative">No</td>
+					</tr>
+					<tr class="notes">
+						<th>Notes</th>
+						<td>
+							* On Ascend Phase 4, Melody Loop duration is increased by 1s for every energy orb obtained, max 5s.<br/>
+							** Cooldown is 27.2s on Constellation 2.
+						</td>
+						<td>
+							* Same rules to <a href="#shield">shield table</a> (**) apply.
+						</td>
+						<td>
+							* Requires Ascend Phase 1.
+						</td>
+						<td></td>
+						<td>
+							* Only heals up to 70% character HP.
+						</td>
+						<td></td>
+						<td>
+							* Same rules to <a href="#helper">companion/helper table</a> (*) apply.
+						</td>
+						<td>
+							This column needs more information.<br/>
+							* Same rules to companion/helper table (*) apply.
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>Q: Where Zhongli?<br/>A: That requires Constellation 6!</p>
 			<p>Is there any mistake in this table? Fill an issue in here: <a href="https://github.com/MikuAuahDark/MikuAuahDark.github.io/issues">https://github.com/MikuAuahDark/MikuAuahDark.github.io/issues</a></p>
 		</div>
 	</body>
