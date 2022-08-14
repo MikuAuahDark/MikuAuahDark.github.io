@@ -23,7 +23,8 @@
 				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
 				0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 0
+				0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 1, 0
 			]
 			const SEC_PER_BEAT = 60/BPM
 
@@ -55,20 +56,32 @@
 
 				// New elements
 				let beat = -28
-				for (let i = 0; i < SEEKPOINTS.length; i++)
+				let tr = null
+				for (let i = 0; i < Math.ceil(SEEKPOINTS.length / 7) * 7; i++)
 				{
-					let li = document.createElement("li")
-					let a = document.createElement("a")
-					let sec = (beat += (1 + SEEKPOINTS[i]) * 32) * SEC_PER_BEAT
+					if (i % 7 == 0)
+					{
+						tr = document.createElement("tr")
+						fragment.appendChild(tr)
+					}
 
-					a.textContent = "Song Index #" + (i + 1).toString()
-					a.setAttribute("href", "#")
-					a.addEventListener("click", () => {
-						audioElem.currentTime = sec
-					})
-					li.appendChild(a)
-					fragment.appendChild(li)
-					allAudio.push(a)
+					let td = document.createElement("td")
+
+					if (i < SEEKPOINTS.length)
+					{
+						let a = document.createElement("a")
+						let sec = (beat += (1 + SEEKPOINTS[i]) * 32) * SEC_PER_BEAT
+
+						a.textContent = (i + 1).toString()
+						a.setAttribute("href", "#")
+						a.addEventListener("click", () => {
+							audioElem.currentTime = sec
+						})
+						td.appendChild(a)
+						allAudio.push(a)
+					}
+
+					tr.appendChild(td)
 				}
 
 				document.getElementById("seekpoints").appendChild(fragment)
@@ -100,7 +113,10 @@
 			</audio>
 			<p>Song Index: <span id="audio_index">Unknown</span></p>
 			<a href="https://www.youtube.com/playlist?list=PLdtYS688bxvT7uORq5X7uoYMOF2JPc-Bj">Some little references.</a>
-			<ul id="seekpoints"></ul>
+			<table class="ui unstackable table">
+				<tbody id="seekpoints">
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html>
