@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Miku AuahDark">
+		<meta name="description" content="FFmpeg Motion Interpolation Command-line Generator.">
+		<meta name="keywords" content="ffmpeg, generator, motion, interpolation">
+		<title>FFmpeg minterpolate</title>
+		<link rel="stylesheet" href="semantic/semantic.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<style>
+			#command {
+				font-family: monospace;
+				width: 100%;
+				height: auto;
+				text-align: center;
+				resize: none
+			}
+		</style>
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script>
+			const DESCRIPTIONS = {
+				"mi_mode": {
+					"dup": "Duplicate previous or next frame for interpolating new ones.",
+					"blend": "Blend source frames. Interpolated frame is mean of previous and next frames.",
+					"mci": "Motion compensated interpolation. Following options are effective when this mode is selected:"
+				},
+				"mc_mode": {
+					"obmc": "Overlapped block motion compensation.",
+					"aobmc": "Adaptive overlapped block motion compensation. Window weighting coefficients are controlled adaptively according to the reliabilities of the neighboring motion vectors to reduce oversmoothing."
+				},
+				"me_mode": {
+					"bidir": "Bidirectional motion estimation. Motion vectors are estimated for each source frame in both forward and backward directions.",
+					"bilat": "Bilateral motion estimation. Motion vectors are estimated directly for interpolated frame."
+				},
+				"scd": {
+					"none": "Disable scene change detection.",
+					"fdiff": "Frame difference. Corresponding pixel values are compared and if it satisfies value of Scene change detection threshold below, scene change is detected."
+				}
+			}
+
+			let options = []
+			let optionsInverseMap = {}
+			let commandElement = null
+			let explicitElement = null
+
+			function ready(fn)
+			{
+				if (document.readyState !== "loading")
+					fn()
+				else
+					document.addEventListener("DOMContentLoaded", fn)
+			}
+
+			function getElementValue(elem)
+			{
+				if (elem.tagName == "INPUT" && elem.getAttribute("type") == "checkbox")
+					return elem.checked ? "1" : "0"
+				else
+					return elem.value
+			}
+
+			function buildCommandLine()
+			{
+				let explicit = explicitElement.checked
+				let result = ["minterpolate"]
+				let firstPair = true
+
+				for (let i = 0; i < options.length; i++)
+				{
+					let opt = options[i]
+					let value = getElementValue(opt.element)
+
+					if (explicit || value != opt.default)
+					{
+						if (firstPair)
+						{
+							result.push("=")
+							firstPair = false
+						}
+						else
+							result.push(":")
+						result.push(opt.name)
+						result.push("=")
+						result.push(value)
+					}
+				}
+
+				commandElement.value = result.join("")
+			}
+
+			ready(() => {
+				$('.ui.dropdown').dropdown();
+
+				// Get needed elements
+				commandElement = document.getElementById("command")
+				explicitElement = document.getElementById("explicit")
+				document.getElementById("copybutton").addEventListener("click", () => {
+					navigator.clipboard.writeText(commandElement.value)
+				})
+
+				// Get all options
+				document.querySelectorAll("[minterpolate]").forEach((elem) => {
+					let name = elem.getAttribute("name")
+					let data = {
+						name: name,
+						element: elem,
+						default: ""
+					}
+
+					// Determine default value
+					switch (elem.tagName) {
+						case "INPUT":
+						{
+							if (elem.getAttribute("type") == "checkbox")
+								data.default = elem.getAttribute("checked") !== null ? "1" : "0"
+							else
+								data.default = elem.getAttribute("value")
+							break;
+						}
+						case "SELECT":
+						{
+							for (let i = 0; i < elem.children.length; i++)
+							{
+								let e = elem.children[i]
+								if (e.tagName == "OPTION" && e.getAttribute("selected") !== null)
+									data.default = e.getAttribute("value")
+							}
+							break;
+						}
+						default:
+							throw elem
+					}
+
+					if (elem.tagName == "INPUT")
+						elem.addEventListener("input", buildCommandLine)
+					else
+						elem.addEventListener("change", buildCommandLine)
+					options.push(data)
+					optionsInverseMap[name] = data
+				})
+
+				// Get all descriptions
+				document.querySelectorAll("p.description[name]").forEach((elem) => {
+					let name = elem.getAttribute("name")
+					let obj = optionsInverseMap[name]
+					let desc = DESCRIPTIONS[name]
+					let change = () => {
+						elem.textContent = desc[obj.element.value]
+					}
+
+					obj.element.addEventListener("change", change)
+					change()
+				})
+
+				// Get all element ifs
+				document.querySelectorAll("[show-if-key][show-if-value]").forEach((elem) => {
+					let key = elem.getAttribute("show-if-key")
+					let value = elem.getAttribute("show-if-value")
+					let obj = optionsInverseMap[key]
+					let change = () => {
+						if (obj.element.value == value)
+							elem.style.removeProperty("display")
+						else
+							elem.style.display = "none"
+					}
+
+					obj.element.addEventListener("change", change)
+					change()
+				})
+
+				explicitElement.addEventListener("change", buildCommandLine)
+				buildCommandLine()
+			})
+		</script>
+	</head>
+	<body style="padding: 1em">
+		<div class="ui text container pink segment" style="margin-bottom: 1em">
+			<h1 class="ui header"><i class="film icon"></i>FFmpeg minterpolate Filter</h1>
+			<p>
+				FFmpeg has motion interpolation filter called
+				<a href="https://ffmpeg.org/ffmpeg-filters.html#minterpolate">minterpolate</a>. This filter
+				Creates additional frames based on the movement of video frames. FFmpeg offers so much options
+				on this filter so this website will help you create your own.
+			</p>
+
+			<p style="text-align: center;">Your filter string is:</p>
+			<div class="ui fluid input">
+				<textarea id="command" readonly></textarea>
+			</div>
+			<br/>
+
+			<button id="copybutton" class="ui fluid labeled icon positive button">
+				<i class="copy icon"></i>
+				Copy to Clipboard
+			</button>
+			<br/>
+
+			<div class="ui checkbox">
+				<input id="explicit" type="checkbox">
+				<label>Explicit filter string, do not omit defaults.</label>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<h3 class="ui header">FPS</h3>
+			<p>Specify the output frame rate. This can be rational e.g. <code>60000/1001</code>. Frames are dropped if FPS is lower than source FPS.</p>
+			<div class="ui labeled input">
+				<label class="ui label">FPS</label>
+				<input type="text" name="fps" value="60" minterpolate>
+			</div>
+
+			<h3 class="ui header">Motion Interpolation Mode</h3>
+			<select class="ui dropdown" name="mi_mode" minterpolate>
+				<option value="dup">Duplicate Frames</option>
+				<option value="blend">Blend Frames</option>
+				<option value="mci" selected>Motion Interpolation</option>
+			</select>
+			<p class="description" name="mi_mode"></p>
+
+			<div show-if-key="mi_mode" show-if-value="mci">
+				<h3 class="ui header">Motion Compensation Mode</h3>
+				<select class="ui dropdown" name="mc_mode" minterpolate>
+					<option value="obmc" selected>OBMC</option>
+					<option value="aobmc">AOBMC</option>
+				</select>
+				<p class="description" name="mc_mode"></p>
+
+				<h3 class="ui header">Motion Estimation Mode</h3>
+				<select class="ui dropdown" name="me_mode" minterpolate>
+					<option value="bidir">Bidirectional</option>
+					<option value="bilat" selected>Bilateral</option>
+				</select>
+				<p class="description" name="me_mode"></p>
+
+				<h3 class="ui header">Motion Estimation Algorithm</h3>
+				<select class="ui dropdown" name="me" minterpolate>
+					<option value="esa">Exhaustive Search</option>
+					<option value="tss">3-Step Search</option>
+					<option value="tdls">2D Logarithmic Search</option>
+					<option value="ntss">New 3-Step Search</option>
+					<option value="fss">4-Step Search</option>
+					<option value="ds">Diamond Search</option>
+					<option value="hexbs">Hexagon-Based Search</option>
+					<option value="epzs" selected>Enhanced Predictive Zonal Search</option>
+					<option value="umh">Uneven Multi-Hexagon Search</option>
+				</select>
+
+				<h3 class="ui header">Macroblock Size</h3>
+				<div class="ui input">
+					<input type="number" name="mb_size" min="4" max="16" value="16" minterpolate>
+				</div>
+
+				<h3 class="ui header">Motion Estimation Search Parameter</h3>
+				<div class="ui input">
+					<input type="number" name="search_param" min="4" max="2147483647" value="32" minterpolate>
+				</div>
+
+				<h3 class="ui header">Variable-Size Block Motion Compensation</h3>
+				<p>
+					Motion estimation is applied with smaller block sizes at object boundaries in order to
+					make the them less blur
+				</p>
+				<div class="ui checkbox">
+					<input type="checkbox" name="vsbmc" minterpolate>
+					<label>Variable-Size Block Motion Compensation</label>
+				</div>
+			</div>
+
+			<h3 class="ui header">Scene Change Detection</h3>
+			<p>
+				Scene change leads motion vectors to be in random direction. Scene change detection replace
+				interpolated frames by duplicate ones. May not be needed for other modes.</p>
+			<select class="ui dropdown" name="scd" minterpolate>
+				<option value="none">Off</option>
+				<option value="fdiff" selected>Frame Difference</option>
+			</select>
+			<p class="description" name="scd"></p>
+
+			<h3 class="ui header">Scene Change Detection Threshold</h3>
+			<div class="ui input">
+				<input type="number" name="scd_threshold" min="0" max="100" value="10" step="any" minterpolate>
+			</div>
+		</div>
+	</body>
+</html>
