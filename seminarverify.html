@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="semantic/semantic.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script type="text/javascript" src="sha256.js"></script>
+		<script>
+			const E_PARAM = 0x5da9a9dc3726df78a3079ea5aebc6887c0b19c802bfbed5ecf81ccd329586b87n
+			const N_PARAM = 0x7ee0047e78f528d6f461df99de40114936d6b1bbd17818ab07ac132ccc9999efn
+
+			function ready(fn)
+			{
+				if (document.readyState !== "loading")
+					fn()
+				else
+					document.addEventListener("DOMContentLoaded", fn)
+			}
+
+			/**
+			 * @param {ArrayBuffer} buffer
+			 **/
+			 function buf2hex(buffer)
+			 {
+				return [...new Uint8Array(buffer)]
+					.map(x => x.toString(16).padStart(2, "0"))
+					.join("")
+			}
+
+			/**
+			 * @param {BigInt} a
+			 * @param {BigInt} b
+			 * @param {BigInt} mod
+			 * @return {BigInt}
+			 **/
+			function powmod(a, b, mod)
+			{
+				if(b < 1n)
+					return 1n;
+
+				const t = powmod(a, b >> 1n, mod);
+				return ((b & 1n) ? (a * t * t) : (t * t)) % mod
+			}
+
+			/**
+			 * @param {string} nim1
+			 * @param {string} nim2
+			 * @param {string} kind
+			 * @param {Date} date
+			 * @param {BigInt} signature
+			 **/
+			function seminarVerify(nim1, nim2, kind, date, signature)
+			{
+				// "date" is in YYYY-MM-DD. Need DDMMYYYY
+				let ddmmyyyy = date.toLocaleDateString("id-ID", {
+					year: "numeric",
+					month: "2-digit",
+					day: "2-digit"
+				}).replaceAll("/", "")
+				let message = nim2 + "_" + nim1 + "_" + kind + "_" + ddmmyyyy
+				let hash = sha224(message)
+				let result = powmod(signature, E_PARAM, N_PARAM)
+
+				return BigInt("0x" + hash) == result
+			}
+
+			ready(() => {
+				$('.ui.dropdown').dropdown();
+
+				let whenElem = document.getElementById("when")
+				let seminarKindElem = document.getElementById("seminar")
+				let speakerElem = document.getElementById("source")
+				let desiredElem = document.getElementById("target")
+				let signCodeElem = document.getElementById("hash")
+				let resultElem = document.getElementById("result")
+
+				function doVerify()
+				{
+					let d = new Date(whenElem.value)
+
+					if (!isFinite(d))
+					{
+						resultElem.textContent = "Masukkan tanggal!"
+						return;
+					}
+
+					if (speakerElem.value == "")
+					{
+						resultElem.textContent = "Masukkan NIM pembicara!"
+						return;
+					}
+
+					if (desiredElem.value == "")
+					{
+						resultElem.textContent = "Masukkan NIM Anda!"
+						return;
+					}
+
+					if (signCodeElem.value == "")
+					{
+						resultElem.textContent = "Masukkan kode tanda tangan!"
+						return;
+					}
+
+					let signatureValue = null
+					try
+					{
+						let sv = signCodeElem.value
+						signatureValue = BigInt(sv.substring(0, 2) == "0x" ? sv : ("0x" + sv))
+					}
+					catch (e)
+					{
+						resultElem.textContent = "Kode tanda tangan tidak benar!"
+						return;
+					}
+
+					try
+					{
+						resultElem.textContent = seminarVerify(
+							speakerElem.value,
+							desiredElem.value,
+							seminarKindElem.value,
+							d, signatureValue
+						) ? "Valid" : "Tidak Valid"
+					}
+					catch (e)
+					{
+						console.log(e)
+						resultElem.textContent = e.toString()
+					}
+				}
+
+				whenElem.addEventListener("change", doVerify)
+				seminarKindElem.addEventListener("change", doVerify)
+				speakerElem.addEventListener("input", doVerify)
+				desiredElem.addEventListener("input", doVerify)
+				signCodeElem.addEventListener("input", doVerify)
+				doVerify()
+			})
+			</script>
+	</head>
+	<body style="padding: 1em">
+		<div class="ui text container red segment" style="margin-bottom: 1em">
+			<h1 class="ui header"><i class="hashtag icon"></i>Verifikasi Tanda Tangan Seminar</h1>
+			<p>Kapan seminarnya?</p>
+			<div class="ui input">
+				<input type="date" id="when">
+			</div>
+			<p>Jenis seminar</p>
+			<select id="seminar" class="ui dropdown">
+				<option value="SEM-1" selected>Seminar Proposal</option>
+				<option value="SEM-2">Seminar Hasil</option>
+			</select>
+			<p>Masukkan NIM yang melaksanakan seminar.</p>
+			<div class="ui labeled input">
+				<label class="ui label">NIM</label>
+				<input id="source" type="text">
+			</div>
+			<p>Masukkan NIM kamu.</p>
+			<div class="ui labeled input">
+				<label class="ui label">NIM</label>
+				<input id="target" type="text">
+			</div>
+			<p>Masukkan kode tanda tangan.</p>
+			<div class="ui labeled fluid input">
+				<label class="ui label">0x</label>
+				<input id="hash" type="text">
+			</div>
+			<p id="result"></p>
+		</div>
+	</body>
+</html>
