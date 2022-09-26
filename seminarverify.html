@@ -12,6 +12,11 @@
 		<script>
 			const E_PARAM = 0x5da9a9dc3726df78a3079ea5aebc6887c0b19c802bfbed5ecf81ccd329586b87n
 			const N_PARAM = 0x7ee0047e78f528d6f461df99de40114936d6b1bbd17818ab07ac132ccc9999efn
+			const DATEFORMAT = {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit"
+			}
 
 			function ready(fn)
 			{
@@ -56,11 +61,7 @@
 			function seminarVerify(nim1, nim2, kind, date, signature)
 			{
 				// "date" is in YYYY-MM-DD. Need DDMMYYYY
-				let ddmmyyyy = date.toLocaleDateString("id-ID", {
-					year: "numeric",
-					month: "2-digit",
-					day: "2-digit"
-				}).replaceAll("/", "")
+				let ddmmyyyy = date.toLocaleDateString("id-ID", DATEFORMAT).replaceAll("/", "")
 				let message = nim2 + "_" + nim1 + "_" + kind + "_" + ddmmyyyy
 				let hash = sha224(message)
 				let result = powmod(signature, E_PARAM, N_PARAM)
