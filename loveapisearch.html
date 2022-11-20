@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Miku AuahDark">
+		<meta name="description" content="FFmpeg Motion Interpolation Command-line Generator.">
+		<meta name="keywords" content="ffmpeg, generator, motion, interpolation">
+		<title>LÖVE Docs Bot Search Golf</title>
+		<link rel="stylesheet" href="semantic/semantic.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script>
+			const SHOW_MAX = 10
+
+			async function start()
+			{
+				/**
+				 * @typedef {Object} DocsApi
+				 * @property {string} name
+				 * @property {string} description
+				 **/
+				let response = await fetch("https://raw.githubusercontent.com/Sheepolution/love-docs-bot/master/code/src/Data/DocsApi.json")
+				/** @type DocsApi[] */
+				let loveDocsApi = await response.json()
+				/** @type Object.<string,string[]> */
+				let shortestLookup = {}
+
+				/** @param {string} input */
+				function searchForMatch(input)
+				{
+					/** @type DocsApi[] */
+					let result = []
+					let count = 0
+					const inputLower = input.toLowerCase()
+
+					for (let api of loveDocsApi)
+					{
+						const name = api.name.toLowerCase()
+
+						// Prioritize exact match
+						if (name == inputLower)
+							return [api]
+						else if (name.indexOf(inputLower) != -1)
+						{
+							result.push(api)
+							count++
+						}
+
+						if (count >= SHOW_MAX)
+							break
+					}
+
+					return result
+				}
+
+				/**
+				 * @param {string} name
+				 **/
+				function findShortest(name)
+				{
+					if (shortestLookup[name] !== undefined)
+						return shortestLookup[name]
+
+					let nameLower = name.toLowerCase()
+					/** @type string[] */
+					let result = []
+
+					for (let size = 2; size < name.length; size++)
+					{
+						let foundThisSize = false
+
+						for (let start = 0; start < name.length - size + 1; start++)
+						{
+							const test = nameLower.substr(start, size)
+							let foundCount = 0
+
+							for (let api of loveDocsApi)
+							{
+								const apiNameLower = api.name.toLowerCase()
+								if (apiNameLower.indexOf(test) != -1)
+									foundCount++
+								if (foundCount > 1)
+								{
+									foundCount = -1
+									break
+								}
+							}
+
+							if (foundCount == 1)
+							{
+								foundThisSize = true
+								result.push(name.substr(start, size))
+							}
+						}
+
+						if (foundThisSize)
+							break
+					}
+
+					if (result.length == 0)
+						shortestLookup[name] = [name]
+					else
+						shortestLookup[name] = result
+					console.log(name, shortestLookup[name])
+					return shortestLookup[name]
+				}
+
+				let resultElement = document.getElementById("result")
+				/** @type HTMLInputElement */
+				let searchElement = document.getElementById("search")
+				searchElement.addEventListener("input", () => {
+					let value = searchElement.value
+					let newChild = []
+
+					if (value.length >= 2)
+					{
+						// Start search
+						/** @type DocsApi[] */
+						let result = searchForMatch(value)
+
+						if (result.length > 0)
+						{
+							for (let api of result)
+							{
+								let shortest = findShortest(api.name)
+								let div = document.createElement("div")
+								let header = document.createElement("h4")
+								let unorderedList = document.createElement("ul")
+								let description = document.createElement("p")
+
+								div.className = "ui segment"
+								header.textContent = api.name
+								header.className = "ui header"
+								description.textContent = api.description
+								unorderedList.className = "ui list"
+
+								for (let short of shortest)
+								{
+									let li = document.createElement("li")
+									let code = document.createElement("code")
+									code.textContent = short
+									li.replaceChildren(code)
+									unorderedList.appendChild(li)
+								}
+
+								div.replaceChildren(header, unorderedList, description)
+								newChild.push(div)
+							}
+						}
+					}
+
+					resultElement.replaceChildren(...newChild)
+				})
+
+				searchElement.removeAttribute("disabled")
+				searchElement.setAttribute("placeholder", "Search away...")
+			}
+
+			function main()
+			{
+				start().then(
+					() => {},
+					() => {
+						document.getElementById("search").setAttribute("placeholder", "Error!")
+					}
+				)
+			}
+
+			if (document.readyState !== "loading")
+				main()
+			else
+				document.addEventListener("DOMContentLoaded", main);
+		</script>
+	</head>
+	<body style="padding: 1em">
+		<div class="ui text container teal segment" style="margin-bottom: 1em">
+			<h1 class="ui header"><i class="search icon"></i>LÖVE Docs Bot Search Golf</h1>
+			<div class="ui left icon fluid input" style="margin-bottom:1rem;">
+				<input id="search" type="text" placeholder="Please wait..." autocomplete="off" disabled>
+				<i class="search icon"></i>
+			</div>
+			<div id="result"></div>
+		</div>
+	</body>
+</html>
