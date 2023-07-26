@@ -302,6 +302,10 @@ $(document).ready(function()
 	multiDictionaryElem = document.getElementById("dictionary_multiple")
 	multiNamesTbody = document.getElementById("multiple_sectors")
 
+	// Preload for PWA
+	for (const opt of singleDictionaryElem.options)
+		fetch(opt.value)
+
 	// Build template
 	multiNamesTdataTemplate = document.createElement("tr")
 	let td = document.createElement("td")
