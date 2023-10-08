@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="Miku AuahDark">
+	<meta name="description" content="Determine potential gender assignment of names.">
+	<title>Name-Gender Classification</title>
+	<link rel="stylesheet" href="semantic/semantic.min.css" />
+	<link rel="stylesheet" href="index.css" />
+	<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+	<script type="text/javascript" src="semantic/semantic.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.16.0/dist/ort.min.js" integrity="sha256-s5/nxwfOCEuEuVIb/Kj8rE0swKpahaqqpObFEKLW/Vk=" crossorigin="anonymous"></script>
+	<script>
+		const ONNXMODEL = fetch("modelgol2.onnx")
+		const MAX_CODEPOINT_LEN = 64
+		const NUMBER_OF_BITS = 21
+		const DO_SUM = false
+
+		/**
+		 * @param {number[]|Float32Array} arr
+		 */
+		function determineGender(arr) {
+			if (DO_SUM) {
+				const s = arr[1] + arr[0]
+				if (s > 0 && (Math.abs(arr[1] - arr[0]) / s) < 0.5) {
+					return 2
+				}
+			} else {
+				if (Math.abs(arr[1] - arr[0]) < 0.5) {
+					return 2
+				}
+			}
+
+			if (arr[0] > arr[1]) {
+				return 0
+			} else if (arr[1] > arr[0]) {
+				return 1
+			} else {
+				throw new Error("logic error")
+			}
+		}
+
+		/**
+		 * @param {HTMLSpanElement} gt
+		 * @param {JQuery} gm
+		 * @param {JQuery} gf
+		 * @param {0|1|2} gender
+		 * @param {number[]|Float32Array|null} stats
+		 */
+		function returnStatistics(gt, gm, gf, gender, stats) {
+			if (stats == null) {
+				gm.progress({percent: 0})
+				gf.progress({percent: 0})
+				gt.textContent = "Unknown"
+			} else {
+				if (gender == 0) {
+					gt.textContent = "Male"
+				} else if (gender == 1) {
+					gt.textContent = "Female"
+				} else if (gender == 2) {
+					gt.textContent = "Unisex"
+				} else if (gender == 1) {
+					gt.textContent = "Unknown"
+				}
+
+				if (DO_SUM) {
+					const s = stats[1] + stats[0]
+					const mr = s > 0 ? (stats[0] / s) : 0
+					const fr = s > 0 ? (stats[1] / s) : 0
+					gm.progress({percent: mr * 100})
+					gf.progress({percent: fr * 100})
+				} else {
+					gm.progress({percent: stats[0] * 100})
+					gf.progress({percent: stats[1] * 100})
+				}
+				console.log("output", stats)
+			}
+		}
+
+		/**
+		 * @param {ArrayBuffer} model
+		 * @param {boolean} useWGL
+		 */
+		async function createSession(model, useWGL) {
+			const provider = useWGL ? ["webgl"] : ["wasm"]
+			const session = await ort.InferenceSession.create(model, {providers: ["wasm"]})
+			return session
+		}
+
+		/**
+		 * @param {string} name
+		 * @param {HTMLSpanElement} gt
+		 * @param {JQuery} gm
+		 * @param {JQuery} gf
+		 */
+		async function doInference(session, name, gt, gm, gf) {
+			if (name.length > 0) {
+				const floatArray = new Float32Array(MAX_CODEPOINT_LEN * NUMBER_OF_BITS)
+
+				for (let i = 0; i < name.length; i++) {
+					const int = name.codePointAt(i)
+
+					if (int !== undefined) {
+						for (let j = 0; j < NUMBER_OF_BITS; j++) {
+							floatArray[i * NUMBER_OF_BITS + j] = (int & (1 << j)) != 0
+						}
+					}
+				}
+
+				const tensor = new ort.Tensor(floatArray, [1, MAX_CODEPOINT_LEN, NUMBER_OF_BITS])
+				const result = await session.run({input: tensor})
+				returnStatistics(gt, gm, gf, determineGender(result.output.data), result.output.data)
+			} else {
+				returnStatistics(gt, gm, gf, 0, null)
+			}
+		}
+
+		async function main() {
+			const floatArray = new Float32Array(MAX_CODEPOINT_LEN * NUMBER_OF_BITS)
+			/** @type {HTMLInputElement} */
+			const inputElement = document.getElementById("input")
+			/** @type {HTMLSpanElement} */
+			const genderTextElement = document.getElementById("gender_text")
+			/** @type {HTMLInputElement} */
+			const useWebGLCheckbox = document.getElementById("use_webgl")
+			const genderMaleProgressJQ = $("#gender_male")
+			const genderFemaleProgressJQ = $("#gender_female")
+
+			genderMaleProgressJQ.progress({percent: 0})
+			genderFemaleProgressJQ.progress({percent: 0})
+
+			const modeldata = await (await ONNXMODEL).arrayBuffer()
+			let session = await createSession(modeldata, useWebGLCheckbox.checked)
+
+			inputElement.addEventListener("input", async () => {
+				const name = inputElement.value.substring(0, MAX_CODEPOINT_LEN)
+				inputElement.value = name
+
+				return await doInference(session, name, genderTextElement, genderMaleProgressJQ, genderFemaleProgressJQ)
+			})
+			useWebGLCheckbox.addEventListener("change", async () => {
+				console.log("WebGL2 mode", useWebGLCheckbox.checked)
+				session = await createSession(modeldata, useWebGLCheckbox.checked)
+				return await doInference(session, inputElement.value, genderTextElement, genderMaleProgressJQ, genderFemaleProgressJQ)
+			})
+
+			inputElement.disabled = false
+			inputElement.setAttribute("placeholder", "Type away...")
+		}
+		
+		if (document.readyState !== "loading") {
+			main()
+		} else {
+			document.addEventListener("DOMContentLoaded", main);
+		}
+	</script>
+</head>
+
+<body style="padding: 1em">
+	<section class="ui text container pink segment" style="margin-bottom: 1em">
+		<h1 class="ui header"><i class="address card outline icon"></i>Name-Gender Classification</h1>
+		<div class="ui left icon fluid input" style="margin-bottom:1rem;">
+			<input id="input" type="text" placeholder="Please wait..." autocomplete="off" disabled>
+		</div>
+		<div class="ui checkbox">
+			<input id="use_webgl" type="checkbox" name="example">
+			<label for="example">Use WebGL2 For Inference</label>
+		</div>
+		<p>Best Guessed Gender: <span id="gender_text">Unknown</span></p>
+		<div id="gender_male" class="ui blue progress">
+			<div class="bar">
+				<div class="progress"></div>
+			</div>
+			<div class="label">Male</div>
+		</div>
+		<div id="gender_female" class="ui pink progress">
+			<div class="bar">
+				<div class="progress"></div>
+			</div>
+			<div class="label">Female</div>
+		</div>
+	</section>
+</body>
+
+</html>
