@@ -1,1 +1,1 @@
-![what?](https://cdn.discordapp.com/attachments/498097846143287296/548897592524931083/resize.png)
+![what?](what.png)
