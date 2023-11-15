@@ -193,7 +193,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<p><sup>◊φ</sup>: This denotes Arkhe system in Fontaine. ◊ being pneuma and φ being ousia.</p>
+			<p><sup>◊φ</sup>: This denotes Arkhe system in Fontaine. ◊ being pneuma and φ being ousia. See the <a href="#arkhe">alignment table</a> below for additional information.</p>
 			<h2 class="ui header" id="shield"><a href="#shield">Shield Table</a></h2>
 			<table class="ui celled fixed table">
 				<thead>
@@ -352,6 +352,7 @@
 						<th>Kokomi</th>
 						<th>Itto</th>
 						<th>Yaoyao</th>
+						<th>Furina</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -363,6 +364,7 @@
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Burst</td>
+						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
@@ -378,6 +380,7 @@
 						<td class="negative">Not Possible</td>
 						<td>Hold Elemental Skill</td>
 						<td>Hold Elemental Skill</td>
+						<td class="negative">Not Possible</td>
 					</tr>
 					<tr>
 						<th>Has HP</th>
@@ -390,9 +393,10 @@
 						<td class="positive">No</td>
 						<td class="warning">Yes</td>
 						<td class="positive">No</td>
+						<td class="positive">No</td>
 					</tr>
 					<tr>
-						<th>Triggers Pressure Plate</th>
+						<th><abbr title="Triggers Pressure Plate">Weighted</abbr></th>
 						<td class="positive">Yes</td>
 						<td class="negative">No</td>
 						<td class="positive">Yes</td>
@@ -402,6 +406,7 @@
 						<td class="negative">No</td>
 						<td class="positive">Yes</td>
 						<td class="positive">Yes</td>
+						<td class="negative">No</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -414,6 +419,7 @@
 						<td>12s<sup>*</sup></td>
 						<td>6s</td>
 						<td>10s</td>
+						<td>30s</td>
 					</tr>
 					<tr>
 						<th>Cooldown</th>
@@ -426,6 +432,7 @@
 						<td>20s</td>
 						<td>10s</td>
 						<td>15s</td>
+						<td>20s</td>
 					</tr>
 					<tr>
 						<th>Uptime</th>
@@ -438,6 +445,7 @@
 						<td class="positive">60%<sup>*</sup></td>
 						<td class="positive">60%</td>
 						<td class="positive">67%</td>
+						<td class="positive">100%</td>
 					</tr>
 					<tr>
 						<th><abbr title="What does the companion do?">Behavior</abbr></th>
@@ -450,6 +458,7 @@
 						<td>Heals player and Attack enemies</td>
 						<td>Taunt enemies</td>
 						<td>Heals player/Attack enemies<sup>*</sup></td>
+						<td>Heals player<sup>◊</sup>/Attack enemies<sup>φ</sup> <sup>(*)</sup></td>
 					</tr>
 					<tr>
 						<th><abbr title="What happends when the companion duration ends?">Aftermath</abbr></th>
@@ -458,6 +467,7 @@
 						<td>Explode</td>
 						<td>Drops Chilli<sup>**</sup></td>
 						<td>Explode</td>
+						<td class="negative">None</td>
 						<td class="negative">None</td>
 						<td class="negative">None</td>
 						<td class="negative">None</td>
@@ -495,6 +505,9 @@
 						<td>
 							* Heals when there are players with HP below 70% or no enemies nearby. Otherwise attacks enemies.
 						</td>
+						<td>
+							* Only one can active at the time. Check the respective Arkhe symbol.
+						</td>
 					</tr>
 				</tbody> 
 			</table>
@@ -516,6 +529,8 @@
 						<th>Dori</th>
 						<th>Yaoyao</th>
 						<th>Baizhu</th>
+						<th>Charlotte</th>
+						<th>Furina<sup>◊</sup></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -533,6 +548,8 @@
 						<td>Max HP</td>
 						<td>Max HP</td>
 						<td>Max HP</td>
+						<td>ATK</td>
+						<td>Max HP</td>
 					</tr>
 					<tr>
 						<th>Invocation</th>
@@ -548,6 +565,8 @@
 						<td>Tap Elemental Burst</td>
 						<td>Tap Elemental Skill/Burst</td>
 						<td>Tap Elemental Skill/Burst</td>
+						<td>Tap Elemental Burst</td>
+						<td>Tap Elemental Skill</td>
 					</tr>
 					<tr>
 						<th><abbr title="Additional requirements needed for healing.">Requirement</abbr></th>
@@ -558,11 +577,13 @@
 						<td>In AoE</td>
 						<td class="positive">None</td>
 						<td>In AoE</td>
-						<td>None/Kokomi Normal ATK</td>
+						<td>None/Normal ATK</td>
 						<td>Shinobu's Health</td>
 						<td>In AoE</td>
 						<td>In Yuegui Range<sup>*</sup>/In White Radish Range</td>
 						<td>Needs some time/None</td>
+						<td>In AoE</td>
+						<td>In AoE</td>
 					</tr>
 					<tr>
 						<th><abbr title="Which character it will heal?">Target Character</abbr></th>
@@ -578,6 +599,8 @@
 						<td>Active</td>
 						<td>Least Health<sup>*</sup>/All</td>
 						<td>All/Active</td>
+						<td>Active</td>
+						<td>Active</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -593,6 +616,8 @@
 						<td>12s</td>
 						<td>10s/5s</td>
 						<td>Instant/15s</td>
+						<td>4s</td>
+						<td>30s</td>
 					</tr>
 					<tr>
 						<th>Cooldown</th>
@@ -608,6 +633,8 @@
 						<td>20s</td>
 						<td>15s/20s</td>
 						<td>10s/20s</td>
+						<td>20s</td>
+						<td>20s</td>
 					</tr>
 					<tr>
 						<th>Uptime</th>
@@ -623,6 +650,8 @@
 						<td>60%</td>
 						<td>67%/25%</td>
 						<td>-/75%</td>
+						<td>20%</td>
+						<td>100%</td>
 					</tr>
 					<tr>
 						<th><abbr title="Additional ways of healing after invoking Elemental Skill or Burst?">More Healing</abbr></th>
@@ -638,6 +667,8 @@
 						<td>None</td>
 						<td>Picking White Radish<sup>**</sup></td>
 						<td>None</td>
+						<td>None</td>
+						<td>None</td>
 					</tr>
 					<tr>
 						<th><abbr title="Cooking healing food has 12% chance to double the result.">Passive Cooking</abbr></th>
@@ -645,6 +676,8 @@
 						<td class="negative">No</td>
 						<td class="positive">Yes</td>
 						<td class="positive">Yes</td>
+						<td class="negative">No</td>
+						<td class="negative">No</td>
 						<td class="negative">No</td>
 						<td class="negative">No</td>
 						<td class="negative">No</td>
@@ -683,15 +716,84 @@
 						<td>Shinobu's health will deplete during invocation. However the deplete:healing ratio is larger than 1.</td>
 						<td></td>
 						<td>
-							* Same rules to <a href="#helper">companion/helper table</a> (*) apply.
+							* Same rules to <a href="#helper">companion/helper table</a> (*) apply.<br/>
 							** Additional periodical healing on Ascend Phase 4.
 						</td>
 						<td>Picking certain materials will heal active character when Baizhu is in party.</td>
+						<td>Heals better if the party has more non-Fontaine character (Ascend Phase 4).</td>
+						<td>Need to be in Pneuma Arkhe.</td>
 					</tr>
 				</tbody>
 			</table>
 			<p>Q: Where Zhongli?<br/>A: That requires Constellation 6!</p>
 			<p>Q: Where Gorou?<br/>A: Requires Constellation 4 and at least 2 additional Geo character in party.</p>
+			<h2 class="ui header" id="arkhe"><a href="#arkhe">Arkhe Alignment Table</a></h2>
+			<p>For obvious reasons, only Fontaine characters are listed here.</p>
+			<table class="ui celled fixed table">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Traveler</th>
+						<th>Lynette</th>
+						<th>Lyney</th>
+						<th>Freminet</th>
+						<th>Neuvillette</th>
+						<th>Wriothesley</th>
+						<th>Charlotte</th>
+						<th>Furina</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>Arkhe</th>
+						<td>Pneuma</td>
+						<td>Ousia</td>
+						<td>Pneuma</td>
+						<td>Pneuma</td>
+						<td>Pneuma</td>
+						<td>Ousia</td>
+						<td>Pneuma</td>
+						<td>Ousia/Pneuma<sup>*</sup></td>
+					</tr>
+					<tr>
+						<th>Invocation</th>
+						<td>Elemental Skill</td>
+						<td>Elemental Skill</td>
+						<td><abbr title="Aiming with bow">Charged Attack</abbr></td>
+						<td>Elemental Skill</td>
+						<td>Elemental Skill</td>
+						<td>Elemental Burst</td>
+						<td>Charged Attack</td>
+						<td>Normal Attack</td>
+					</tr>
+					<tr>
+						<th><abbr title="Cooldown of the respective elemental skill/burst is written in parenthesis.">Cooldown</abbr></th>
+						<td>9s (10s)</td>
+						<td>10s (12s)</td>
+						<td>6s</td>
+						<td>9s (10s)</td>
+						<td>10s (12s)</td>
+						<td>10s (15s)</td>
+						<td>6s</td>
+						<td>6s<sup>**</sup></td>
+					</tr>
+					<tr>
+						<th>Notes</th>
+						<td>Only when using Hydro element.</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+							Starting arkhe is ousia.<br/>
+							* Use Charged Attack to switch arkhe.<br/>
+							** Counted separately for each arkhe.
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<p>Is there any mistake in this table? Fill an issue in here: <a href="https://github.com/MikuAuahDark/MikuAuahDark.github.io/issues">https://github.com/MikuAuahDark/MikuAuahDark.github.io/issues</a></p>
 		</div>
 	</body>
