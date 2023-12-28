@@ -64,8 +64,6 @@ export async function main() {
 	const multiCoordXMax = document.getElementById("x_max_range")
 	/** @type {HTMLInputElement} */
 	const multiCoordYMax = document.getElementById("y_max_range")
-	/** @type {HTMLButtonElement} */
-	const generateAlotButton = document.getElementById("generate_alot")
 	/** @type {HTMLTableElement} */
 	const multipleSectorsTable = document.getElementById("multiple_sectors")
 	/** @type {HTMLAnchorElement} */
@@ -161,13 +159,31 @@ export async function main() {
 		}
 	}
 
+	/**
+	 * @param {HTMLElement} elem
+	 * @param {() => void} cb
+	 */
+	function registerButtonClickAndKeyboard(elem, cb) {
+		elem.addEventListener("click", cb)
+		elem.addEventListener("keyup", (ev) => {
+			if (ev.key == "Enter") cb()
+		})
+	}
+
 	coordX.addEventListener("input", recalculateSingleSector)
 	coordY.addEventListener("input", recalculateSingleSector)
 	selectedDictSingle.addEventListener("change", updateSingleSectorcalc)
 	selectedDictMulti.addEventListener("change", updateMultiSectorcalc)
-	generateAlotButton.addEventListener("click", generateMultipleSectors)
-	document.getElementById("save_csv_1").addEventListener("click", () => downloadCSV(false))
-	document.getElementById("save_csv_2").addEventListener("click", () => downloadCSV(true))
+	registerButtonClickAndKeyboard(document.getElementById("generate_alot"), generateMultipleSectors)
+	registerButtonClickAndKeyboard(document.getElementById("save_csv_1"), () => downloadCSV(false))
+	registerButtonClickAndKeyboard(document.getElementById("save_csv_2"), () => downloadCSV(true))
+	registerButtonClickAndKeyboard(document.getElementById("randomize_single"), () => {
+		if (singleSectorcalc) {
+			coordX.value = getRandomInt(-999, 999)
+			coordY.value = getRandomInt(-999, 999)
+			recalculateSingleSector()
+		}
+	})
 
 	await Promise.all([updateSingleSectorcalc(), updateMultiSectorcalc()])
 }
