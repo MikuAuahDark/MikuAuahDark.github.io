@@ -99,7 +99,7 @@ export class TheClassifier {
 
 					if (int !== undefined) {
 						for (let j = 0; j < NUMBER_OF_BITS; j++) {
-							floatArray[(i * NUMBER_OF_BITS + j) * names.length + k] = (int & (1 << j)) != 0
+							floatArray[(k * MAX_CODEPOINT_LEN + i) * NUMBER_OF_BITS + j] = (int & (1 << j)) != 0
 						}
 					}
 				}
@@ -109,8 +109,10 @@ export class TheClassifier {
 			const result = await this.model.run({input: tensor})
 
 			for (let k = 0; k < names.length; k++) {
-				const genderid = determineGender(result.output.data)
-				const [gendertext, maleness, femaleness] = returnStatistics(genderid, result.output.data)
+				console.log(result.output.data)
+				const stats = result.output.data.slice(k * 2, k * 2 + 2)
+				const genderid = determineGender(stats)
+				const [gendertext, maleness, femaleness] = returnStatistics(genderid, stats)
 				inferResult.push(new ClassificationResult(genderid, gendertext, maleness, femaleness))
 			}
 		}

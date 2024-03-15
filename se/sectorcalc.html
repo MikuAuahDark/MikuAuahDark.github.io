@@ -16,6 +16,7 @@
 			import { main } from "./sectorcalc_main.mjs"
 			$(document).ready(() => {
 				$(".ui.dropdown").dropdown()
+				$(".ui.checkbox").checkbox()
 				main()
 			})
 		</script>
@@ -61,6 +62,10 @@
 				</div>
 				<div class="ui center aligned inverted segment">
 					<span id="sector_name" style="font-size:xx-large"></span>
+				</div>
+				<div class="ui inverted checkbox" style="padding: 1em">
+					<input type="checkbox" id="inference_gender">
+					<label style="color:white">Inference gender (slighly slower) <i id="infer_gender_status" class="icon"></i></label>
 				</div>
 				<div class="ui inverted segment">
 					<h2 class="ui header">Multiple Names</h2>
