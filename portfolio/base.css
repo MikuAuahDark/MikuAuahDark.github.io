@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.the-card {
+	@apply rounded-lg bg-white bg-opacity-25 flex flex-col;
+
+	div:first-child {
+		@apply rounded-t-lg;
+
+		img {
+			@apply rounded-t-lg;
+		}
+	}
+
+	div:nth-child(2) {
+		@apply flex flex-grow flex-col p-4;
+
+		p:first-child {
+			@apply text-lg;
+		}
+
+		p:nth-child(2) {
+			@apply py-2 flex-grow;
+		}
+
+		div:nth-child(3) {
+			@apply self-end;
+
+			a {
+				@apply no-underline px-2 py-1 bg-purple-600 hover:bg-purple-800 active:bg-purple-900 transition-colors rounded-full text-sm
+			}
+		}
+	}
+}
+
+.the-section {
+	@apply p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+span[reveal] {
+	@apply bg-white bg-opacity-10 px-1 rounded-md;
+}
+
+a {
+	@apply underline;
+}
