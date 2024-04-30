@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="index.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+	</style>
+	<script>
+		/**
+		 * @param {number} key
+		 * @param {Uint8Array} data
+		 **/
+		function reveal(key, data) {
+			let currentKey = BigInt(key)
+			const result = []
+
+			for (const s of data) {
+				const newKey = (currentKey * 214013n + 2531011n) & 0xFFFFFFFFn
+				const xorKey = Number((newKey & 0xFFn) ^ ((newKey >> 8n) & 0xFFn))
+				result.push(s ^ xorKey)
+				currentKey = newKey
+			}
+
+			const u8result = Uint8Array.from(result)
+			return new TextDecoder().decode(u8result)
+		}
+
+		/**
+		 * @param {string} key
+		 **/
+		function preprocessKey(key) {
+			const u8key = Uint8Array.from(atobURLSafe(key), (m) => m.codePointAt(0));
+			const key1 = BigInt((u8key[0] | (u8key[1] << 8) | (u8key[2] << 16) | (u8key[3] << 24)) >>> 0)
+			const key2 = BigInt(u8key[4] | (u8key[5] << 8))
+			return Number(((key1 * key2) ^ key2) & 0xFFFFFFFFn)
+		}
+
+		/**
+		 * @param {string} data
+		 **/
+		function preprocessData(data) {
+			return Uint8Array.from(atobURLSafe(data), (m) => m.codePointAt(0))
+		}
+
+		/**
+		 * @param {string} data
+		 **/
+		function atobURLSafe(data) {
+			return atob(data.replace(/_/g, '/').replace(/-/g, '+'))
+		}
+
+		function main() {
+			for (const button of document.querySelectorAll("button[font-swap-target]")) {
+				for (const target of document.querySelectorAll(button.getAttribute("font-swap-target"))) {
+					button.addEventListener("click", () => {
+						target.classList.toggle("font-zendots")
+						target.classList.toggle("font-sans")
+						target.classList.toggle("text-lg")
+					})
+				}
+			}
+
+			for (const elem of document.querySelectorAll("[reveal]")) {
+				function foo() {
+					const oldValue = elem.textContent
+					const revealKeyBase64 = elem.getAttribute("reveal-key")
+					const revealValueBase64 = elem.getAttribute("reveal-data")
+					const newValue = revealKeyBase64 ? reveal(preprocessKey(revealKeyBase64), preprocessData(revealValueBase64)) : revealValueBase64
+					let revealed = false
+
+					elem.addEventListener("click", () => {
+						if (revealed) {
+							elem.textContent = oldValue
+						} else {
+							elem.textContent = newValue
+						}
+						revealed = !revealed
+					})
+				}
+				foo()
+			}
+
+			const sectionButtons = Array.from(document.querySelectorAll("#sections button"))
+			const sectionButtonMap = sectionButtons.map((v) => [v, document.getElementById(v.getAttribute("tab-target"))])
+			for (const [i, [elem, target]] of sectionButtonMap.entries()) {
+				elem.addEventListener("click", () => {
+					for (const [j, [elem2, target2]] of sectionButtonMap.entries()) {
+						if (i == j) {
+							target2.classList.add("the-section")
+							target2.classList.remove("hidden")
+							elem2.classList.add("bg-green-700", "text-gray-200")
+							elem2.classList.remove("bg-green-600", "text-gray-100")
+						} else {
+							target2.classList.remove("the-section")
+							target2.classList.add("hidden")
+							elem2.classList.remove("bg-green-700", "text-gray-200")
+							elem2.classList.add("bg-green-600", "text-gray-100")
+						}
+					}
+				})
+			}
+		}
+
+		if (document.readyState !== "loading")
+			main()
+		else
+			document.addEventListener("DOMContentLoaded", main)
+	</script>
+</head>
+
+<body class="font-zendots bg-gray-800">
+	<h1 class="py-40 text-center text-white text-7xl">Miku AuahDark</h1>
+	<section class="rounded-lg m-8 md:m-24 bg-opacity-50 bg-gray-600 grid sm:grid-cols-2 sm:grid-rows-1 grid-cols-1 grid-rows-2">
+		<div class="text-white p-8 sm:p-12">
+			<h2 class="py-7 text-4xl text-center">About Me</h2>
+			<button font-swap-target="#about_text" class="px-2 py-1 bg-purple-600 hover:bg-purple-800 active:bg-purple-900 transition-colors rounded-full text-sm">No fancy text please</button>
+			<p id="about_text" class="text-justify font-zendots mt-4">
+				Hello, my name is <span reveal-data="wGdzjTdVutiszCwXP4255axT8-J8" reveal-key="1HaN-BQd" reveal="Click to reveal name.">Miku AuahDark</span>. I'm a backend developer proficient in Python, FastAPI, Flask, and SQLAlchemy. I'm also a game developer proficient in Lua and LOVE game framework. I also have good skill in reverse engineering and problem solving. I'm currently interested in client-side AI or known as on-device inference.
+			</p>
+			<div class="text-center mt-8">
+				<a href="cv.pdf" class="px-4 py-2 bg-purple-600 hover:bg-purple-800 active:bg-purple-900 transition-colors rounded-full no-underline">See my CV</a>
+			</div>
+		</div>
+		<div class="order-first sm:p-16 lg:p-32 sm:order-last place-items-center">
+			<img class="object-contain" src="placeholder1.jpg">
+			<p class="text-center text-white">TODO replace. <a href="https://pixiv.net/i/91856665" target="_blank">Image Source</a></p>
+		</div>
+	</section>
+	<section class="rounded-lg m-8 md:m-24 bg-opacity-50 bg-gray-600 text-white">
+		<h2 class="py-7 text-4xl text-center">Portfolio</h2>
+		<div class="content-center p-4">
+			<div id="sections" class="grid grid-cols-2 grid-rows-1">
+				<button tab-target="project" class="p-2 rounded-l-md bg-green-700 hover:bg-green-800 active:bg-green-900 transition-colors text-gray-200">Projects</button>
+				<button tab-target="music" class="p-2 rounded-r-md bg-green-600 hover:bg-green-800 active:bg-green-900 transition-colors text-gray-100">Music Production</button>
+			</div>
+		</div>
+		<div id="project" class="the-section">
+			<div class="the-card">
+				<div class="bg-white">
+					<img src="npps_logo.png">
+				</div>
+				<div>
+					<p>NPPS4</p>
+					<p>A server implementation of a certain end-of-life idol rhythm game.</p>
+					<div>
+						<a href="https://github.com/DarkEnergyProcessor/NPPS4" target="_blank">Repository</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-32 bg-green-300"></div>
+				<div>
+					<p>RIME</p>
+					<p>An image metadata reader and remover.</p>
+					<div>
+						<a href="../rime/index.html" target="_blank">Open</a>
+						<a href="https://github.com/MikuAuahDark/rime" target="_blank">Repository</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div>
+					<img src="ls2.png">
+				</div>
+				<div>
+					<p>Live Simulator: 2</p>
+					<p>A Love Live! School Idol Festival Live Show Simulator for Windows, Linux, macOS, and Android.</p>
+					<div>
+						<a href="https://github.com/DarkEnergyProcessor/livesim2_async" target="_blank">Repository</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-32 bg-sky-300"></div>
+				<div>
+					<p>simplewebp</p>
+					<p>Single-file WebP image decoder. Work in progress.</p>
+					<div>
+						<a href="https://github.com/MikuAuahDark/simplewebp" target="_blank">Repository</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-32 bg-pink-300"></div>
+				<div>
+					<p>Name Gender Classification</p>
+					<p>Classify binary gender based on your name using LSTM AI model. Runs directly in your device/browser.</p>
+					<div>
+						<a href="../namegender.html" target="_blank">Open</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="music" class="hidden">
+			<div class="the-card">
+				<div>
+					<img src="snew.png">
+				</div>
+				<div>
+					<p>Start Anew</p>
+					<p><a href="https://twitter.com/meron_2770/status/1636989327459909634">Artwork source</a>. <span reveal="Reveal UUID" reveal-data="0a27f055-2d8f-42d1-88e7-fb99a22604ac">Reveal UUID</span>.</p>
+					<div>
+						<a href="https://www.youtube.com/watch?v=UgfSFZpC4AU" target="_blank">Listen in YouTube</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div>
+					<img src="tcm.png">
+				</div>
+				<div>
+					<p>Truncated Memory</p>
+					<p><a href="https://pixiv.net/i/62529718">Artwork source</a>. <span reveal="Reveal UUID" reveal-data="c6aeedfc-7798-43a9-8841-14506bf1485f">Reveal UUID</span>.</p>
+					<div>
+						<a href="https://www.youtube.com/watch?v=8NJDRxurIbE" target="_blank">Listen in YouTube</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-[150px] bg-white">
+				</div>
+				<div>
+					<p>Oldbits</p>
+					<p><span reveal="Reveal UUID" reveal-data="bca260eb-899b-4ea0-8914-13817da45ec2">Reveal UUID</span>.</p>
+					<div>
+						<a href="https://npad93.bandcamp.com/album/datasound">Get EP in Bandcamp</a>
+						<a href="https://www.youtube.com/watch?v=mY1kZCv6m94" target="_blank">Listen in YouTube</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-[150px] bg-white">
+				</div>
+				<div>
+					<p>Datasound</p>
+					<p><span reveal="Reveal UUID" reveal-data="9cf1313f-e629-44bf-ad41-bdf2d6c2addd">Reveal UUID</span>.</p>
+					<div>
+						<a href="https://npad93.bandcamp.com/album/datasound">Get EP in Bandcamp</a>
+						<a href="https://www.youtube.com/watch?v=4A6axelDNRM" target="_blank">Listen in YouTube</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	</section>
+</body>
+
+</html>
