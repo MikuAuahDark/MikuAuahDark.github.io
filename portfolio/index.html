@@ -3,9 +3,17 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="index.css">
+	<title>MikuAuahDark's Portfolio</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+
+		body {
+				background-image: url(../pwa/starfield.svg);
+				background-size: cover;
+				background-attachment: fixed;
+			}
 	</style>
 	<script>
 		/**
@@ -110,11 +118,11 @@
 	</script>
 </head>
 
-<body class="font-zendots bg-gray-800">
-	<h1 class="py-40 text-center text-white text-7xl">Miku AuahDark</h1>
-	<section class="rounded-lg m-8 md:m-24 bg-opacity-50 bg-gray-600 grid sm:grid-cols-2 sm:grid-rows-1 grid-cols-1 grid-rows-2">
+<body class="font-zendots">
+	<h1 class="py-40 text-center text-white text-6xl">Miku AuahDark</h1>
+	<section class="rounded-lg m-8 md:m-24 bg-opacity-75 bg-gray-800 grid sm:grid-cols-2 sm:grid-rows-1 grid-cols-1 grid-rows-2">
 		<div class="text-white p-8 sm:p-12">
-			<h2 class="py-7 text-4xl text-center">About Me</h2>
+			<h2 class="py-7 text-3xl text-center">About Me</h2>
 			<button font-swap-target="#about_text" class="px-2 py-1 bg-purple-600 hover:bg-purple-800 active:bg-purple-900 transition-colors rounded-full text-sm">No fancy text please</button>
 			<p id="about_text" class="text-justify font-zendots mt-4">
 				Hello, my name is <span reveal-data="wGdzjTdVutiszCwXP4255axT8-J8" reveal-key="1HaN-BQd" reveal="Click to reveal name.">Miku AuahDark</span>. I'm a backend developer proficient in Python, FastAPI, Flask, and SQLAlchemy. I'm also a game developer proficient in Lua and LOVE game framework. I also have good skill in reverse engineering and problem solving. I'm currently interested in client-side AI or known as on-device inference.
@@ -128,8 +136,8 @@
 			<p class="text-center text-white">TODO replace. <a href="https://pixiv.net/i/91856665" target="_blank">Image Source</a></p>
 		</div>
 	</section>
-	<section class="rounded-lg m-8 md:m-24 bg-opacity-50 bg-gray-600 text-white">
-		<h2 class="py-7 text-4xl text-center">Portfolio</h2>
+	<section class="rounded-lg m-8 md:m-24 bg-opacity-75 bg-gray-800 text-white">
+		<h2 class="py-7 text-3xl text-center">Portfolio</h2>
 		<div class="content-center p-4">
 			<div id="sections" class="grid grid-cols-2 grid-rows-1">
 				<button tab-target="project" class="p-2 rounded-l-md bg-green-700 hover:bg-green-800 active:bg-green-900 transition-colors text-gray-200">Projects</button>
@@ -189,6 +197,16 @@
 					<p>Classify binary gender based on your name using LSTM AI model. Runs directly in your device/browser.</p>
 					<div>
 						<a href="../namegender.html" target="_blank">Open</a>
+					</div>
+				</div>
+			</div>
+			<div class="the-card">
+				<div class="min-h-32 bg-gray-300"></div>
+				<div>
+					<p>NLay</p>
+					<p>Flexible layouting for Lua-based game framework inspired by Android ConstraintLayout.</p>
+					<div>
+						<a href="https://github.com/MikuAuahDark/NPad93#nlay" target="_blank">Repository</a>
 					</div>
 				</div>
 			</div>
