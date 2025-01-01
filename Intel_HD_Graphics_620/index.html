@@ -18,6 +18,10 @@
 			tr.notes td {
 				vertical-align: top;
 			}
+			table.scrollable {
+				display: block;
+				overflow-x: auto;
+			}
 		</style>
 	</head>
 	<body>
@@ -77,6 +81,7 @@
 					<tr>
 						<td>Liyue</td>
 						<td><ul class="ui list">
+							<li>Lanyan</li>
 							<li>Xianyun</li>
 							<li>Xiao</li>
 						</ul></td>
@@ -200,7 +205,8 @@
 						<td>Ororon</td>
 						<td>Kinich</td>
 						<td>Mualani</td>
-						<td colspan="2"></td>
+						<td>Mavuika</td>
+						<td>Citlali</td>
 					</tr>
 					<tr>
 						<td>Snezhnaya</td>
@@ -212,7 +218,7 @@
 			</table>
 			<p><sup>◊φ</sup>: This denotes Arkhe system in Fontaine. ◊ being pneuma and φ being ousia. See the <a href="#arkhe">alignment table</a> below for additional information.</p>
 			<h2 class="ui header" id="shield"><a href="#shield">Shield Table</a></h2>
-			<table class="ui celled fixed table">
+			<table class="ui celled scrollable table">
 				<thead>
 					<tr>
 						<th></th>
@@ -226,6 +232,7 @@
 						<th>Layla</th>
 						<th>Baizhu</th>
 						<th>Kirara</th>
+						<th>Citlali</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -241,6 +248,7 @@
 						<td>Max HP</td>
 						<td>Max HP</td>
 						<td>Max HP</td>
+						<td>Elemental Mastery</td>
 					</tr>
 					<tr>
 						<th><abbr title="How to use the shield.">Invocation</abbr></th>
@@ -254,6 +262,7 @@
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Burst</td>
 						<td>Tap/Hold Elemental Skill/Hitting Enemies<sup>***</sup></td>
+						<td>Tap Elemental Skill</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -267,6 +276,7 @@
 						<td>12s</td>
 						<td>6×2.5s</td>
 						<td>12s</td>
+						<td>20s</td>
 					</tr>
 					<tr>
 						<th>Cooldown</th>
@@ -280,6 +290,7 @@
 						<td>12s</td>
 						<td>20s</td>
 						<td>8s-22s<sup>*</sup></td>
+						<td>16s</td>
 					</tr>
 					<tr>
 						<th><abbr title="Duration divided by Cooldown">Uptime</abbr></th>
@@ -293,6 +304,7 @@
 						<td class="positive">100%</td>
 						<td class="positive">75%</td>
 						<td class="warning">55%-100%<sup>*, **</sup></td>
+						<td class="positive">100%</td>
 					</tr>
 					<tr>
 						<th>Stackability</th>
@@ -306,6 +318,7 @@
 						<td class="negative">Reset</td>
 						<td class="warning">Reset, every 2.5s</td>
 						<td class="positive">Stackable</td>
+						<td class="negative">Reset</td>
 					</tr>
 					<tr>
 						<th><abbr title="Additional shield effectiveness on certain elements.">Efficiency</abbr></th>
@@ -319,6 +332,7 @@
 						<td>250% Cryo</td>
 						<td>250% Dendro</td>
 						<td>250% Dendro</td>
+						<td>250% Cryo</td>
 					</tr>
 					<tr class="notes">
 						<th>Notes</th>
@@ -349,6 +363,7 @@
 							** Using Urgent Neko Parcel longer will decrease the shield uptime. Tapping guarantees 100% uptime.<br/>
 							*** During Urgent Neko Parcel mode (elemental skill), after it's uncast. Requires Ascend Phase 1.
 						</td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
@@ -356,7 +371,7 @@
 			<p>Q: Where's Yunjin?<br/>A: Yunjin is not actually a shielder. Her elemental skill shield only lasts up to 2s and less if you perform counter-attack like Beidou.</p>
 			<p>Q: Where Crystallize reaction?<br/>A: Oh come on!</p>
 			<h2 class="ui header" id="helper"><a href="#helper">Companion/Helper Table</a></h2>
-			<table class="ui celled fixed table">
+			<table class="ui celled scrollable table">
 				<thead>
 					<tr>
 						<th></th>
@@ -530,7 +545,7 @@
 			</table>
 			<h2 class="ui header" id="healer"><a href="#healer">Healer Table</a></h2>
 			<p>Any skill that heals themselves are not counted. Don't ask for Kaeya, Fischl, Hu Tao, and Dehya!</p>
-			<table class="ui celled fixed table">
+			<table class="ui celled scrollable table">
 				<thead>
 					<tr>
 						<th></th>
@@ -548,6 +563,7 @@
 						<th>Baizhu</th>
 						<th>Charlotte</th>
 						<th>Furina<sup>◊</sup></th>
+						<th>Chevreuse</th>
 						<th>Xianyun</th>
 						<th>Xilonen</th>
 					</tr>
@@ -569,6 +585,7 @@
 						<td>Max HP</td>
 						<td>ATK</td>
 						<td>Max HP</td>
+						<td>Max HP</td>
 						<td>ATK</td>
 						<td>DEF</td>
 					</tr>
@@ -588,6 +605,7 @@
 						<td>Tap Elemental Skill/Burst</td>
 						<td>Tap Elemental Burst</td>
 						<td>Tap Elemental Skill</td>
+						<td>Tap/Hold Elemental Skill</td>
 						<td>Tap Elemental Burst</td>
 						<td>Tap Elemental Burst</td>
 					</tr>
@@ -607,6 +625,7 @@
 						<td>Needs some time/None</td>
 						<td>In AoE</td>
 						<td>In AoE</td>
+						<td class="positive">None</td>
 						<td class="positive">None</td>
 						<td class="negative">Need 2 Source Samples</td>
 					</tr>
@@ -628,6 +647,7 @@
 						<td>Active</td>
 						<td>Active</td>
 						<td>Active</td>
+						<td>Active</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -645,6 +665,7 @@
 						<td>Instant/15s</td>
 						<td>4s</td>
 						<td>30s</td>
+						<td>12s</td>
 						<td>16s</td>
 						<td>12s</td>
 					</tr>
@@ -664,6 +685,7 @@
 						<td>10s/20s</td>
 						<td>20s</td>
 						<td>20s</td>
+						<td>15s</td>
 						<td>18s</td>
 						<td>15s</td>
 					</tr>
@@ -683,6 +705,7 @@
 						<td>-/75%</td>
 						<td>20%</td>
 						<td>100%</td>
+						<td>80%</td>
 						<td>88.9%</td>
 						<td>80%</td>
 					</tr>
@@ -702,6 +725,7 @@
 						<td>None</td>
 						<td>None</td>
 						<td>None</td>
+						<td>None</td>
 						<td>Followed by Starwicker</td>
 						<td>None</td>
 					</tr>
@@ -711,6 +735,7 @@
 						<td class="negative">No</td>
 						<td class="positive">Yes</td>
 						<td class="positive">Yes</td>
+						<td class="negative">No</td>
 						<td class="negative">No</td>
 						<td class="negative">No</td>
 						<td class="negative">No</td>
@@ -760,6 +785,8 @@
 						<td>Heals better if the party has more non-Fontaine character (Ascend Phase 4).</td>
 						<td>Need to be in Pneuma Arkhe.</td>
 						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
@@ -767,7 +794,7 @@
 			<p>Q: Where Gorou?<br/>A: Requires Constellation 4 and at least 2 additional Geo character in party.</p>
 			<h2 class="ui header" id="arkhe"><a href="#arkhe">Arkhe Alignment Table</a></h2>
 			<p>For obvious reasons, only characters with Fontaine vision are listed here.</p>
-			<table class="ui celled fixed table">
+			<table class="ui celled scrollable table">
 				<thead>
 					<tr>
 						<th></th>
