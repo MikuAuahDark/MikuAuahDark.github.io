@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="KK Data Stuff">
+		<title>KK Data Preserver</title>
+		<link rel="stylesheet" href="semantic/semantic.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script type="module">
+			import { PNGChunk, extractPNGChunks, reassemblePNG, isPNG } from "./pngasm.mjs"
+
+			const KKX_CHUNK = "kkDt"
+			const IEND_CHUNK = "IEND"
+
+			class ProcessResult
+			{
+				/**
+				 * @param {Uint8Array|null} u8a
+				 * @param {string|null} msg
+				 */
+				constructor(u8a, msg)
+				{
+					this.result = u8a
+					this.message = msg
+				}
+			}
+
+			/**
+			 * @param {Uint8Array} png
+			 */
+			function processPNG(png)
+			{
+				if (!isPNG(png))
+					return new ProcessResult(null, "Not PNG")
+
+				const [chunks, extra] = extractPNGChunks(png)
+				let kkdt = null
+
+				for (let i = 0; i < chunks.length; i++)
+				{
+					const chunk = chunks[i]
+
+					if (chunk.chunk == KKX_CHUNK)
+					{
+						kkdt = chunk
+						chunks.splice(i, 1)
+						break
+					}
+				}
+
+				if (kkdt != null)
+					/* Reassemble with added data */
+					return new ProcessResult(reassemblePNG(chunks, kkdt.data), "Koi data recovered")
+				else if (extra.length > 0)
+				{
+					/* Find IEND */
+					let i = 0
+					for (; i < chunks.length; i++)
+					{
+						const chunk = chunks[i]
+
+						if (chunk.chunk == IEND_CHUNK)
+							break;
+					}
+
+					chunks.splice(i, 0, new PNGChunk(KKX_CHUNK, extra))
+					/* Reassemble with added chunk */
+					return new ProcessResult(reassemblePNG(chunks, null), "Koi data encapsulated")
+				}
+				else
+					return new ProcessResult(null, "No Koi data to encapsulate nor to recover")
+			}
+
+			function main()
+			{
+				const inputFile = document.getElementById("input")
+				const inputArea = document.getElementById("input_area")
+				const statusMessage = document.getElementById("status")
+				const savebutton = document.getElementById("save")
+				const imageOutput = document.getElementById("image_output")
+
+				/**
+				 * @param {File} file
+				 */
+				async function processMain(file)
+				{
+					const buffer = await file.arrayBuffer()
+					const u8arr = new Uint8Array(buffer)
+					const result = processPNG(u8arr)
+
+					if (result.result)
+						return result
+					else
+						throw new Error(result.message)
+				}
+
+				/**
+				 * @param {File} file
+				 */
+				function process(file)
+				{
+					const objectURL = URL.createObjectURL(file)
+					let img = null
+					if (inputArea.childElementCount > 0)
+					{
+						// Has img element
+						img = inputArea.children[0]
+					}
+					else
+					{
+						// Create new one
+						img = document.createElement("img")
+						inputArea.appendChild(img)
+					}
+
+					const imgSrc = img.getAttribute("src")
+					img.setAttribute("src", objectURL)
+					if (imgSrc)
+						URL.revokeObjectURL(imgSrc)
+
+					processMain(file).then(async function(result)
+					{
+						statusMessage.classList.remove("error")
+						statusMessage.classList.add("ok")
+						statusMessage.textContent = result.message
+
+						const url = URL.createObjectURL(new Blob([result.result], {type: "image/png"}))
+
+						const oldSrc = imageOutput.getAttribute("src")
+						imageOutput.setAttribute("src", url)
+						savebutton.setAttribute("href", url)
+
+						if (oldSrc)
+							URL.revokeObjectURL(oldSrc)
+					}).catch(function(err)
+					{
+						console.error(err)
+						statusMessage.classList.remove("ok")
+						statusMessage.classList.add("error")
+						statusMessage.textContent = err.message
+
+						const oldSrc = imageOutput.getAttribute("src")
+						imageOutput.setAttribute("src", "")
+						savebutton.setAttribute("href", "")
+
+						if (oldSrc)
+							URL.revokeObjectURL(oldSrc)
+					})
+
+				}
+
+				inputArea.addEventListener("dragover", function(ev)
+				{
+					ev.preventDefault()
+				})
+				inputArea.addEventListener("click", function(ev)
+				{
+					inputFile.click()
+				})
+				inputArea.addEventListener("drop", function(ev)
+				{	
+					ev.preventDefault();
+
+					if (ev.dataTransfer.items)
+					{
+						for (const item of ev.dataTransfer.items)
+						{
+							// If dropped items aren't files, reject them
+							if (item.kind == "file")
+							{
+								const file = item.getAsFile()
+
+								if (file)
+								{
+									process(file)
+									break
+								}
+							}
+						}
+					}
+					else
+					{
+						for (const file of ev.dataTransfer.files)
+						{
+							process(file)
+							break
+						}
+					}
+				})
+
+				inputFile.addEventListener("change", function(ev)
+				{
+					ev.preventDefault()
+
+					if (inputFile.files)
+					{
+						for (const file of inputFile.files)
+						{
+							process(file)
+							break
+						}
+					}
+				})
+			}
+
+			$(document).ready(main)
+		</script>
+		<style>
+			table.ui.table tbody th {
+				text-align: center;
+			}
+			tr.notes td {
+				vertical-align: top;
+			}
+			table.scrollable {
+				display: block;
+				overflow-x: auto;
+			}
+			div.drop {
+				background-color: rgba(0, 0, 0, 0.5)
+			}
+			#status.ok {
+				color: green
+			}
+			#status.error {
+				color: red
+			}
+			#save:not([href]) {
+				display: none
+			}
+			#input_area {
+				aspect-ratio: 16/9;
+
+				* {
+					pointer-events: none
+				}
+			}
+			#image_output, #input_area > img {
+				object-fit: contain;
+				width: 100%;
+				height: 100%
+			}
+		</style>
+	</head>
+	<body>
+		<div class="ui text container purple segment">
+			<h1 class="ui header">KK Data Encapsulate</h1>
+			<p>Make KK metadata survive across Discord.</p>
+			<div id="input_area" class="ui segment" style="min-width:100px">Drag image here or click</div>
+			<p id="status"></p>
+			<div class="ui segment">
+				<img id="image_output">
+				<a id="save" class="ui fluid green button" download>Download Image</a>
+			</div>
+			<input id="input" type="file" style="display:none">
+		</div>
+	</body>
+</html>
