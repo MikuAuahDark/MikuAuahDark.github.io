@@ -32,7 +32,9 @@
 			<table class="ui table">
 				<thead>
 					<tr>
-						<th>Region</th>
+						<th><abbr title="Where the character gets their elemental powers, not their birth location.">
+							Region
+						</abbr></th>
 						<th>Anemo</th>
 						<th>Geo</th>
 						<th>Electro</th>
@@ -68,6 +70,7 @@
 							<li>Amber</li>
 							<li>Bennett</li>
 							<li>Diluc</li>
+							<li>Durin</li>
 							<li>Klee</li>
 						</ul></td>
 						<td><ul class="ui list">
@@ -217,11 +220,34 @@
 						<td>Citlali</td>
 					</tr>
 					<tr>
+						<td>Nod-Krai</td>
+						<td>Jahoda</td>
+						<td></td>
+						<td><ul class="ui list">
+							<li>Flins</li>
+							<li>Ineffa</li>
+						</ul></td>
+						<td><ul class="ui list">
+							<li>Nefer</li>
+							<li>Lauma</li>
+						</ul></td>
+						<td>Aino</td>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
 						<td>Snezhnaya</td>
 						<td colspan="4"></td>
 						<td>Childe</td>
 						<td>Arlecchino</td>
 						<td></td>
+					</tr>
+					<tr>
+						<td>Otherworld</td>
+						<td colspan="6"></td>
+						<td><ul class="ui list">
+							<li>Aloy</li>
+							<li>Skirk</li>
+						</ul></td>
 					</tr>
 				</tbody>
 			</table>
@@ -236,13 +262,13 @@
 						<th>Beidou</th>
 						<th>Xinyan</th>
 						<th>Zhongli</th>
-						<th>Yanfei<sup>*</sup></th>
 						<th>Thoma</th>
 						<th>Layla</th>
 						<th>Baizhu</th>
 						<th>Kirara</th>
 						<th>Citlali</th>
 						<th>Lan Yan</th>
+						<th>Ineffa</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -257,8 +283,8 @@
 						<td>Max HP</td>
 						<td>Max HP</td>
 						<td>Max HP</td>
-						<td>Max HP</td>
 						<td>Elemental Mastery</td>
+						<td>ATK</td>
 						<td>ATK</td>
 					</tr>
 					<tr>
@@ -268,13 +294,13 @@
 						<td>Hold Elemental Skill/Tap Elemental Burst<sup>*</sup></td>
 						<td>Tap Elemental Skill</td>
 						<td>Hold Elemental Skill/Tap Elemental Burst<sup>*</sup></td>
-						<td>Tap Elemental Burst</td>
 						<td>Tap Elemental Skill/Burst</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Burst</td>
 						<td>Tap/Hold Elemental Skill/Hitting Enemies<sup>***</sup></td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap/Hold Elemental Skill</td>
+						<td>Tap Elemental Skill</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -283,13 +309,13 @@
 						<td>3s<sup>**</sup>/15s</td>
 						<td>12s</td>
 						<td>20s</td>
-						<td>15s</td>
 						<td>8s</td>
 						<td>12s</td>
 						<td>6×2.5s</td>
 						<td>12s</td>
 						<td>20s</td>
 						<td>12.5s</td>
+						<td>20s</td>
 					</tr>
 					<tr>
 						<th>Cooldown</th>
@@ -298,11 +324,11 @@
 						<td>7.5s/20s</td>
 						<td>18s</td>
 						<td>12s</td>
-						<td>20s</td>
 						<td>15s/20s</td>
 						<td>12s</td>
 						<td>20s</td>
 						<td>8s-22s<sup>*</sup></td>
+						<td>16s</td>
 						<td>16s</td>
 						<td>16s</td>
 					</tr>
@@ -313,13 +339,13 @@
 						<td class="warning">40%/75%</td>
 						<td class="warning">67%</td>
 						<td class="positive">100%</td>
-						<td class="positive">75%</td>
 						<td class="negative">53%/40%</td>
 						<td class="positive">100%</td>
 						<td class="positive">75%</td>
 						<td class="warning">55%-100%<sup>*, **</sup></td>
 						<td class="positive">100%</td>
 						<td class="positive">78%</td>
+						<td class="positive">100%</td>
 					</tr>
 					<tr>
 						<th>Stackability</th>
@@ -328,11 +354,11 @@
 						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
-						<td class="negative">Reset</td>
 						<td class="positive">Stackable</td>
 						<td class="negative">Reset</td>
 						<td class="warning">Reset, every 2.5s</td>
 						<td class="positive">Stackable</td>
+						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
 						<td class="negative">Reset</td>
 					</tr>
@@ -344,12 +370,12 @@
 						<td>250% Pyro</td>
 						<td>150% All</td>
 						<td>250% Pyro</td>
-						<td>250% Pyro</td>
 						<td>250% Cryo</td>
 						<td>250% Dendro</td>
 						<td>250% Dendro</td>
 						<td>250% Cryo</td>
 						<td>250% Anemo</td>
+						<td>250% Electro</td>
 					</tr>
 					<tr class="notes">
 						<th>Notes</th>
@@ -371,7 +397,6 @@
 						<td>
 							* Elemental Burst shield is only available on Constellation 2.<br/>
 							* Grants other players a shield in the burst area.</td>
-						<td>* Requires Constellation 4.</td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -382,10 +407,11 @@
 						</td>
 						<td></td>
 						<td></td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
-			<p>Q: Where's Kaeya?<br/>A: Kaeya's shield requires Constellation 4, only triggered if Kaeya's HP below 20%, and tied to Kaeya himself. If you reached Constellation 4, you must be a Kaeya DPS user and knows all about his shield stats.</p>
+			<p>Q: Where's Kaeya and Yanfei?<br/>A: Character shield that requires constellation is excluded.</p>
 			<p>Q: Where's Yunjin?<br/>A: Yunjin is not actually a shielder. Her elemental skill shield only lasts up to 2s and less if you perform counter-attack like Beidou.</p>
 			<p>Q: Where Crystallize reaction?<br/>A: Oh come on!</p>
 			<h2 class="ui header" id="helper"><a href="#helper">Companion/Helper Table</a></h2>
@@ -403,6 +429,7 @@
 						<th>Itto</th>
 						<th>Yaoyao</th>
 						<th>Furina</th>
+						<th>Ineffa</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -418,6 +445,7 @@
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
 						<td>Tap Elemental Skill</td>
+						<td>Tap Elemental Skill/Burst</td>
 					</tr>
 					<tr>
 						<th>Change Location</th>
@@ -431,6 +459,7 @@
 						<td>Hold Elemental Skill</td>
 						<td>Hold Elemental Skill</td>
 						<td class="negative">Not Possible</td>
+						<td class="negative">Not Possible</td>
 					</tr>
 					<tr>
 						<th>Has HP</th>
@@ -442,6 +471,7 @@
 						<td class="positive">No</td>
 						<td class="positive">No</td>
 						<td class="warning">Yes</td>
+						<td class="positive">No</td>
 						<td class="positive">No</td>
 						<td class="positive">No</td>
 					</tr>
@@ -457,6 +487,7 @@
 						<td class="positive">Yes</td>
 						<td class="positive">Yes</td>
 						<td class="negative">No</td>
+						<td class="negative">No</td>
 					</tr>
 					<tr>
 						<th>Duration</th>
@@ -470,6 +501,7 @@
 						<td>6s</td>
 						<td>10s</td>
 						<td>30s</td>
+						<td>20s</td>
 					</tr>
 					<tr>
 						<th>Cooldown</th>
@@ -483,6 +515,7 @@
 						<td>10s</td>
 						<td>15s</td>
 						<td>20s</td>
+						<td>16s</td>
 					</tr>
 					<tr>
 						<th>Uptime</th>
@@ -495,6 +528,7 @@
 						<td class="positive">60%<sup>*</sup></td>
 						<td class="positive">60%</td>
 						<td class="positive">67%</td>
+						<td class="positive">100%</td>
 						<td class="positive">100%</td>
 					</tr>
 					<tr>
@@ -509,6 +543,7 @@
 						<td>Taunt enemies</td>
 						<td>Heals player/Attack enemies<sup>*</sup></td>
 						<td>Heals player<sup>◊</sup>/Attack enemies<sup>φ</sup> <sup>(*)</sup></td>
+						<td>Attack enemies</td>
 					</tr>
 					<tr>
 						<th><abbr title="What happends when the companion duration ends?">Aftermath</abbr></th>
@@ -517,6 +552,7 @@
 						<td>Explode</td>
 						<td>Drops Chilli<sup>**</sup></td>
 						<td>Explode</td>
+						<td class="negative">None</td>
 						<td class="negative">None</td>
 						<td class="negative">None</td>
 						<td class="negative">None</td>
@@ -558,6 +594,7 @@
 						<td>
 							* Only one can active at the time. Check the respective Arkhe symbol.
 						</td>
+						<td></td>
 					</tr>
 				</tbody> 
 			</table>
