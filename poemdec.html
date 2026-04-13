@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Poem Hidden Message</title>
+		<link rel="stylesheet" href="semantic/semantic.min.css">
+		<link rel="stylesheet" href="index.css" />
+		<style>
+			#command {
+				font-family: monospace;
+				width: 100%;
+				min-height: 6em;
+				resize: vertical
+			}
+		</style>
+		<script type="text/javascript" src="jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="semantic/semantic.min.js"></script>
+		<script>
+			$(function() {
+				/*** @type {HTMLTextAreaElement} */
+				const input = document.getElementById("command")
+				/*** @type {HTMLInputElement} */
+				const output = document.getElementById("result")
+
+				input.addEventListener("input", function() {
+					const message = []
+
+					for (const line of input.value.split(/\r?\n/)) {
+						const trimmedLine = line.trim()
+						if (trimmedLine.length > 0) {
+							const cleanLine = trimmedLine.replace(/[.,!?;:"' ]+$/, "")
+							const first = cleanLine[0].toUpperCase()
+							if (first === cleanLine[cleanLine.length - 1].toUpperCase())
+								message.push(" ")
+							else
+								message.push(first)
+						}
+					}
+
+					const finalMessage = message.join("").trim()
+					output.value = finalMessage
+				})
+			})
+		</script>
+	</head>
+	<body>
+		<div class="ui text container blue segment">
+			<h1 class="ui header">Poem Hidden Message</h1>
+			<p>Acrostic rule with specific rule for space?</p>
+			<div class="ui fluid input">
+				<textarea id="command"></textarea>
+			</div>
+			<p>Decoded Message</p>
+			<div class="ui fluid input">
+				<input id="result" type="text" readonly>
+			</div>
+		</div>
+	</body>
+</html>
