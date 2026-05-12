@@ -77,6 +77,20 @@
 			--star: #2e2840;
 		}
 
+		@font-face {
+			font-family: "font-sub";
+			src: url("StoryScript-Regular.ttf");
+			/* size-adjust: 120%;
+			font-weight: 900;
+			font-synthesis-weight: auto; */
+		}
+
+		@font-face {
+			font-family: "font-main";
+			src: url("SourGummy-VariableFont_wdth,wght.ttf");
+			size-adjust: 105%;
+		}
+
 		*,
 		*::before,
 		*::after {
@@ -134,6 +148,7 @@
 			box-shadow: 0 2px 8px var(--shadow);
 			transition: all 0.2s;
 			letter-spacing: 0.03em;
+			font-family: "font-main", cursive;
 		}
 
 		.theme-btn:hover {
@@ -231,6 +246,7 @@
 		}
 
 		.display-name {
+			font-family: "font-main", cursive;
 			font-size: 1.5rem;
 			font-weight: 800;
 			letter-spacing: -0.02em;
@@ -257,6 +273,7 @@
 			padding: 0.15rem 0.7rem;
 			margin-bottom: 0.9rem;
 			letter-spacing: 0.03em;
+			font-family: "font-sub", sans-serif;
 		}
 
 		.bio {
@@ -265,6 +282,7 @@
 			color: var(--text);
 			max-width: 380px;
 			margin: 0 auto;
+			font-family: "font-main", cursive;
 		}
 
 		.section-label {
@@ -277,6 +295,7 @@
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
+			font-family: "font-main", cursive;
 		}
 
 		.section-label::after {
@@ -302,6 +321,7 @@
 			background: var(--bg2);
 			border: 1px solid var(--divider);
 			transition: transform 0.15s, border-color 0.2s;
+			font-family: "font-main", cursive;
 		}
 
 		.info-row:hover {
@@ -345,6 +365,7 @@
 			display: inline-flex;
 			align-items: center;
 			gap: 0.3rem;
+			font-family: "font-sub", sans-serif;
 		}
 
 		.tag img {
@@ -381,6 +402,15 @@
 			font-size: 0.88rem;
 			font-weight: 500;
 			transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+			/* font-family: "font-sub", sans-serif; */
+			div {
+				div:first-child {
+					font-family: "font-sub", sans-serif;
+				}
+				div:nth-child(2) {
+					font-family: "font-main", cursive;
+				}
+			}
 		}
 
 		.link-item:hover {
@@ -442,10 +472,12 @@
 			color: var(--dni-text);
 			font-weight: 700;
 			flex-shrink: 0;
+			font-family: "font-sub", sans-serif;
 		}
 
 		.dni-text {
 			color: var(--text);
+			font-family: "font-main", cursive;
 		}
 
 		.note-panel {
@@ -456,6 +488,7 @@
 			line-height: 1.7;
 			background: color-mix(in srgb, var(--accent2) 8%, var(--panel));
 			border-style: dashed;
+			font-family: "font-sub", sans-serif;
 		}
 
 		.note-panel strong {
@@ -490,6 +523,7 @@
 			color: var(--tag-text);
 			border: 1px solid var(--divider);
 			transition: transform 0.15s, border-color 0.2s;
+			font-family: "font-main", cursive;
 		}
 
 		.byf-row:hover {
@@ -604,6 +638,8 @@
 				<span class="tag spin">zhezhi</span>
 				<span class="tag">aemeath</span>
 				<span class="tag">frover</span>
+				<span class="tag" show-if-light>lynae</span>
+				<span class="tag" show-if-dark>chisa</span>
 				<span class="tag">wuwa girls are cute</span>
 				<span class="tag">xiangli yao</span>
 			</div>
@@ -619,6 +655,7 @@
 				<span class="tag spin">amber</span>
 				<span class="tag spin">citlali</span>
 				<span class="tag spin">raiden shogun</span>
+				<span class="tag" show-if-light>nicole</span>
 				<span class="tag">varka</span>
 				<span class="tag">zhongli</span>
 			</div>
@@ -633,6 +670,7 @@
 				<span class="tag">🎞️ sci-fi</span>
 				<span class="tag" show-if-light>gintama</span>
 				<span class="tag" show-if-dark>🚀 star trek</span>
+				<span class="tag">🦭 fleet snowfluff</span>
 			</div>
 		</div>
 
@@ -652,6 +690,13 @@
 						<span class="info-label">If you just want to talk or something. All conversation in my DM are
 							NDA/private unless given permission to share. <strong>I reply fast mostly, but please wait
 								up 24h for reply.</strong></span>
+					</div>
+				</div>
+				<div class="byf-row">
+					<div>
+						<span class="info-value">Shy as Hell</span>
+						<span class="info-label">Due to past experiences, I often talk in "formal" language and don't
+							talk about personal things in tweets.</span>
 					</div>
 				</div>
 				<div class="byf-row">
@@ -687,7 +732,7 @@
 		<div class="panel">
 			<div class="section-label">✦ other links</div>
 			<div class="links-list">
-				<a href="https://x.com/MikuAuahDark" target="_blank" class="link-item">
+				<a href="https://x.com/MikuAuahDark" target="_blank" class="link-item" target="_blank">
 					<div class="link-icon">🐦</div>
 					<div>
 						<div style="font-size:0.74rem; color:var(--text-muted)">programmer/main twitter account</div>
@@ -695,7 +740,7 @@
 					</div>
 					<span class="link-arrow">↗</span>
 				</a>
-				<a href="https://www.youtube.com/@MikuAuahDark" class="link-item">
+				<a href="https://www.youtube.com/@MikuAuahDark" class="link-item" target="_blank">
 					<div class="link-icon">📽️</div>
 					<div>
 						<div style="font-size:0.74rem; color:var(--text-muted)">youtube main</div>
@@ -703,7 +748,7 @@
 					</div>
 					<span class="link-arrow">↗</span>
 				</a>
-				<a href="https://www.youtube.com/@NPad93" class="link-item">
+				<a href="https://www.youtube.com/@NPad93" class="link-item" target="_blank">
 					<div class="link-icon">🎵</div>
 					<div>
 						<div style="font-size:0.74rem; color:var(--text-muted)">youtube original music upload</div>
@@ -711,7 +756,7 @@
 					</div>
 					<span class="link-arrow">↗</span>
 				</a>
-				<a show-if-dark href="https://github.com/MikuAuahDark" class="link-item">
+				<a show-if-dark href="https://github.com/MikuAuahDark" class="link-item" target="_blank">
 					<div class="link-icon">⌨️</div>
 					<div>
 						<div style="font-size:0.74rem; color:var(--text-muted)">github</div>
@@ -719,11 +764,19 @@
 					</div>
 					<span class="link-arrow">↗</span>
 				</a>
-				<a show-if-light href=".." class="link-item">
+				<a show-if-light href=".." class="link-item" target="_blank">
 					<div class="link-icon">🌐</div>
 					<div>
 						<div style="font-size:0.74rem; color:var(--text-muted)">personal homepage</div>
 						<div>MikuAuahDark.github.io</div>
+					</div>
+					<span class="link-arrow">↗</span>
+				</a>
+				<a href="https://bsky.app/profile/auahdark.npdep.com" class="link-item" target="_blank">
+					<div class="link-icon">🦋</div>
+					<div>
+						<div style="font-size:0.74rem; color:var(--text-muted)">bluesky</div>
+						<div>@auahdark.npdep.com</div>
 					</div>
 					<span class="link-arrow">↗</span>
 				</a>
@@ -752,13 +805,14 @@
 		<!-- MISC NOTE -->
 		<div class="panel note-panel">
 			✦ <strong>soft blocks are fine!</strong> no need for explanation ✦<br>
-			some things only show depending on the dark/light theme.
+			some things only show depending on the dark/light theme, find it out. 
 		</div>
 
 		<div class="footer">
 			for legal reasons, i have to disclose that all images used were belong to their respective copyright
 			holders.<br>
-			also for legal reasons, i have to disclose that this page does <strong>not</strong> use cookies, yay.<br><br>
+			also for legal reasons, i have to disclose that this page does <strong>not</strong> use cookies,
+			yay.<br><br>
 			sorry the core design and layout was vibe-coded 🥀 but the scripts are not
 		</div>
 	</div>
