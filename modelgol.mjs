@@ -109,7 +109,6 @@ export class TheClassifier {
 			const result = await this.model.run({input: tensor})
 
 			for (let k = 0; k < names.length; k++) {
-				console.log(result.output.data)
 				const stats = result.output.data.slice(k * 2, k * 2 + 2)
 				const genderid = determineGender(stats)
 				const [gendertext, maleness, femaleness] = returnStatistics(genderid, stats)
