@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<title>Emoji Storage</title>
+	<meta property="og:title" content="Emoji Storage">
+	<meta property="og:description" content="It's just way to store links.">
+	<meta property="og:type" content="website">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.4/dist/semantic.min.css"
+		integrity="sha256-xlp3XbXCVlcKYMpXDnziC1QzN9j0SQiDjRiZ0qu6IOc=" crossorigin="anonymous">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.4/dist/semantic.min.js"
+		integrity="sha256-Zh6NZwjzefLXtkIYJygkBuwIxUhZjOPgxKHvlGPo688=" crossorigin="anonymous"></script>
+	<style>
+		h1.ui.center.aligned.header {
+			margin-top: 1.5em;
+		}
+
+		footer {
+			padding: 1em 0;
+			text-align: center;
+		}
+
+		#add_emoji_modal .ui.small.image {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f8f8f8;
+			border-radius: 0.28571429rem;
+			min-height: 96px;
+			overflow: hidden;
+		}
+
+		#add_emoji_modal .ui.small.image img,
+		#remove_emoji_modal .ui.small.image img {
+			max-width: 100%;
+			max-height: 96px;
+			object-fit: contain;
+		}
+	</style>
+	<script type="module">
+		const STORAGE_KEY = 'emoji-storage';
+
+		const listElement = document.getElementById('emoji_list');
+		const exportButton = document.getElementById('export_emojis');
+		const importInput = document.getElementById('import_json');
+		const addModalElement = document.getElementById('add_emoji_modal');
+		const addForm = addModalElement.querySelector('form');
+		const addNameInput = document.getElementById('emoji_name');
+		const addLinkInput = document.getElementById('emoji_link');
+		const addPreviewImage = document.getElementById('add_emoji_preview');
+		const addButton = document.getElementById('add_emoji_add');
+		const removeModalElement = document.getElementById('remove_emoji_modal');
+		const removePreviewImage = document.getElementById('remove_emoji_preview');
+		const removeConfirmButton = document.getElementById('remove_emoji_confirm');
+
+		let emojiEntries = loadEmojiEntries();
+		let imageLoadToken = 0;
+		let isPreviewLoaded = false;
+		let pendingRemovalIndex = null;
+
+		function loadEmojiEntries() {
+			try {
+				const raw = localStorage.getItem(STORAGE_KEY);
+				if (!raw) {
+					return [];
+				}
+
+				const parsed = JSON.parse(raw);
+				return Array.isArray(parsed)
+					? parsed.filter((entry) => entry && typeof entry.name === 'string' && typeof entry.link === 'string')
+					: [];
+			} catch {
+				return [];
+			}
+		}
+
+		function saveEmojiEntries() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(emojiEntries));
+		}
+
+		function setAddButtonEnabled(enabled) {
+			addButton.classList.toggle('disabled', !enabled);
+		}
+
+		function resetAddModalState() {
+			addForm.reset();
+			addPreviewImage.removeAttribute('src');
+			isPreviewLoaded = false;
+			imageLoadToken += 1;
+			setAddButtonEnabled(false);
+		}
+
+		function renderEmojiList() {
+			if (emojiEntries.length === 0) {
+				listElement.innerHTML = `
+					<div class="item">
+						<div class="content">
+							<div class="header">No emojis yet</div>
+							<div class="description">Add one to get started.</div>
+						</div>
+					</div>
+				`;
+				return;
+			}
+
+			listElement.innerHTML = '';
+
+			emojiEntries.forEach((entry, index) => {
+				const item = document.createElement('div');
+				item.className = 'item';
+				item.innerHTML = `
+					<img class="ui avatar image" src="${escapeAttribute(entry.link)}" alt="${escapeAttribute(entry.name)}">
+					<div class="content">
+						<div class="header">${escapeHtml(entry.name)}</div>
+						<a href="${escapeAttribute(entry.link)}" target="_blank" rel="noopener noreferrer" class="description">${escapeHtml(entry.link)}</a>
+					</div>
+					<div class="right floated content">
+						<button class="ui green icon button" data-action="copy" data-index="${index}">
+							<i class="copy icon"></i>
+						</button>
+						<button class="ui red icon button" data-action="remove" data-index="${index}">
+							<i class="trash alternate icon"></i>
+						</button>
+					</div>
+				`;
+				listElement.appendChild(item);
+			});
+		}
+
+		function escapeHtml(value) {
+			return value
+				.replaceAll('&', '&amp;')
+				.replaceAll('<', '&lt;')
+				.replaceAll('>', '&gt;')
+				.replaceAll('"', '&quot;')
+				.replaceAll("'", '&#39;');
+		}
+
+		function escapeAttribute(value) {
+			return escapeHtml(value);
+		}
+
+		function updatePreviewFromLink() {
+			const link = addLinkInput.value.trim();
+			const token = ++imageLoadToken;
+
+			isPreviewLoaded = false;
+			setAddButtonEnabled(false);
+
+			if (!link) {
+				addPreviewImage.removeAttribute('src');
+				return;
+			}
+
+			const probe = new Image();
+			probe.onload = () => {
+				if (token !== imageLoadToken) {
+					return;
+				}
+
+				isPreviewLoaded = true;
+				addPreviewImage.src = link;
+				setAddButtonEnabled(true);
+			};
+			probe.onerror = () => {
+				if (token !== imageLoadToken) {
+					return;
+				}
+
+				addPreviewImage.removeAttribute('src');
+				isPreviewLoaded = false;
+				setAddButtonEnabled(false);
+			};
+			probe.src = link;
+		}
+
+		function addEmoji() {
+			if (!isPreviewLoaded) {
+				return;
+			}
+
+			emojiEntries.push({
+				name: addNameInput.value.trim(),
+				link: addLinkInput.value.trim(),
+			});
+			saveEmojiEntries();
+			renderEmojiList();
+			resetAddModalState();
+			//$(addModalElement).modal('hide');
+		}
+
+		function exportEmojiEntries() {
+			const blob = new Blob([JSON.stringify(emojiEntries, null, 2)], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const anchor = document.createElement('a');
+			anchor.href = url;
+			anchor.download = 'emoji-storage.json';
+			anchor.click();
+			URL.revokeObjectURL(url);
+		}
+
+		function importEmojiEntries(file) {
+			if (!file) {
+				return;
+			}
+
+			file.text()
+				.then((text) => {
+					const parsed = JSON.parse(text);
+					if (!Array.isArray(parsed)) {
+						throw new Error('Invalid import format');
+					}
+
+					emojiEntries = parsed.filter((entry) => entry && typeof entry.name === 'string' && typeof entry.link === 'string');
+					saveEmojiEntries();
+					renderEmojiList();
+				})
+				.catch(() => {
+					window.alert('Could not import emoji JSON.');
+				})
+				.finally(() => {
+					importInput.value = '';
+				});
+		}
+
+		async function copyEmojiLink(index) {
+			const entry = emojiEntries[index];
+			if (!entry) {
+				return;
+			}
+
+			try {
+				await navigator.clipboard.writeText(entry.link);
+			} catch {
+				window.alert('Could not copy the emoji link.');
+			}
+		}
+
+		function promptRemoveEmoji(index) {
+			const entry = emojiEntries[index];
+			if (!entry) {
+				return;
+			}
+
+			pendingRemovalIndex = index;
+			removePreviewImage.src = entry.link;
+			$(removeModalElement).modal('show');
+		}
+
+		function removeEmoji() {
+			if (pendingRemovalIndex === null) {
+				return;
+			}
+
+			emojiEntries.splice(pendingRemovalIndex, 1);
+			pendingRemovalIndex = null;
+			saveEmojiEntries();
+			renderEmojiList();
+			$(removeModalElement).modal('hide');
+		}
+
+		addLinkInput.addEventListener('input', updatePreviewFromLink);
+		addButton.addEventListener('click', addEmoji);
+		exportButton.addEventListener('click', exportEmojiEntries);
+		importInput.addEventListener('change', (event) => importEmojiEntries(event.target.files?.[0]));
+		removeConfirmButton.addEventListener('click', removeEmoji);
+
+		listElement.addEventListener('click', (event) => {
+			const button = event.target.closest('button[data-action]');
+			if (!button) {
+				return;
+			}
+
+			const index = Number(button.dataset.index);
+			if (button.dataset.action === 'copy') {
+				copyEmojiLink(index);
+				return;
+			}
+
+			if (button.dataset.action === 'remove') {
+				promptRemoveEmoji(index);
+			}
+		});
+
+		$(addModalElement).modal({
+			autofocus: false,
+		});
+
+		$(removeModalElement).modal({
+			autofocus: false,
+			onHidden() {
+				pendingRemovalIndex = null;
+				removePreviewImage.removeAttribute('src');
+			},
+		});
+
+		renderEmojiList();
+	</script>
+</head>
+
+<body>
+	<div class="ui text container teal segment">
+		<h1 class="ui header">Emoji Storage</h1>
+		<button class="ui green labeled icon button" onclick="$('#add_emoji_modal').modal('show')">
+			<i class="plus icon"></i>
+			Add
+		</button>
+		<button id="export_emojis" class="ui blue labeled icon button">
+			<i class="download icon"></i>
+			Export
+		</button>
+		<input type="file" id="import_json" class="ui invisible file input">
+		<label for="import_json" class="ui red labeled icon button">
+			<i class="upload icon"></i>
+			Import
+		</label>
+
+		<div id="emoji_list" class="ui middle aligned divided list">
+		</div>
+	</div>
+
+	<div id="add_emoji_modal" class="ui modal">
+		<div class="header">
+			Add Emoji
+		</div>
+		<div class="image content">
+			<div class="ui small image">
+				<img id="add_emoji_preview" src="" alt=""> <!-- follows "image link" below -->
+			</div>
+			<div class="description">
+				<form class="ui form">
+					<div class="field">
+						<label>Emoji Name</label>
+						<input id="emoji_name" type="text" name="emoji_name" placeholder="Emoji Name">
+					</div>
+					<div class="field">
+						<label>Image Link</label>
+						<input id="emoji_link" type="text" name="emoji_link"
+							placeholder="https://example.com/image.png">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="actions">
+			<button class="ui black deny button">
+				Cancel
+			</button>
+			<button id="add_emoji_add" class="ui positive disabled right labeled icon button">
+				Add
+				<i class="plus icon"></i>
+			</button>
+		</div>
+	</div>
+
+	<div id="remove_emoji_modal" class="ui modal">
+		<div class="header">Remove Emoji</div>
+		<div class="image content">
+			<div class="ui small image">
+				<img id="remove_emoji_preview" src="" alt=""> <!-- follows "emoji link" -->
+			</div>
+			<div class="description">
+				<p>Are you sure want to delete this emoji?</p>
+			</div>
+		</div>
+		<div class="actions">
+			<button class="ui black deny button">
+				No
+			</button>
+			<button id="remove_emoji_confirm" class="ui negative right labeled icon button">
+				Yes
+				<i class="trash alternate icon"></i>
+			</button>
+		</div>
+	</div>
+</body>
+
+</html>
