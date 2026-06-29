@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<title>Name Similarity</title>
+	<meta property="og:title" content="Name Similarity">
+	<meta property="og:description" content="Calculate name similarity?">
+	<meta property="og:type" content="website">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.4/dist/semantic.min.css"
+		integrity="sha256-xlp3XbXCVlcKYMpXDnziC1QzN9j0SQiDjRiZ0qu6IOc=" crossorigin="anonymous">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.4/dist/semantic.min.js"
+		integrity="sha256-Zh6NZwjzefLXtkIYJygkBuwIxUhZjOPgxKHvlGPo688=" crossorigin="anonymous"></script>
+	<style>
+		#namelist {
+			min-height: 12em
+		}
+
+		#privacy_notice {
+			margin-top: 0.75em
+		}
+
+		#results_empty {
+			text-align: center
+		}
+	</style>
+	<script type="module">
+		// JS code shouldn't have semicolon unless necessary and always use double-quotes for strings.
+		$(async function() {
+			$(".ui.dropdown").dropdown()
+
+			const namelistElement = document.getElementById("namelist")
+			const presetElement = document.getElementById("preset")
+			const loadPresetElement = document.getElementById("loadpreset")
+			const nameElement = document.getElementById("name")
+			const resultBodyElement = document.getElementById("resultbody")
+
+			/**
+			 * @param {string} value
+			 * @returns {string}
+			 */
+			function normalizeName(value) {
+				return value.trim().toLocaleLowerCase()
+			}
+
+			/**
+			 * @returns {string[]}
+			 */
+			function getNames() {
+				const seen = new Set()
+				const names = []
+
+				for (const rawName of namelistElement.value.split(/\r?\n/)) {
+					const name = rawName.trim()
+					const key = normalizeName(name)
+
+					if (key.length === 0 || seen.has(key))
+						continue
+
+					seen.add(key)
+					names.push(name)
+				}
+
+				return names
+			}
+
+			/**
+			 * @param {string} first
+			 * @param {string} second
+			 * @returns {number}
+			 */
+			function getLevenshteinDistance(first, second) {
+				if (first === second)
+					return 0
+
+				if (first.length === 0)
+					return second.length
+
+				if (second.length === 0)
+					return first.length
+
+				let previous = Array.from({ length: second.length + 1 }, (_, index) => index)
+				let current = new Array(second.length + 1)
+
+				for (let firstIndex = 0; firstIndex < first.length; firstIndex++) {
+					current[0] = firstIndex + 1
+
+					for (let secondIndex = 0; secondIndex < second.length; secondIndex++) {
+						const substitutionCost = first[firstIndex] === second[secondIndex] ? 0 : 1
+						current[secondIndex + 1] = Math.min(
+							current[secondIndex] + 1,
+							previous[secondIndex + 1] + 1,
+							previous[secondIndex] + substitutionCost
+						)
+					}
+
+					const temporary = previous
+					previous = current
+					current = temporary
+				}
+
+				return previous[second.length]
+			}
+
+			/**
+			 * @param {string} first
+			 * @param {string} second
+			 * @param {number} firstStart
+			 * @param {number} firstEnd
+			 * @param {number} secondStart
+			 * @param {number} secondEnd
+			 * @returns {{ firstStart: number, secondStart: number, length: number }}
+			 */
+			function findLongestCommonSubstring(first, second, firstStart, firstEnd, secondStart, secondEnd) {
+				let bestFirstStart = firstStart
+				let bestSecondStart = secondStart
+				let bestLength = 0
+
+				for (let firstIndex = firstStart; firstIndex < firstEnd; firstIndex++) {
+					for (let secondIndex = secondStart; secondIndex < secondEnd; secondIndex++) {
+						let length = 0
+
+						while (
+							firstIndex + length < firstEnd &&
+							secondIndex + length < secondEnd &&
+							first[firstIndex + length] === second[secondIndex + length]
+						)
+							length++
+
+						if (length > bestLength) {
+							bestFirstStart = firstIndex
+							bestSecondStart = secondIndex
+							bestLength = length
+						}
+					}
+				}
+
+				return {
+					firstStart: bestFirstStart,
+					secondStart: bestSecondStart,
+					length: bestLength
+				}
+			}
+
+			/**
+			 * @param {string} first
+			 * @param {string} second
+			 * @param {number} [firstStart]
+			 * @param {number} [firstEnd]
+			 * @param {number} [secondStart]
+			 * @param {number} [secondEnd]
+			 * @returns {number}
+			 */
+			function getMatchingCharacters(first, second, firstStart = 0, firstEnd = first.length, secondStart = 0, secondEnd = second.length) {
+				const match = findLongestCommonSubstring(first, second, firstStart, firstEnd, secondStart, secondEnd)
+
+				if (match.length === 0)
+					return 0
+
+				return match.length +
+					getMatchingCharacters(first, second, firstStart, match.firstStart, secondStart, match.secondStart) +
+					getMatchingCharacters(
+						first,
+						second,
+						match.firstStart + match.length,
+						firstEnd,
+						match.secondStart + match.length,
+						secondEnd
+					)
+			}
+
+			/**
+			 * @param {string} first
+			 * @param {string} second
+			 * @returns {number}
+			 */
+			function getGestaltSimilarity(first, second) {
+				if (first.length === 0 && second.length === 0)
+					return 1
+
+				return 2 * getMatchingCharacters(first, second) / (first.length + second.length)
+			}
+
+			/**
+			 * @param {number} value
+			 * @returns {string}
+			 */
+			function formatPercent(value) {
+				return `${(value * 100).toFixed(2)}%`
+			}
+
+			/**
+			 * @param {HTMLTableRowElement} row
+			 * @param {string} value
+			 * @returns {void}
+			 */
+			function appendCell(row, value) {
+				const cell = document.createElement("td")
+				cell.textContent = value
+				row.appendChild(cell)
+			}
+
+			/**
+			 * @returns {void}
+			 */
+			function renderResults() {
+				const inputName = normalizeName(nameElement.value)
+				const names = getNames()
+				const fragment = document.createDocumentFragment()
+
+				resultBodyElement.replaceChildren()
+
+				if (inputName.length === 0 || names.length === 0) {
+					const row = document.createElement("tr")
+					const cell = document.createElement("td")
+					cell.id = "results_empty"
+					cell.colSpan = 4
+					cell.textContent = inputName.length === 0
+						? "Enter your name to calculate similarity."
+						: "Add at least one name to compare."
+					row.appendChild(cell)
+					resultBodyElement.appendChild(row)
+					return
+				}
+
+				const results = names.map((name) => {
+					const normalized = normalizeName(name)
+					const levenshteinDistance = getLevenshteinDistance(inputName, normalized)
+					const longestLength = Math.max(inputName.length, normalized.length)
+					const levenshteinSimilarity = longestLength === 0 ? 1 : 1 - levenshteinDistance / longestLength
+
+					return {
+						name,
+						levenshteinDistance,
+						levenshteinSimilarity,
+						gestaltSimilarity: getGestaltSimilarity(inputName, normalized)
+					}
+				})
+
+				const byLevenshtein = [...results].sort((left, right) =>
+					left.levenshteinDistance - right.levenshteinDistance ||
+					right.levenshteinSimilarity - left.levenshteinSimilarity ||
+					left.name.localeCompare(right.name)
+				)
+				const byGestalt = [...results].sort((left, right) =>
+					right.gestaltSimilarity - left.gestaltSimilarity ||
+					left.levenshteinDistance - right.levenshteinDistance ||
+					left.name.localeCompare(right.name)
+				)
+
+				for (let index = 0; index < results.length; index++) {
+					const levenshteinResult = byLevenshtein[index]
+					const gestaltResult = byGestalt[index]
+					const row = document.createElement("tr")
+
+					appendCell(row, levenshteinResult.name)
+					appendCell(row, `${levenshteinResult.levenshteinDistance}`)
+					appendCell(row, gestaltResult.name)
+					appendCell(row, formatPercent(gestaltResult.gestaltSimilarity))
+					fragment.appendChild(row)
+				}
+
+				resultBodyElement.appendChild(fragment)
+			}
+
+			/**
+			 * @returns {Promise<void>}
+			 */
+			async function loadPreset() {
+				const url = presetElement.value
+
+				if (url.length === 0)
+					return
+
+				loadPresetElement.classList.add("loading", "disabled")
+
+				try {
+					const response = await fetch(url)
+
+					if (!response.ok)
+						throw new Error(`HTTP ${response.status}`)
+
+					const names = await response.json()
+
+					if (!Array.isArray(names))
+						throw new Error("Preset must contain an array")
+
+					namelistElement.value = names
+						.filter((name) => typeof name === "string")
+						.join("\n")
+					renderResults()
+				} catch (error) {
+					window.alert(`Could not load preset: ${error.message}`)
+				} finally {
+					loadPresetElement.classList.remove("loading", "disabled")
+				}
+			}
+
+			namelistElement.addEventListener("input", renderResults)
+			nameElement.addEventListener("input", renderResults)
+			loadPresetElement.addEventListener("click", loadPreset)
+			renderResults()
+		})
+	</script>
+</head>
+
+<body>
+	<div class="ui text container violet segment">
+		<h1 class="ui header">Name Similarity</h1>
+
+		<label for="namelist">List of Names, one for each line</label>
+		<textarea id="namelist" style="display:block;width:100%;resize:vertical"></textarea>
+
+		<label for="preset">Or select pre-defined list</label>
+		<br>
+		<select class="ui dropdown" id="preset">
+			<option value="" selected>(none)</option>
+			<option value="Intel_HD_Graphics_620/names.json">Genshin Impact</option>
+			<option value="FFT/names.json">Wuthering Waves</option>
+		</select>
+		<button id="loadpreset" class="ui primary button">Load</button>
+		<br>
+
+		<label for="name">Your Name</label>
+		<br>
+		<div class="ui input">
+			<input id="name" type="text" placeholder="Your name">
+		</div>
+		<br>
+		<div class="ui pointing label">
+			Don't worry. Processing is done 100% in your browser.
+    	</div>
+
+		<table class="ui celled table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th><abbr title="Levenshtein distance. The smaller, the better.">Levenshtein</abbr></th>
+					<th>Name</th>
+					<th><abbr title="a.k.a. Ratcliff-Obershelp similarity. The higher, the better.">Gestalt</abbr></th>
+				</tr>
+			</thead>
+			<tbody id="resultbody">
+				<!--Auto construction of rows-->
+				<!--Row construction should use `document.createElement(Fragment)` rather than `innerHTML`-->
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>
