@@ -30,7 +30,6 @@
 		}
 	</style>
 	<script type="module">
-		// JS code shouldn't have semicolon unless necessary and always use double-quotes for strings.
 		$(async function() {
 			$(".ui.dropdown").dropdown()
 
@@ -336,20 +335,20 @@
 			Don't worry. Processing is done 100% in your browser.
     	</div>
 
-		<table class="ui celled table">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th><abbr title="Levenshtein distance. The smaller, the better.">Levenshtein</abbr></th>
-					<th>Name</th>
-					<th><abbr title="a.k.a. Ratcliff-Obershelp similarity. The higher, the better.">Gestalt</abbr></th>
-				</tr>
-			</thead>
-			<tbody id="resultbody">
-				<!--Auto construction of rows-->
-				<!--Row construction should use `document.createElement(Fragment)` rather than `innerHTML`-->
-			</tbody>
-		</table>
+		<div style="width:100%;overflow-x:scroll">
+			<table class="ui celled unstackable table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th><abbr title="Levenshtein distance. The smaller, the better.">Levenshtein</abbr></th>
+						<th>Name</th>
+						<th><abbr title="a.k.a. Ratcliff-Obershelp similarity. The higher, the better.">Gestalt</abbr></th>
+					</tr>
+				</thead>
+				<tbody id="resultbody">
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 
