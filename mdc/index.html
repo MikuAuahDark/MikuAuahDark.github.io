@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Type" content="text/html" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>A Secret Place?</title>
+		<meta name="description" content="Nothing here, really.">
+		<link rel="stylesheet" href="../semantic/semantic.min.css" />
+		<link rel="stylesheet" href="../index.css" />
+		<script type="text/javascript" src="../jquery-3.5.1.min.js"></script>
+		<script type="text/javascript" src="../semantic/semantic.min.js"></script>
+		<script type="module">
+			import { default as decryptHonokaV2 } from "./honoka-v2.mjs"
+			/** @type {{default:Uint8Array}[]} */
+			const MESSAGES = await Promise.all([
+				import("./msg0.mjs"),
+				import("./msg1.mjs"),
+				import("./msg2.mjs"),
+				import("./msg3.mjs"),
+				import("./msg4.mjs"),
+			])
+
+			/**
+			 * @param {string} base64Str
+			 **/
+			function atobUTF8(base64Str) {
+				const binaryString = atob(base64Str);
+				const bytes = new Uint8Array(binaryString.length);
+				for (let i = 0; i < binaryString.length; i++) {
+					bytes[i] = binaryString.charCodeAt(i);
+				}
+				return new TextDecoder().decode(bytes);
+			}
+
+			/**
+			 * @param {string} key
+			 **/
+			function specializeKey(key)
+			{
+				try
+				{
+					const url = new URL(key)
+					if (url.protocol !== "https:" && url.protocol !== "http:")
+						return key
+					if ((url.hostname === "youtube.com" || url.hostname === "www.youtube.com") && url.pathname === "/watch")
+						return url.searchParams.get("v") || key
+					if (url.hostname === "youtu.be")
+					{
+						const pathParts = url.pathname.split("/").filter(Boolean)
+						if (pathParts.length === 1)
+							return pathParts[0]
+					}
+				}
+				catch (error)
+				{
+					if (!(error instanceof TypeError))
+						throw error
+				}
+
+				return key
+			}
+
+			$(document).ready(function()
+			{
+				// Replace content-base64
+				for (const el of document.querySelectorAll("[content-base64]"))
+				{
+					const b64 = el.getAttribute("content-base64")
+					el.textContent = atobUTF8(b64)
+				}
+
+				/** @type {HTMLInputElement} */
+				const keyInput = document.querySelector("#key")
+				const status = document.querySelector("#status")
+				const output = document.querySelector("#output")
+
+				function loadKey()
+				{
+					const key = specializeKey(keyInput.value)
+					let decryptionError
+
+					for (const message of MESSAGES)
+					{
+						try
+						{
+							output.value = new TextDecoder().decode(
+								decryptHonokaV2(message.default, key),
+							)
+							status.textContent = ""
+							return
+						}
+						catch (error)
+						{
+							if (!(error instanceof Error)
+								|| error.message !== "invalid Honoka v2 JP header or filename")
+							{
+								decryptionError = error
+							}
+						}
+					}
+
+					status.textContent = decryptionError === undefined
+						? "Invalid key"
+						: decryptionError instanceof Error
+							? decryptionError.message
+							: String(decryptionError)
+				}
+
+				document.querySelector("#loadkey").addEventListener("click", loadKey)
+				keyInput.addEventListener("keydown", function(event)
+				{
+					if (event.key === "Enter")
+					{
+						event.preventDefault()
+						loadKey()
+					}
+				})
+				window.MESSAGES = MESSAGES
+			})
+		</script>
+	</head>
+	<body>
+		<div class="ui text container green segment">
+			<h1 content-base64="TXkgTG92ZWx5IEZhbWlseQ==" class="ui header">Nothing here</h1>
+			<p><i content-base64="QmVjYXVzZSB0aGUgb25seSB3YXkgdG8gc3RheSBhbGl2ZSBpcyB0byBiZSBhIGxpdHRsZSBiaXQgc2VsZmlzaC4=">Wrong place?</i></p>
+			<p>Enter key below.</p>
+			<div class="ui input">
+				<input type="text" id="key">
+			</div>
+			<button id="loadkey" class="ui button">Enter</button>
+			<p id="status"></p>
+			<textarea id="output" style="width:100%;min-height:400px" readonly></textarea>
+		</div>
+	</body>
+</html>
