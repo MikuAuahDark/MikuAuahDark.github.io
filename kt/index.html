@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="A local, browser-based karaoke timing editor.">
+	<title>Karaoke Timing Editor</title>
+	<link rel="stylesheet" href="../semantic/semantic.min.css">
+	<style>
+		:root {
+			color-scheme: light dark;
+			--page: #f5f6f7;
+			--surface: #fff;
+			--surface-2: #f8f8f9;
+			--text: #1b1c1d;
+			--muted: #6b6f73;
+			--border: #d4d4d5;
+			--focus: #2185d0;
+			--accent: #21ba45;
+			--active: #e8f5ff;
+			--danger: #db2828;
+		}
+
+		@media (prefers-color-scheme:dark) {
+			:root {
+				--page: #17191c;
+				--surface: #22252a;
+				--surface-2: #2a2e34;
+				--text: #f1f2f3;
+				--muted: #b0b5ba;
+				--border: #484d54;
+				--focus: #54a9e8;
+				--accent: #40cf63;
+				--active: #243b4d;
+				--danger: #ff6961;
+			}
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			background: var(--page);
+			color: var(--text);
+			min-height: 100vh;
+		}
+
+		.app {
+			max-width: 1600px;
+			margin: auto;
+			padding: 1rem;
+			display: grid;
+			gap: 1rem;
+			grid-template-rows: auto auto minmax(30rem, 1fr);
+			min-height: 100vh;
+		}
+
+		.panel {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: .28571429rem;
+			padding: 1rem;
+		}
+
+		header.panel {
+			display: flex;
+			flex-wrap: wrap;
+			gap: .75rem 1rem;
+			align-items: end;
+		}
+
+		header h1 {
+			margin: 0 auto 0 0;
+			align-self: center;
+			font-size: 1.6rem;
+		}
+
+		.workspace {
+			display: grid;
+			grid-template-columns: minmax(17rem, 28rem) minmax(30rem, 1fr);
+			gap: 1rem;
+			min-height: 0;
+		}
+
+		.sidebar {
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+		}
+
+		.line-toolbar,
+		.button-row,
+		.transport,
+		.timing-actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: .5rem;
+			align-items: center;
+		}
+
+		.line-list {
+			list-style: none;
+			padding: 0;
+			margin: .75rem 0 0;
+			overflow-y: auto;
+			overflow-x: hidden;
+			min-height: 12rem;
+			border-top: 1px solid var(--border);
+		}
+
+		.line-item {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			gap: .25rem .5rem;
+			padding: .65rem;
+			border-bottom: 1px solid var(--border);
+			cursor: pointer;
+		}
+
+		.line-item > div {
+			min-width: 0;
+		}
+
+		.line-item:hover,
+		.line-item.selected {
+			background: var(--active);
+		}
+
+		.line-item .preview {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.line-item .times {
+			color: var(--muted);
+			font-size: .8rem;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.status {
+			border: 1px solid var(--border);
+			border-radius: 1rem;
+			padding: .1rem .5rem;
+			font-size: .75rem;
+			align-self: start;
+			justify-self: end;
+		}
+
+		main.panel {
+			overflow: auto;
+		}
+
+		.empty {
+			text-align: center;
+			color: var(--muted);
+			padding: 4rem 1rem;
+		}
+
+		.fields {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(8rem, 1fr));
+			gap: .75rem;
+		}
+
+		label {
+			font-weight: 600;
+		}
+
+		label>input,
+		label>select,
+		label>textarea {
+			display: block;
+			margin-top: .3rem !important;
+			width: 100% !important;
+		}
+
+		input,
+		textarea,
+		select,
+		button {
+			font: inherit;
+		}
+
+		input,
+		textarea,
+		select {
+			color: var(--text) !important;
+			background: var(--surface-2) !important;
+			border-color: var(--border) !important;
+		}
+
+		button:focus-visible,
+		input:focus-visible,
+		textarea:focus-visible,
+		select:focus-visible,
+		[tabindex]:focus-visible {
+			outline: 3px solid color-mix(in srgb, var(--focus) 55%, transparent) !important;
+			outline-offset: 2px;
+		}
+
+		.splitter,
+		.timer {
+			margin-top: 1.25rem;
+			border-top: 1px solid var(--border);
+			padding-top: 1rem;
+		}
+
+		.segments {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: stretch;
+			gap: .5rem;
+			margin: .75rem 0;
+			min-height: 3rem;
+		}
+
+		.segment-card {
+			background: var(--surface-2);
+			border: 1px solid var(--border);
+			padding: .6rem;
+			border-radius: .3rem;
+			min-width: min(100%, 14rem);
+			flex: 1 1 14rem;
+		}
+
+		.segment-card.active {
+			border: 2px solid var(--accent);
+			background: var(--active);
+		}
+
+		.segment-card.done {
+			opacity: .7;
+		}
+
+		.segment-card.review-current {
+			border: 2px solid var(--focus);
+			background: var(--active);
+			opacity: 1;
+			box-shadow: 0 0 0 2px color-mix(in srgb, var(--focus) 20%, transparent);
+		}
+
+		.segment-card.review-past {
+			opacity: .55;
+		}
+
+		.segment-card textarea {
+			resize: vertical;
+			min-width: 0;
+			min-height: 3.2rem;
+			width: 100%;
+		}
+
+		.segment-card .segment-tools {
+			display: flex;
+			flex-wrap: wrap;
+			gap: .35rem;
+			margin-top: .35rem;
+		}
+
+		.segment-card .segment-tools>button {
+			flex: 1 1 6rem;
+		}
+
+		.timing-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: .75rem 0;
+		}
+
+		.timing-table th,
+		.timing-table td {
+			border-bottom: 1px solid var(--border);
+			padding: .45rem;
+			text-align: left;
+		}
+
+		.timing-table input {
+			width: 8rem !important;
+		}
+
+		.player {
+			display: grid;
+			grid-template-columns: auto minmax(12rem, 1fr) auto auto auto;
+			gap: .75rem;
+			align-items: center;
+		}
+
+		.player input[type=range] {
+			width: 100% !important;
+			accent-color: var(--accent);
+		}
+
+		.clock {
+			font-variant-numeric: tabular-nums;
+			min-width: 9rem;
+			text-align: center;
+		}
+
+		.hint,
+		.muted {
+			color: var(--muted);
+		}
+
+		.notice {
+			margin: .75rem 0;
+			padding: .65rem .8rem;
+			border-left: 4px solid var(--focus);
+			background: var(--surface-2);
+		}
+
+		.notice.error {
+			border-color: var(--danger);
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		kbd {
+			border: 1px solid var(--border);
+			border-bottom-width: 2px;
+			border-radius: .25rem;
+			padding: .1rem .35rem;
+			background: var(--surface-2);
+		}
+
+		@media(max-width:900px) {
+			.workspace {
+				grid-template-columns: 1fr;
+			}
+
+			.sidebar {
+				max-height: 35rem;
+			}
+
+			.fields {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			.player {
+				grid-template-columns: auto 1fr auto;
+			}
+
+			.player .secondary {
+				grid-column: span 3;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="app">
+		<header class="panel">
+			<h1>Karaoke Timing Editor</h1>
+			<label>Title<input class="ui input" id="title" type="text"></label>
+			<label>Artist<input id="artist" type="text"></label>
+			<label class="ui button">Choose audio<input id="audio-file" class="hidden" type="file"
+					accept="audio/*"></label>
+			<label class="ui button">Import SRT<input id="srt-file" class="hidden" type="file"
+					accept=".srt,application/x-subrip,text/plain"></label>
+			<label class="ui button">Open project<input id="project-file" class="hidden" type="file"
+					accept=".json,application/json"></label>
+			<button id="save-project" class="ui button">Save project</button>
+			<button id="export-ass" class="ui green button">Export ASS</button>
+		</header>
+
+		<section class="panel" aria-label="Audio playback">
+			<audio id="audio" preload="metadata"></audio>
+			<div class="player">
+				<button id="play" class="ui primary button">Play</button>
+				<input id="seek" type="range" min="0" max="0" step="0.001" value="0" aria-label="Audio position">
+				<output id="clock" class="clock">00:00.000 / 00:00.000</output>
+				<label class="secondary">Speed <select id="speed">
+						<option value="0.5">0.5×</option>
+						<option value="0.75">0.75×</option>
+						<option value="1" selected>1×</option>
+					</select></label>
+				<label class="secondary">Volume <input id="volume" type="range" min="0" max="1" step="0.05"
+						value="1"></label>
+			</div>
+			<div class="button-row" style="margin-top:.75rem">
+				<label>Global offset (ms)<input id="offset" type="number" step="1" value="0"></label>
+				<label>ASS incomplete lines <select id="incomplete-policy">
+						<option value="confirmed">Confirmed only</option>
+						<option value="plain">Include as plain dialogue</option>
+					</select></label>
+				<span id="audio-name" class="muted">No audio selected</span>
+				<span class="hint"><kbd>Space</kbd> play/pause · <kbd>F</kbd> tap · <kbd>Backspace</kbd> undo ·
+					<kbd>Esc</kbd> cancel</span>
+			</div>
+		</section>
+
+		<div class="workspace">
+			<aside class="panel sidebar" aria-label="Lyric lines">
+				<div class="line-toolbar">
+					<button id="add-line" class="ui primary button">Add line</button>
+					<button id="duplicate-line" class="ui button">Duplicate</button>
+					<button id="delete-line" class="ui red basic button">Delete</button>
+					<button id="move-up" class="ui icon button" title="Move up"
+						aria-label="Move selected line up">↑</button>
+					<button id="move-down" class="ui icon button" title="Move down"
+						aria-label="Move selected line down">↓</button>
+				</div>
+				<ol id="line-list" class="line-list"></ol>
+			</aside>
+
+			<main class="panel">
+				<div id="notice" class="notice hidden" role="status" aria-live="polite"></div>
+				<div id="no-selection" class="empty">Load audio, import an SRT, or add a lyric line to begin.</div>
+				<section id="line-editor" class="hidden" aria-label="Selected lyric line">
+					<div class="fields">
+						<label style="grid-column:span 2">Lyric text<textarea id="line-text"
+								rows="2"></textarea></label>
+						<label>Line start (seconds)<input id="line-start" type="number" min="0" step="0.001"></label>
+						<label>Line end (seconds)<input id="line-end" type="number" min="0" step="0.001"></label>
+					</div>
+					<div class="button-row">
+						<button id="set-start" class="ui button">Set start to playhead</button>
+						<button id="set-end" class="ui button">Set end to playhead</button>
+						<button id="jump-line" class="ui button">Jump to lead-in</button>
+						<label>Lead-in (s)<input id="lead-in" type="number" min="0" max="30" step="0.1"></label>
+						<label><input id="loop-line" type="checkbox"> Loop line</label>
+					</div>
+
+					<section class="splitter">
+						<h2>Syllable splitting</h2>
+						<p class="hint">Place the caret in a segment, then choose Split. Text—including spaces and
+							<code>|</code>—is preserved exactly.</p>
+						<div id="split-segments" class="segments"></div>
+						<div class="button-row"><button id="confirm-split" class="ui primary button">Confirm
+								splitting</button><span id="split-warning" class="muted"></span></div>
+					</section>
+
+					<section class="timer">
+						<h2>Tap timing <span id="line-status" class="status"></span></h2>
+						<div id="timing-segments" class="segments"></div>
+						<div class="timing-actions">
+							<button id="start-timing" class="ui green button">Start / retry timing</button>
+							<button id="tap" class="ui primary button">Tap next (F)</button>
+							<button id="undo-tap" class="ui button">Undo tap</button>
+							<button id="cancel-timing" class="ui button">Cancel</button>
+							<button id="preview-timing" class="ui blue basic button">Preview</button>
+							<button id="confirm-timing" class="ui green basic button">Confirm timing</button>
+						</div>
+						<table class="timing-table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Segment</th>
+									<th>Start</th>
+									<th>Duration</th>
+								</tr>
+							</thead>
+							<tbody id="timing-table"></tbody>
+						</table>
+					</section>
+				</section>
+			</main>
+		</div>
+
+	</div>
+	<script type="module" src="app.mjs"></script>
+</body>
+
+</html>
